@@ -5,7 +5,7 @@
 
 #background {
 
-    background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url(pictures/school.jpg);
+    background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url(../pictures/school.jpg);
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -32,5 +32,9 @@ hr {
 }
 
 #back {
+    margin-top: 20px;
+}
+
+#submit {
     margin-top: 20px;
 }
