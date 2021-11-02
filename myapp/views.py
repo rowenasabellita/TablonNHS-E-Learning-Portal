@@ -4,3 +4,9 @@ from django.http import HttpResponse
 
 def home(request):
     return render(request, 'home.html')
+def login(request):
+    return render(request, 'login.html')
+def teacher(request):
+    return render(request, 'teacher.html')
+def teachersubject(request):
+    return render(request, 'teachersubject.html')    
