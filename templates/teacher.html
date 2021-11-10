@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-
+{% block content%}
 <html>
     <head>
         <!-- Required meta tags --> 
@@ -19,38 +19,42 @@
         </script> -->
       </head>
       <body>
-        <div class="container-fluid" id="background">
-          <div class="container">
-            <div class="row">
-              <div class="col-3" id="image">
-                <div class="file-upload-content">
-                        <img class="file-upload-image" src="{% static 'pictures/school.jpg'%}" width="200" height="200"/>
-                        <div class="image-title-wrap"></div>
-                </div> 
-                    <br>
-                <div class="image-upload-wrap">
-                        <input class="file-upload input" type="file" onchange="readURL(this);" accept="image/"/></div>
-                </div>
+        {% if user.is_authenticated %}
+          <div class="container-fluid" id="background">
+            <div class="container">
+              <div class="row">
+                <div class="col-3" id="image">
+                  <div class="file-upload-content">
+                          <img class="file-upload-image" src="{% static 'pictures/school.jpg'%}" width="200" height="200"/>
+                          <div class="image-title-wrap"></div>
+                  </div> 
+                      <br>
+                  <div class="image-upload-wrap">
+                          <input class="file-upload input" type="file" onchange="readURL(this);" accept="image/"/></div>
+                  </div>
 
-                <div class="col-7" id="label">
-                   <h1 align="center">User Details<button type="button" class="btn btn-secondary btn-sm" id="edit">Edit Profile</button></h1>
-                   <h5>Full Name:</h5>
-                   <h5>Age:</h5>
-                   <h5>Gender:</h5>
-                   <h5>Town/City:</h5>
-                   <h5>Email address: </h5>
-                </div>
+                  <div class="col-7" id="label">
+                    <h1 align="center">User Details<button type="button" class="btn btn-secondary btn-sm" id="edit">Edit Profile</button></h1>
+                    <h5>Full Name:{{user.firstname}}</h5>
+                    <h5>Age:</h5>
+                    <h5>Gender:</h5>
+                    <h5>Town/City:</h5>
+                    <h5>Email address: </h5>
+                  </div>
 
-                <div class="col">
-                    <img src="{% static 'pictures/logo.jpg'%}" width="150" height="150" id="logo">
-                    <button type="button" class="btn btn-secondary btn-md" id="logout">LOG OUT</button>
-                </div>
+                  <div class="col">
+                      <img src="{% static 'pictures/logo.jpg'%}" width="150" height="150" id="logo">
+                      <button type="button" class="btn btn-secondary btn-md" id="logout">LOG OUT</button>
+                  </div>
+              </div>
+                  <br><br><br>
+                  <a href="teachersubject.html" type="button"><button class="btn btn-primary btn-lg">Subjects</button></a>
             </div>
-                <br><br><br>
-                <a href="teachersubject.html" type="button"><button class="btn btn-primary btn-lg">Subjects</button></a>
-        </div>
-      </div> 
+          </div> 
+        {% else %}
+          <div class="alert alert-danger">This credential doesn't match our records. </div>
+        {%endif%}
     </body>
 </html>
-
+{% endblock%}
 
