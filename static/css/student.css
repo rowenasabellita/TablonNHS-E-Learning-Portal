@@ -1,10 +1,6 @@
 #background {
 
-<<<<<<< HEAD
     background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url(../pictures/school.jpg);
-=======
-    background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url(pictures/school.jpg);
->>>>>>> 92d6db937c8f6250c048dfb83b0bc02463d9d9b7
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
