@@ -21,6 +21,7 @@ def login(request):
             messages.info(request, "Invalid credentials")
             return redirect("login")
     else:
+        # return render(request, {"title": "Login"})
         return render(request, 'login.html', {"title": "Login"})
 
     # return render(request, 'login.html')
