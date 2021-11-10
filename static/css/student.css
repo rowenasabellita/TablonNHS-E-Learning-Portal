@@ -1,14 +1,6 @@
 #background {
 
-<<<<<<< HEAD
     background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url(../pictures/school.jpg);
-=======
-<<<<<<< HEAD
-    background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url(pictures/school.jpg);
-=======
-    background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url(../pictures/school.jpg);
->>>>>>> 16763adf2563a4b11642ff074608f34491ffbceb
->>>>>>> 44ab3f68b75e01d38b9efd8a3af9dbcced078715
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -41,11 +33,7 @@
 }
 
 #image{
-<<<<<<< HEAD
-    padding-top: 40px;
-=======
     padding-top: 30px;
->>>>>>> 16763adf2563a4b11642ff074608f34491ffbceb
     
 }
 

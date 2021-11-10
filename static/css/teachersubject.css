@@ -38,21 +38,3 @@ hr {
 #submit {
     margin-top: 20px;
 }
-
-#comment {
-    resize: none;
-    width: 800px;
-    height: 100px;
-    overflow: auto;
-}
-
-#url {
-    margin-bottom: 20px;
-}
-
-#date {
-    margin-left: 20px;
-}
-
-
-
