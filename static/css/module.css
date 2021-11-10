@@ -18,14 +18,6 @@
     align-items: center;
     overflow: auto;
 }
-a{
-    text-decoration: none;
-    
-}
-a:link{color: #009879;}
-a:hover{color: skyblue;}
-
-
 
 .container {
     background-color: white;
