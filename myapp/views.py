@@ -30,3 +30,5 @@ def teachersubject(request):
     return render(request, 'teachersubject.html')    
 def student(request):
     return render(request, 'student.html')   
+def studentsubject(request):
+    return render(request, 'studentsubject.html')  
