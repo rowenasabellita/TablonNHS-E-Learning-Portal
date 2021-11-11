@@ -22,7 +22,7 @@
                         Tablon NHS e-learning Portal
                     </h1>
                 </header>
-                <form action="login" method="post">
+                <form action="/" method="post">
                     {% csrf_token %}
                     <div class="main">
                         <div class="form-group">
@@ -30,7 +30,7 @@
                         </div>
 
                         <div class="form-group">
-                            <input class="form-control input-lg" id="inputlg" type="password" name= "username" placeholder="Password" required>
+                            <input class="form-control input-lg" id="inputlg" type="password" name= "password" placeholder="Password" required>
                           </div>
                         <div class="text-center">
                         <button type="submit" class="btn btn-success mt-5 btn-block">Login</button>

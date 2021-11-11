@@ -13,7 +13,7 @@ def login(request):
         username = request.POST['username']
         password = request.POST['password']
 
-        user = AUTH_PASSWORD_VALIDATORS.authenticate(username=username, password=password)
+        user = auth.authenticate(username=username, password=password)
         if user is not None:
             auth.login(request, user)
             return redirect("teacher")
@@ -22,7 +22,7 @@ def login(request):
             return redirect("login")
     else:
         # return render(request, {"title": "Login"})
-        return render(request, 'login.html', {"title": "Login"})
+        return render(request, 'login.html')
 
     # return render(request, 'login.html')
 def teacher(request):
@@ -33,3 +33,7 @@ def student(request):
     return render(request, 'student.html')   
 def studentsubject(request):
     return render(request, 'studentsubject.html')  
+def logout(request):
+    auth.logout(request)
+    return render(request, 'login.html')
+
