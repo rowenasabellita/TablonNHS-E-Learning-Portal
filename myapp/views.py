@@ -21,10 +21,8 @@ def login(request):
             messages.info(request, "Invalid credentials")
             return redirect("login")
     else:
-        # return render(request, {"title": "Login"})
         return render(request, 'login.html')
 
-    # return render(request, 'login.html')
 def teacher(request):
     return render(request, 'teacher.html')
 def teachersubject(request):
@@ -33,6 +31,7 @@ def student(request):
     return render(request, 'student.html')   
 def studentsubject(request):
     return render(request, 'studentsubject.html')  
+    
 def logout(request):
     auth.logout(request)
     return render(request, 'login.html')

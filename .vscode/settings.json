@@ -1,0 +1,10 @@
+{
+    "python.defaultInterpreterPath": "C:\\ROWENA'S FILES\\firstdjango\\Scripts\\", 
+
+    "beautify.language": {
+        "html": [
+            "htm", "html", "django-html"
+        ]
+    },
+    "editor.formatOnSave": true
+}
