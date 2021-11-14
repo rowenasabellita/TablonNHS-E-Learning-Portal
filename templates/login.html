@@ -1,4 +1,5 @@
 {% load static %}
+{% block content %}
 <!doctype html>
 <html lang="en">
 
@@ -21,23 +22,9 @@
             <div>
                 <header>
                     <h1>
-                        Noah's Ark e-learning Portal
+                        Tablon NHS e-learning Portal
                     </h1>
                 </header>
-<<<<<<< HEAD
-                <form>
-                    <div class="main">
-                        <div class="form-group">
-                            <input class="form-control input-lg mb-4 mt-4" id="inputlg" type="text" placeholder="Username" required>
-                        </div>
-
-                        <div class="form-group">
-                            <input class="form-control input-lg" id="inputlg" type="password" placeholder="Password" required>
-                          </div>
-                        <div class="text-center">
-                        <button type="button" class="btn btn-success mt-5 btn-block">Login</button>
-                        </div>
-=======
                 {% if messages %}
                 <div class="alert alert-danger">This credentials do not match on our records.</div>
                 {% for msg in messages%}
@@ -62,19 +49,13 @@
                     </div>
                     <div class="text-center">
                         <button type="submit" class="btn btn-success mt-5 btn-block">Login</button>
->>>>>>> 583bf4e4209b861d6891af3cd5d9acd7e4c79e4c
                     </div>
                 </div>
             </form>
         </div>
     </div>
-<<<<<<< HEAD
-  </body>
-</html>
-=======
     </div>
 </body>
 
 </html>
 {% endblock %}
->>>>>>> 583bf4e4209b861d6891af3cd5d9acd7e4c79e4c
