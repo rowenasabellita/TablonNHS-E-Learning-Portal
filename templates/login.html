@@ -1,19 +1,22 @@
 {% load static %}
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{% static '/css/login.css' %}">
     <title>Login</title>
-  </head>
-  <body>
+</head>
+
+<body>
     <div class="container-fluid" id="background">
-        
+
         <div class="container" id="content">
             <div>
                 <header>
@@ -21,6 +24,7 @@
                         Noah's Ark e-learning Portal
                     </h1>
                 </header>
+<<<<<<< HEAD
                 <form>
                     <div class="main">
                         <div class="form-group">
@@ -33,10 +37,44 @@
                         <div class="text-center">
                         <button type="button" class="btn btn-success mt-5 btn-block">Login</button>
                         </div>
+=======
+                {% if messages %}
+                <div class="alert alert-danger">This credentials do not match on our records.</div>
+                {% for msg in messages%}
+                <strong> {{ msg }}</strong>
+                {% endfor %}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endif %}
+            <form action="/" method="post">
+                {% csrf_token %}
+                <div class="main">
+                    <div class="form-group">
+                        <input class="form-control input-lg mb-4 mt-4" id="inputlg" type="text" name="username"
+                            placeholder="Username" required>
                     </div>
-                </form>   
-            </div>     
+
+                    <div class="form-group">
+                        <input class="form-control input-lg" id="inputlg" type="password" name="password"
+                            placeholder="Password" required>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success mt-5 btn-block">Login</button>
+>>>>>>> 583bf4e4209b861d6891af3cd5d9acd7e4c79e4c
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
+<<<<<<< HEAD
   </body>
 </html>
+=======
+    </div>
+</body>
+
+</html>
+{% endblock %}
+>>>>>>> 583bf4e4209b861d6891af3cd5d9acd7e4c79e4c
