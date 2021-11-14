@@ -8,6 +8,8 @@ from django.contrib.auth.models import User, auth
 
 # def home(request):
 #     return render(request, 'home.html')
+
+
 def login(request):
     if request.method == "POST":
         username = request.POST['username']
@@ -23,16 +25,23 @@ def login(request):
     else:
         return render(request, 'login.html')
 
+
 def teacher(request):
     return render(request, 'teacher.html')
+
+
 def teachersubject(request):
-    return render(request, 'teachersubject.html')    
+    return render(request, 'teachersubject.html')
+
+
 def student(request):
-    return render(request, 'student.html')   
+    return render(request, 'student.html')
+
+
 def studentsubject(request):
-    return render(request, 'studentsubject.html')  
-    
+    return render(request, 'studentsubject.html')
+
+
 def logout(request):
     auth.logout(request)
     return render(request, 'login.html')
-
