@@ -2,98 +2,1835 @@
 <!DOCTYPE html>
 {% block content%}
 <html>
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Bootstrap CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{%static 'css/teacher.css'%}"
-    />
-    <title>teacher</title>
-    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <!-- <script type="text/javascript">
-            function loadSubject() {
-              document.getElementById("teacher").innerHTML = "get content.";
-            }
-        </script> -->
-  </head>
-  <body>
-    {% if user.is_authenticated %}
-    <div class="container-fluid" id="background">
-      <div class="container">
-        <div class="row">
-          <div class="col-3" id="image">
-            <div class="file-upload-content">
-              <img
-                class="file-upload-image"
-                src="{% static 'pictures/school.jpg'%}"
-                width="200"
-                height="200"
-              />
-              <div class="image-title-wrap"></div>
-            </div>
-            <br />
-            <div class="image-upload-wrap">
-              <input
-                class="file-upload input"
-                type="file"
-                onchange="readURL(this);"
-                accept="image/"
-              />
-            </div>
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="/static/css/mycss.css?{% now " U" %}" />
+  <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+  <link rel="stylesheet" type="text/css" href="{%static 'css/teacher.css'%}" />
+  <title>teacher</title>
+  <script src=" http://code.jquery.com/jquery-3.4.1.js">
+  </script>
+</head>
+
+<body>
+  {% if user.is_authenticated %}
+  <!-- <div class="container-fluid" id="background">
+    <div class="container">
+      <div class="row">
+        <div class="col-3" id="image">
+          <div class="file-upload-content">
+            <img class="file-upload-image" src="{% static 'pictures/school.jpg'%}" width="200" height="200" />
+            <div class="image-title-wrap"></div>
           </div>
-
-          <div class="col-7" id="label">
-            <h1 align="center">
-              User Details<button
-                type="button"
-                class="btn btn-secondary btn-sm"
-                id="edit"
-              >
-                Edit Profile
-              </button>
-            </h1>
-            <h5>Full Name:{{user.firstname}}</h5>
-            <h5>Age:</h5>
-            <h5>Gender:</h5>
-            <h5>Town/City:</h5>
-            <h5>Email address:</h5>
-          </div>
-
-          <div class="col">
-            <img
-              src="{% static 'pictures/logo.jpg'%}"
-              width="150"
-              height="150"
-              id="logo"
-            />
-            <a href="logout"
-              ><button
-                type="button"
-                class="btn btn-secondary btn-md"
-                id="logout"
-              >
-                LOG OUT
-              </button></a
-            >
+          <br />
+          <div class="image-upload-wrap">
+            <input class="file-upload input" type="file" onchange="readURL(this);" accept="image/" />
           </div>
         </div>
-        <br /><br /><br />
-        <a href="/teachersubject" type="button"
-          ><button class="btn btn-primary btn-lg">Subjects</button></a
-        >
+
+        <div class="col-7" id="label">
+          <h1 align="center">
+            User Details<button type="button" class="btn btn-secondary btn-sm" id="edit">
+              Edit Profile
+            </button>
+          </h1>
+          <h5>Full Name:{{user.firstname}}</h5>
+          <h5>Age:</h5>
+          <h5>Gender:</h5>
+          <h5>Town/City:</h5>
+          <h5>Email address:</h5>
+        </div>
+
+        <div class="col">
+          <img src="{% static 'pictures/logo.jpg'%}" width="150" height="150" id="logo" />
+          <a href="logout"><button type="button" class="btn btn-secondary btn-md" id="logout">
+              LOG OUT
+            </button></a>
+        </div>
+      </div>
+      <br /><br /><br />
+      <a href="/teachersubject" type="button"><button class="btn btn-primary btn-lg">Subjects</button></a>
+    </div>
+  </div> -->
+
+  <!-- Alternative content -->
+
+  <!-- For Navigation Side-Bar -->
+  <div class="container-fluid" id="background">
+    <div class="container">
+      <div class="wrapper">
+        <div class="sidebar">
+          <div class="logo_content">
+            <img class="file-upload-image" src="{% static 'pictures/tnhslogo.jpg'%}" width="100" height="100" />
+            <h2>Tablon National Highschool</h2>
+          </div>
+          <ul>
+            <li data-tab-target="#profile"><a href="#"><i class='bx bx-user'></i>Profile</a></li>
+            <!-- For Subjects dropdown -->
+            <li><a href="#" class="subj-btn"><i class='bx bxs-book'></i>Student Management<span
+                  class='bx bxs-chevron-right first'></span></a>
+              <ul class="subj-show">
+                <li data-tab-target="#firstsubj"><a href="#">Grade 7</a></li>
+                <li data-tab-target="#secondsubj"><a href="#">Grade 8</a></li>
+                <li data-tab-target="#thirdsubj"><a href="#">Grade 9</a></li>
+                <li data-tab-target="#fourthsubj"><a href="#">Grade 10</a></li>
+              </ul>
+            </li>
+            <!-- For Uploading Module dropdown -->
+            <li><a href="#" class="mod-btn"><i class='bx bx-upload'></i></i>Upload Module<span
+                  class='bx bxs-chevron-right second'></span></a>
+              <ul class="mod-show">
+                <li data-tab-target="#firstmod"><a href="#">Grade 7</a></li>
+                <li data-tab-target="#secondmod"><a href="#">Grade 8</a></li>
+                <li data-tab-target="#thirdmod"><a href="#">Grade 9</a></li>
+                <li data-tab-target="#fourthmod"><a href="#">Grade 10</a></li>
+              </ul>
+            </li>
+            <li><a href="/logout"><i class='bx bx-log-out'></i>Logout</a></li>
+          </ul>
+        </div>
+        <!-- For Page Tabs -->
+        <div class="main_content">
+          <!-- For Profile Page -->
+          <div class="main_content_profile">
+            <div data-tab-content class="active info" id="profile">
+              <div class="row">
+                <div class="col-7" id="label">
+                  <h1 align="center">
+                    User Details<button type="button" class="btn btn-secondary btn-sm" id="edit">
+                      Edit Profile
+                    </button>
+                  </h1>
+                  <h5>Full Name:{{user.firstname}}</h5>
+                  <h5>Age:</h5>
+                  <h5>Gender:</h5>
+                  <h5>Town/City:</h5>
+                  <h5>Email address:</h5>
+                </div>
+                <div class="col" id="image">
+                  <div class="file-upload-content">
+                    <img class="file-upload-image" src="{% static 'pictures/school.jpg'%}" width="200" height="200" />
+                    <div class="image-title-wrap"></div>
+                  </div>
+                  <br />
+                  <div class="image-upload-wrap">
+                    <input class="file-upload input" type="file" onchange="readURL(this);" accept="image/" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- For Subject Page -->
+          <div data-tab-content class="info" id="firstsubj">
+            <table class="table table-bordered table-dark">
+              <thead>
+                <tr align="center">
+                  <th scope="col">Action</th>
+                  <th scope="col">Student Number</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Section</th>
+                  <th scope="col">Gender</th>
+                  <th scope="col">Age</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  </tr> -->
+              </tbody>
+            </table>
+          </div>
+          <div data-tab-content class="info" id="secondsubj">
+            <table class="table table-bordered table-dark">
+              <thead>
+                <tr align="center">
+                  <th scope="col">Action</th>
+                  <th scope="col">Student Number</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Section</th>
+                  <th scope="col">Gender</th>
+                  <th scope="col">Age</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  </tr> -->
+              </tbody>
+            </table>
+          </div>
+
+          <div data-tab-content class="info" id="thirdsubj">
+            <table class="table table-bordered table-dark">
+              <thead>
+                <tr align="center">
+                  <th scope="col">Action</th>
+                  <th scope="col">Student Number</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Section</th>
+                  <th scope="col">Gender</th>
+                  <th scope="col">Age</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  </tr> -->
+              </tbody>
+            </table>
+          </div>
+
+          <div data-tab-content class="info" id="fourthsubj">
+            <table class="table table-bordered table-dark">
+              <thead>
+                <tr align="center">
+                  <th scope="col">Action</th>
+                  <th scope="col">Student Number</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Section</th>
+                  <th scope="col">Gender</th>
+                  <th scope="col">Age</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  </tr> -->
+              </tbody>
+            </table>
+          </div>
+
+
+          <!-- For First Year Module Page -->
+          <div data-tab-content class="info" id="firstmod">
+            <div class="row">
+              <div class="col-12">
+                <h1 align="center">RECORDS & MODULES</h1>
+              </div>
+            </div>
+            <hr />
+            <details>
+              <summary>Math Record</summary>
+              <div class="mathRecord">
+                <table class="table table-bordered table-dark">
+                  <thead>
+                    <tr align="center">
+                      <th scope="col">NAME</th>
+                      <th scope="col">ACTIVITY</th>
+                      <th scope="col">QUIZ</th>
+                      <th scope="col">EXAM</th>
+                      <th scope="col">AVERAGE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      </tr> -->
+                  </tbody>
+                </table>
+              </div>
+            </details>
+            <details>
+              <summary>Math Module</summary>
+              <br>
+              <div class="mathModule">
+                <!-- for uploading modules -->
+                <details>
+                  <summary>Reading Materials</summary>
+                  <br>
+                  <form id="form">
+                    <input class="file-upload input" type="file" onchange="readURL(this);" accept="image/pdf">
+                    <input type="date" value="2020-06-06">
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Activity</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Quiz</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Exam</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+              </div>
+              <div>
+                <a href="#" type="button"><button class="btn btn-primary btn-sm" id="submit">Submit</button></a>
+              </div>
+            </details>
+            <hr />
+            <details>
+              <summary>Science Record</summary>
+              <div class="scienceRecord">
+                <table class="table table-bordered table-dark">
+                  <thead>
+                    <tr align="center">
+                      <th scope="col">NAME</th>
+                      <th scope="col">ACTIVITY</th>
+                      <th scope="col">QUIZ</th>
+                      <th scope="col">EXAM</th>
+                      <th scope="col">AVERAGE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      </tr> -->
+                  </tbody>
+                </table>
+              </div>
+            </details>
+            <details>
+              <summary>Science Module</summary>
+              <br>
+              <div class="scienceModule">
+                <!-- for uploading modules -->
+                <details>
+                  <summary>Reading Materials</summary>
+                  <br>
+                  <form id="form">
+                    <input class="file-upload input" type="file" onchange="readURL(this);" accept="image/pdf">
+                    <input type="date" value="2020-06-06">
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Activity</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Quiz</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Exam</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+              </div>
+              <div>
+                <a href="#" type="button"><button class="btn btn-primary btn-sm" id="submit">Submit</button></a>
+              </div>
+            </details>
+            <hr />
+            <details>
+              <summary>English Record</summary>
+              <div class="englishRecord">
+                <table class="table table-bordered table-dark">
+                  <thead>
+                    <tr align="center">
+                      <th scope="col">NAME</th>
+                      <th scope="col">ACTIVITY</th>
+                      <th scope="col">QUIZ</th>
+                      <th scope="col">EXAM</th>
+                      <th scope="col">AVERAGE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      </tr> -->
+                  </tbody>
+                </table>
+              </div>
+            </details>
+            <details>
+              <summary>English Module</summary>
+              <br>
+              <div class="englishModule">
+                <!-- for uploading modules -->
+                <details>
+                  <summary>Reading Materials</summary>
+                  <br>
+                  <form id="form">
+                    <input class="file-upload input" type="file" onchange="readURL(this);" accept="image/pdf">
+                    <input type="date" value="2020-06-06">
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Activity</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Quiz</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Exam</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+              </div>
+              <div>
+                <a href="#" type="button"><button class="btn btn-primary btn-sm" id="submit">Submit</button></a>
+              </div>
+            </details>
+            <hr />
+            <details>
+              <summary>Filipino Record</summary>
+              <div class="filipinoRecord">
+                <table class="table table-bordered table-dark">
+                  <thead>
+                    <tr align="center">
+                      <th scope="col">NAME</th>
+                      <th scope="col">ACTIVITY</th>
+                      <th scope="col">QUIZ</th>
+                      <th scope="col">EXAM</th>
+                      <th scope="col">AVERAGE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      </tr> -->
+                  </tbody>
+                </table>
+              </div>
+            </details>
+            <details>
+              <summary>Filipino Module</summary>
+              <br>
+              <div class="filipinoModule">
+                <!-- for uploading modules -->
+                <details>
+                  <summary>Reading Materials</summary>
+                  <br>
+                  <form id="form">
+                    <input class="file-upload input" type="file" onchange="readURL(this);" accept="image/pdf">
+                    <input type="date" value="2020-06-06">
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Activity</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Quiz</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Exam</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+              </div>
+              <div>
+                <a href="#" type="button"><button class="btn btn-primary btn-sm" id="submit">Submit</button></a>
+              </div>
+            </details>
+            <hr />
+          </div>
+
+          <!-- For Second Year Module Page -->
+          <div data-tab-content class="info" id="secondmod">
+            <div class="row">
+              <div class="col-12">
+                <h1 align="center">RECORDS & MODULES</h1>
+              </div>
+            </div>
+            <hr />
+            <details>
+              <summary>Math Record</summary>
+              <div class="mathRecord">
+                <table class="table table-bordered table-dark">
+                  <thead>
+                    <tr align="center">
+                      <th scope="col">NAME</th>
+                      <th scope="col">ACTIVITY</th>
+                      <th scope="col">QUIZ</th>
+                      <th scope="col">EXAM</th>
+                      <th scope="col">AVERAGE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      </tr> -->
+                  </tbody>
+                </table>
+              </div>
+            </details>
+
+            <details>
+              <summary>Math Module</summary>
+              <br>
+              <div class="mathModule">
+                <!-- for uploading modules -->
+                <details>
+                  <summary>Reading Materials</summary>
+                  <br>
+                  <form id="form">
+                    <input class="file-upload input" type="file" onchange="readURL(this);" accept="image/pdf">
+                    <input type="date" value="2020-06-06">
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Activity</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Quiz</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Exam</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+              </div>
+              <div>
+                <a href="#" type="button"><button class="btn btn-primary btn-sm" id="submit">Submit</button></a>
+              </div>
+            </details>
+            <hr />
+            <details>
+              <summary>Science Record</summary>
+              <div class="scienceRecord">
+                <table class="table table-bordered table-dark">
+                  <thead>
+                    <tr align="center">
+                      <th scope="col">NAME</th>
+                      <th scope="col">ACTIVITY</th>
+                      <th scope="col">QUIZ</th>
+                      <th scope="col">EXAM</th>
+                      <th scope="col">AVERAGE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      </tr> -->
+                  </tbody>
+                </table>
+              </div>
+            </details>
+            <details>
+              <summary>Science Module</summary>
+              <br>
+              <div class="scienceModule">
+                <!-- for uploading modules -->
+                <details>
+                  <summary>Reading Materials</summary>
+                  <br>
+                  <form id="form">
+                    <input class="file-upload input" type="file" onchange="readURL(this);" accept="image/pdf">
+                    <input type="date" value="2020-06-06">
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Activity</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Quiz</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Exam</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+              </div>
+              <div>
+                <a href="#" type="button"><button class="btn btn-primary btn-sm" id="submit">Submit</button></a>
+              </div>
+            </details>
+            <hr />
+            <details>
+              <summary>English Record</summary>
+              <div class="englishRecord">
+                <table class="table table-bordered table-dark">
+                  <thead>
+                    <tr align="center">
+                      <th scope="col">NAME</th>
+                      <th scope="col">ACTIVITY</th>
+                      <th scope="col">QUIZ</th>
+                      <th scope="col">EXAM</th>
+                      <th scope="col">AVERAGE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      </tr> -->
+                  </tbody>
+                </table>
+              </div>
+            </details>
+            <details>
+              <summary>English Module</summary>
+              <br>
+              <div class="englishModule">
+                <!-- for uploading modules -->
+                <details>
+                  <summary>Reading Materials</summary>
+                  <br>
+                  <form id="form">
+                    <input class="file-upload input" type="file" onchange="readURL(this);" accept="image/pdf">
+                    <input type="date" value="2020-06-06">
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Activity</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Quiz</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Exam</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+              </div>
+              <div>
+                <a href="#" type="button"><button class="btn btn-primary btn-sm" id="submit">Submit</button></a>
+              </div>
+            </details>
+            <hr />
+            <details>
+              <summary>Filipino Record</summary>
+              <div class="filipinoRecord">
+                <table class="table table-bordered table-dark">
+                  <thead>
+                    <tr align="center">
+                      <th scope="col">NAME</th>
+                      <th scope="col">ACTIVITY</th>
+                      <th scope="col">QUIZ</th>
+                      <th scope="col">EXAM</th>
+                      <th scope="col">AVERAGE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      </tr> -->
+                  </tbody>
+                </table>
+              </div>
+            </details>
+            <details>
+              <summary>Filipino Module</summary>
+              <br>
+              <div class="filipinoModule">
+                <!-- for uploading modules -->
+                <details>
+                  <summary>Reading Materials</summary>
+                  <br>
+                  <form id="form">
+                    <input class="file-upload input" type="file" onchange="readURL(this);" accept="image/pdf">
+                    <input type="date" value="2020-06-06">
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Activity</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Quiz</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Exam</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+              </div>
+              <div>
+                <a href="#" type="button"><button class="btn btn-primary btn-sm" id="submit">Submit</button></a>
+              </div>
+            </details>
+            <hr />
+          </div>
+
+          <!-- For Third Year Module Page -->
+          <div data-tab-content class="info" id="thirdmod">
+            <div class="row">
+              <div class="col-12">
+                <h1 align="center">RECORDS & MODULES</h1>
+              </div>
+            </div>
+            <hr />
+            <details>
+              <summary>Math Record</summary>
+              <div class="mathRecord">
+                <table class="table table-bordered table-dark">
+                  <thead>
+                    <tr align="center">
+                      <th scope="col">NAME</th>
+                      <th scope="col">ACTIVITY</th>
+                      <th scope="col">QUIZ</th>
+                      <th scope="col">EXAM</th>
+                      <th scope="col">AVERAGE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      </tr> -->
+                  </tbody>
+                </table>
+              </div>
+            </details>
+            <details>
+              <summary>Math Module</summary>
+              <br>
+              <div class="mathModule">
+                <!-- for uploading modules -->
+                <details>
+                  <summary>Reading Materials</summary>
+                  <br>
+                  <form id="form">
+                    <input class="file-upload input" type="file" onchange="readURL(this);" accept="image/pdf">
+                    <input type="date" value="2020-06-06">
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Activity</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Quiz</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Exam</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+              </div>
+              <div>
+                <a href="#" type="button"><button class="btn btn-primary btn-sm" id="submit">Submit</button></a>
+              </div>
+            </details>
+            <hr />
+            <details>
+              <summary>Science Record</summary>
+              <div class="scienceRecord">
+                <table class="table table-bordered table-dark">
+                  <thead>
+                    <tr align="center">
+                      <th scope="col">NAME</th>
+                      <th scope="col">ACTIVITY</th>
+                      <th scope="col">QUIZ</th>
+                      <th scope="col">EXAM</th>
+                      <th scope="col">AVERAGE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      </tr> -->
+                  </tbody>
+                </table>
+              </div>
+            </details>
+            <details>
+              <summary>Science Module</summary>
+              <br>
+              <div class="scienceModule">
+                <!-- for uploading modules -->
+                <details>
+                  <summary>Reading Materials</summary>
+                  <br>
+                  <form id="form">
+                    <input class="file-upload input" type="file" onchange="readURL(this);" accept="image/pdf">
+                    <input type="date" value="2020-06-06">
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Activity</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Quiz</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Exam</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+              </div>
+              <div>
+                <a href="#" type="button"><button class="btn btn-primary btn-sm" id="submit">Submit</button></a>
+              </div>
+            </details>
+            <hr />
+            <details>
+              <summary>English Record</summary>
+              <div class="englishRecord">
+                <table class="table table-bordered table-dark">
+                  <thead>
+                    <tr align="center">
+                      <th scope="col">NAME</th>
+                      <th scope="col">ACTIVITY</th>
+                      <th scope="col">QUIZ</th>
+                      <th scope="col">EXAM</th>
+                      <th scope="col">AVERAGE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      </tr> -->
+                  </tbody>
+                </table>
+              </div>
+            </details>
+            <details>
+              <summary>English Module</summary>
+              <br>
+              <div class="englishModule">
+                <!-- for uploading modules -->
+                <details>
+                  <summary>Reading Materials</summary>
+                  <br>
+                  <form id="form">
+                    <input class="file-upload input" type="file" onchange="readURL(this);" accept="image/pdf">
+                    <input type="date" value="2020-06-06">
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Activity</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Quiz</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Exam</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+              </div>
+              <div>
+                <a href="#" type="button"><button class="btn btn-primary btn-sm" id="submit">Submit</button></a>
+              </div>
+            </details>
+            <hr />
+            <details>
+              <summary>Filipino Record</summary>
+              <div class="filipinoRecord">
+                <table class="table table-bordered table-dark">
+                  <thead>
+                    <tr align="center">
+                      <th scope="col">NAME</th>
+                      <th scope="col">ACTIVITY</th>
+                      <th scope="col">QUIZ</th>
+                      <th scope="col">EXAM</th>
+                      <th scope="col">AVERAGE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      </tr> -->
+                  </tbody>
+                </table>
+              </div>
+            </details>
+            <details>
+              <summary>Filipino Module</summary>
+              <br>
+              <div class="filipinoModule">
+                <!-- for uploading modules -->
+                <details>
+                  <summary>Reading Materials</summary>
+                  <br>
+                  <form id="form">
+                    <input class="file-upload input" type="file" onchange="readURL(this);" accept="image/pdf">
+                    <input type="date" value="2020-06-06">
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Activity</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Quiz</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Exam</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+              </div>
+              <div>
+                <a href="#" type="button"><button class="btn btn-primary btn-sm" id="submit">Submit</button></a>
+              </div>
+            </details>
+            <hr />
+          </div>
+
+          <!-- For Fourth Year Module Page -->
+          <div data-tab-content class="info" id="fourthmod">
+            <div class="row">
+              <div class="col-12">
+                <h1 align="center">RECORDS & MODULES</h1>
+              </div>
+            </div>
+            <hr />
+            <details>
+              <summary>Math Record</summary>
+              <div class="mathRecord">
+                <table class="table table-bordered table-dark">
+                  <thead>
+                    <tr align="center">
+                      <th scope="col">NAME</th>
+                      <th scope="col">ACTIVITY</th>
+                      <th scope="col">QUIZ</th>
+                      <th scope="col">EXAM</th>
+                      <th scope="col">AVERAGE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      </tr> -->
+                  </tbody>
+                </table>
+              </div>
+            </details>
+            <details>
+              <summary>Math Module</summary>
+              <br>
+              <div class="mathModule">
+                <!-- for uploading modules -->
+                <details>
+                  <summary>Reading Materials</summary>
+                  <br>
+                  <form id="form">
+                    <input class="file-upload input" type="file" onchange="readURL(this);" accept="image/pdf">
+                    <input type="date" value="2020-06-06">
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Activity</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Quiz</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Exam</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+              </div>
+              <div>
+                <a href="#" type="button"><button class="btn btn-primary btn-sm" id="submit">Submit</button></a>
+              </div>
+            </details>
+            <hr />
+            <details>
+              <summary>Science Record</summary>
+              <div class="scienceRecord">
+                <table class="table table-bordered table-dark">
+                  <thead>
+                    <tr align="center">
+                      <th scope="col">NAME</th>
+                      <th scope="col">ACTIVITY</th>
+                      <th scope="col">QUIZ</th>
+                      <th scope="col">EXAM</th>
+                      <th scope="col">AVERAGE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      </tr> -->
+                  </tbody>
+                </table>
+              </div>
+            </details>
+            <details>
+              <summary>Science Module</summary>
+              <br>
+              <div class="scienceModule">
+                <!-- for uploading modules -->
+                <details>
+                  <summary>Reading Materials</summary>
+                  <br>
+                  <form id="form">
+                    <input class="file-upload input" type="file" onchange="readURL(this);" accept="image/pdf">
+                    <input type="date" value="2020-06-06">
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Activity</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Quiz</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Exam</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+              </div>
+              <div>
+                <a href="#" type="button"><button class="btn btn-primary btn-sm" id="submit">Submit</button></a>
+              </div>
+            </details>
+            <hr />
+            <details>
+              <summary>English Record</summary>
+              <div class="englishRecord">
+                <table class="table table-bordered table-dark">
+                  <thead>
+                    <tr align="center">
+                      <th scope="col">NAME</th>
+                      <th scope="col">ACTIVITY</th>
+                      <th scope="col">QUIZ</th>
+                      <th scope="col">EXAM</th>
+                      <th scope="col">AVERAGE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      </tr> -->
+                  </tbody>
+                </table>
+              </div>
+            </details>
+            <details>
+              <summary>English Module</summary>
+              <br>
+              <div class="englishModule">
+                <!-- for uploading modules -->
+                <details>
+                  <summary>Reading Materials</summary>
+                  <br>
+                  <form id="form">
+                    <input class="file-upload input" type="file" onchange="readURL(this);" accept="image/pdf">
+                    <input type="date" value="2020-06-06">
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Activity</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Quiz</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Exam</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+              </div>
+              <div>
+                <a href="#" type="button"><button class="btn btn-primary btn-sm" id="submit">Submit</button></a>
+              </div>
+            </details>
+            <hr />
+            <details>
+              <summary>Filipino Record</summary>
+              <div class="filipinoRecord">
+                <table class="table table-bordered table-dark">
+                  <thead>
+                    <tr align="center">
+                      <th scope="col">NAME</th>
+                      <th scope="col">ACTIVITY</th>
+                      <th scope="col">QUIZ</th>
+                      <th scope="col">EXAM</th>
+                      <th scope="col">AVERAGE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      </tr> -->
+                  </tbody>
+                </table>
+              </div>
+            </details>
+            <details>
+              <summary>Filipino Module</summary>
+              <br>
+              <div class="filipinoModule">
+                <!-- for uploading modules -->
+                <details>
+                  <summary>Reading Materials</summary>
+                  <br>
+                  <form id="form">
+                    <input class="file-upload input" type="file" onchange="readURL(this);" accept="image/pdf">
+                    <input type="date" value="2020-06-06">
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Activity</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Quiz</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+                <details>
+                  <summary>Exam</summary>
+                  <br>
+                  <form id="form">
+                    <input type="submit" value="Add URL">
+                    <input type="url" id="url">
+                    <label>Choose URL</label>
+                    <input type="date" id="date" value="2020-06-06">
+
+                    <textarea id="comment" placeholder="Enter your comment here">
+                      </textarea>
+                  </form>
+                  <br>
+                </details>
+              </div>
+              <div>
+                <a href="#" type="button"><button class="btn btn-primary btn-sm" id="submit">Submit</button></a>
+              </div>
+            </details>
+            <hr />
+          </div>
+        </div>
       </div>
     </div>
+
+    <script>
+
+      // for animations
+
+      $(".subj-btn").click(function () {
+        $(".subj-show").toggleClass("show");
+        $(".bxs-chevron-right").toggleClass("rotate");
+      });
+
+      $(".mod-btn").click(function () {
+        $(".mod-show").toggleClass("show");
+        $(".bxs-chevron-right").toggleClass("rotate");
+      });
+
+      // for page tabs
+
+      const tabs = document.querySelectorAll('[data-tab-target]')
+      const mainContents = document.querySelectorAll('[data-tab-content]')
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const target = document.querySelector(tab.dataset.tabTarget)
+          mainContents.forEach(mainContent => {
+            mainContent.classList.remove('active')
+          })
+          target.classList.add("active")
+        })
+      })
+
+    </script>
+
     {% else %}
     <script>
       alert("Access Denied!");
@@ -102,6 +1839,8 @@
       }, 1000);
     </script>
     {%endif%}
-  </body>
+  </div>
+</body>
+
 </html>
 {% endblock%}
