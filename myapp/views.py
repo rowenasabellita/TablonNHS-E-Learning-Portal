@@ -45,3 +45,7 @@ def studentsubject(request):
 def logout(request):
     auth.logout(request)
     return render(request, 'login.html')
+
+
+def mathmodule(request):
+    return render(request, 'mathmodule.html')
