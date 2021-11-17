@@ -22,7 +22,7 @@
 .container {
     background-color: white;
     width: 1100px;
-    height: auto;
+    height: 100%;
     padding: 30px 30px 50px 30px;
 }
 

@@ -21,45 +21,6 @@
 
 <body>
   {% if user.is_authenticated %}
-  <!-- <div class="container-fluid" id="background">
-    <div class="container">
-      <div class="row">
-        <div class="col-3" id="image">
-          <div class="file-upload-content">
-            <img class="file-upload-image" src="{% static 'pictures/school.jpg'%}" width="200" height="200" />
-            <div class="image-title-wrap"></div>
-          </div>
-          <br />
-          <div class="image-upload-wrap">
-            <input class="file-upload input" type="file" onchange="readURL(this);" accept="image/" />
-          </div>
-        </div>
-
-        <div class="col-7" id="label">
-          <h1 align="center">
-            User Details<button type="button" class="btn btn-secondary btn-sm" id="edit">
-              Edit Profile
-            </button>
-          </h1>
-          <h5>Full Name:{{user.firstname}}</h5>
-          <h5>Age:</h5>
-          <h5>Gender:</h5>
-          <h5>Town/City:</h5>
-          <h5>Email address:</h5>
-        </div>
-
-        <div class="col">
-          <img src="{% static 'pictures/logo.jpg'%}" width="150" height="150" id="logo" />
-          <a href="logout"><button type="button" class="btn btn-secondary btn-md" id="logout">
-              LOG OUT
-            </button></a>
-        </div>
-      </div>
-      <br /><br /><br />
-      <a href="/teachersubject" type="button"><button class="btn btn-primary btn-lg">Subjects</button></a>
-    </div>
-  </div> -->
-
   <!-- Alternative content -->
 
   <!-- For Navigation Side-Bar -->
@@ -129,36 +90,164 @@
           </div>
           <!-- For Subject Page -->
           <div data-tab-content class="info" id="firstsubj">
-            <table class="table table-bordered table-dark">
-              <thead>
-                <tr align="center">
-                  <th scope="col">Action</th>
-                  <th scope="col">Student Number</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Section</th>
-                  <th scope="col">Gender</th>
-                  <th scope="col">Age</th>
-                </tr>
-              </thead>
-              <tbody>
-                <!-- <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td></td>
+            <div class="input-group rounded">
+              <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+                aria-describedby="search-addon" />
+              <span class="input-group-text border-0" id="search-addon">
+                <i class='bx bx-search-alt-2'></i>
+              </span>
+            </div>
+            <hr />
+            <div class="table_container">
+              <table class="table">
+                <thead class="thead-dark">
+                  <tr align="center">
+                    <th scope="col">#</th>
+                    <th scope="col">Action</th>
+                    <th scope="col">Student Number</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Section</th>
+                    <th scope="col">Gender</th>
+                    <th scope="col">Age</th>
+                  </tr>
+                </thead>
+                <tbody align="center">
+                  <!-- <tr>
+                    <th scope="row">1</th>
+                    <td>Edit</td>
+                    <td>2016100461</td>
+                    <td>Rowena Sabellita Sabbellita</td>
+                    <td>Sampaguita</td>
+                    <td>Female</td>
+                    <td>15</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">2</th>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>@fat</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">4</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">5</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">5</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">5</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">5</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">5</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">5</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
                   </tr> -->
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
           </div>
           <div data-tab-content class="info" id="secondsubj">
+            <div class="input-group rounded">
+              <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+                aria-describedby="search-addon" />
+              <span class="input-group-text border-0" id="search-addon">
+                <i class='bx bx-search-alt-2'></i>
+              </span>
+            </div>
+            <hr />
+            <div class="table_container">
+              <table class="table">
+                <thead class="thead-dark">
+                  <tr align="center">
+                    <th scope="col">#</th>
+                    <th scope="col">Action</th>
+                    <th scope="col">Student Number</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Section</th>
+                    <th scope="col">Gender</th>
+                    <th scope="col">Age</th>
+                  </tr>
+                </thead>
+                <tbody align="center">
+                  <!-- <tr>
+                    <th scope="row">1</th>
+                    <td>Edit</td>
+                    <td>2016100461</td>
+                    <td>Rowena Sabellita Sabbellita</td>
+                    <td>Sampaguita</td>
+                    <td>Female</td>
+                    <td>15</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">2</th>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>@fat</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">4</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">5</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
+                  </tr> -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div data-tab-content class="info" id="secondsubj">
+            <div class="input-group rounded">
+              <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+                aria-describedby="search-addon" />
+              <span class="input-group-text border-0" id="search-addon">
+                <i class='bx bx-search-alt-2'></i>
+              </span>
+            </div>
+            <hr />
             <table class="table table-bordered table-dark">
               <thead>
                 <tr align="center">
@@ -190,6 +279,74 @@
           </div>
 
           <div data-tab-content class="info" id="thirdsubj">
+            <div class="input-group rounded">
+              <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+                aria-describedby="search-addon" />
+              <span class="input-group-text border-0" id="search-addon">
+                <i class='bx bx-search-alt-2'></i>
+              </span>
+            </div>
+            <hr />
+            <div class="table_container">
+              <table class="table">
+                <thead class="thead-dark">
+                  <tr align="center">
+                    <th scope="col">#</th>
+                    <th scope="col">Action</th>
+                    <th scope="col">Student Number</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Section</th>
+                    <th scope="col">Gender</th>
+                    <th scope="col">Age</th>
+                  </tr>
+                </thead>
+                <tbody align="center">
+                  <!-- <tr>
+                    <th scope="row">1</th>
+                    <td>Edit</td>
+                    <td>2016100461</td>
+                    <td>Rowena Sabellita Sabbellita</td>
+                    <td>Sampaguita</td>
+                    <td>Female</td>
+                    <td>15</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">2</th>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>@fat</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">4</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">5</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
+                  </tr> -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div data-tab-content class="info" id="secondsubj">
+            <div class="input-group rounded">
+              <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+                aria-describedby="search-addon" />
+              <span class="input-group-text border-0" id="search-addon">
+                <i class='bx bx-search-alt-2'></i>
+              </span>
+            </div>
+            <hr />
             <table class="table table-bordered table-dark">
               <thead>
                 <tr align="center">
@@ -221,6 +378,74 @@
           </div>
 
           <div data-tab-content class="info" id="fourthsubj">
+            <div class="input-group rounded">
+              <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+                aria-describedby="search-addon" />
+              <span class="input-group-text border-0" id="search-addon">
+                <i class='bx bx-search-alt-2'></i>
+              </span>
+            </div>
+            <hr />
+            <div class="table_container">
+              <table class="table">
+                <thead class="thead-dark">
+                  <tr align="center">
+                    <th scope="col">#</th>
+                    <th scope="col">Action</th>
+                    <th scope="col">Student Number</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Section</th>
+                    <th scope="col">Gender</th>
+                    <th scope="col">Age</th>
+                  </tr>
+                </thead>
+                <tbody align="center">
+                  <!-- <tr>
+                  <th scope="row">1</th>
+                  <td>Edit</td>
+                  <td>2016100461</td>
+                  <td>Rowena Sabellita Sabbellita</td>
+                  <td>Sampaguita</td>
+                  <td>Female</td>
+                  <td>15</td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>Jacob</td>
+                  <td>Thornton</td>
+                  <td>@fat</td>
+                </tr>
+                <tr>
+                  <th scope="row">3</th>
+                  <td>Larry</td>
+                  <td>the Bird</td>
+                  <td>@twitter</td>
+                </tr>
+                <tr>
+                  <th scope="row">4</th>
+                  <td>Larry</td>
+                  <td>the Bird</td>
+                  <td>@twitter</td>
+                </tr>
+                <tr>
+                  <th scope="row">5</th>
+                  <td>Larry</td>
+                  <td>the Bird</td>
+                  <td>@twitter</td>
+                </tr> -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div data-tab-content class="info" id="secondsubj">
+            <div class="input-group rounded">
+              <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+                aria-describedby="search-addon" />
+              <span class="input-group-text border-0" id="search-addon">
+                <i class='bx bx-search-alt-2'></i>
+              </span>
+            </div>
+            <hr />
             <table class="table table-bordered table-dark">
               <thead>
                 <tr align="center">
@@ -234,19 +459,19 @@
               </thead>
               <tbody>
                 <!-- <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  </tr> -->
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                </tr> -->
               </tbody>
             </table>
           </div>
