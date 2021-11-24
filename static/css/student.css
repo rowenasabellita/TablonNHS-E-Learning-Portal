@@ -24,6 +24,14 @@
     
 }
 
+#edit{
+  margin-left: 20px;
+  text-decoration: none;
+  background-color: #087937;
+  font-size: 16px;
+  cursor: pointer;
+}
+
 #image{
     padding-top: 30px;
     

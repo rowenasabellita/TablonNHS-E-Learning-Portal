@@ -8,4 +8,7 @@ urlpatterns = [
     path('student', views.student, name='student'),
     path('studentsubject', views.studentsubject, name="studentsubject"),
     path('logout', views.logout, name='logout'),
+    # path('teacher/update_profile/<int:pk>/',
+    #      views.update_profile, name='update_profile'),
+
 ]
