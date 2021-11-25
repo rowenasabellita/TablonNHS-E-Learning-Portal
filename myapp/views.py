@@ -42,6 +42,10 @@ def studentsubject(request):
     return render(request, 'studentsubject.html')
 
 
+def validation(request):
+    return render(request, 'validation.html')
+
+
 def logout(request):
     auth.logout(request)
     return render(request, 'login.html')

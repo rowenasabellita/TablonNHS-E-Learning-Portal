@@ -19,12 +19,22 @@
     <div class="container-fluid" id="background">
 
         <div class="container" id="content">
-            <div>
-                <header>
-                    <h1>
-                        Tablon NHS e-learning Portal
-                    </h1>
-                </header>
+            <div class="container-info">
+                <div class="content-info">
+                    <header>
+                        <h1>
+                            Tablon NHS e-learning Portal
+                        </h1>
+                    </header>
+                    <hr/>
+                    <h2>Is this your first time here? </h2>
+                    <p>Your username is your ID number and your default password is a combination of your Lastname, first letter should be in capital letter, add "@", then ID number.</p>
+                    <p>Example: </p>
+                    <p class="firstp">Username: 2016100461</p> 
+                    <p class="secondp">Password: Varquez@2016100461</p>
+                </div>
+            </div>
+            <div class="container-login">
                 {% if messages %}
                 <div class="alert alert-danger">This credentials do not match on our records.</div>
                 {% for msg in messages%}
@@ -35,7 +45,7 @@
                 </button>
             </div>
             {% endif %}
-            <form action="/" method="post">
+            <form action="/validation" method="post">
                 {% csrf_token %}
                 <div class="main">
                     <div class="form-group">
@@ -48,7 +58,7 @@
                             placeholder="Password" required>
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="btn btn-success mt-5 btn-block">Login</button>
+                        <button type="submit" class="btn btn-success mt-5  btn-lg btn-block">Log in</button>
                     </div>
                 </div>
             </form>
