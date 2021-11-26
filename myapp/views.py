@@ -77,5 +77,26 @@ def logout(request):
     return render(request, 'login.html')
 
 
+def artmodule(request):
+    return render(request, 'artmodule.html')
+
+def englishmodule(request):
+    return render(request, 'englishmodule.html')
+
+def espmodule(request):
+    return render(request, 'espmodule.html')
+
+def filipinomodule(request):
+    return render(request, 'filipinomodule.html')
+
+def historymodule(request):
+    return render(request, 'historymodule.html')
+
 def mathmodule(request):
     return render(request, 'mathmodule.html')
+
+def pemodule(request):
+    return render(request, 'pemodule.html')
+
+def sciencemodule(request):
+    return render(request, 'sciencemodule.html')
