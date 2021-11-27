@@ -61,7 +61,15 @@ ROOT_URLCONF = 'myproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+
+            #re-route the search for templates into this custom template directory
+            os.path.join(os.path.join(BASE_DIR, 'templates'), 'studentmodules'),
+
+            #Uncomment the line below to restore the original Oscar template
+            #OSCAR_MAIN_TEMPLATE_DIR,
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
