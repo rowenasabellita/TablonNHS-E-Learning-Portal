@@ -40,7 +40,7 @@
             <li><a href="#" class="subj-btn"><i class='bx bxs-book'></i>Student Management<span
                   class='bx bxs-chevron-right first'></span></a>
               <ul class="subj-show">
-                <li data-tab-target="#firstsubj"><a href="#">Grade 7</a></li>
+                <li data-tab-target="#firstsubj" ><a href="#">Grade 7</a></li>
                 <li data-tab-target="#secondsubj"><a href="#">Grade 8</a></li>
                 <li data-tab-target="#thirdsubj"><a href="#">Grade 9</a></li>
                 <li data-tab-target="#fourthsubj"><a href="#">Grade 10</a></li>
@@ -56,7 +56,6 @@
                 <li data-tab-target="#fourthmod"><a href="#">Grade 10</a></li>
               </ul>
             </li>
-            <li><a href="/student"><i class='bx bx-log-out'></i>Student</a></li>
             <li><a href="/logout"><i class='bx bx-log-out'></i>Logout</a></li>
           </ul>
         </div>
@@ -82,8 +81,6 @@
                     <h5>Town/City : {{ user.studentprofile.address }}</h5> {% endcomment %}
                     <br>
                   </form>
-
-                  <!--form-->
                 </div>
                 
 
@@ -147,30 +144,6 @@
                   </tr>
                   <tr>
                     <th scope="row">4</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">5</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">5</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">5</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">5</th>
                     <td>Larry</td>
                     <td>the Bird</td>
                     <td>@twitter</td>
@@ -2038,6 +2011,14 @@
     </div>
 
     <script>
+
+      // for changing urls
+        //student management
+          function change (url) {
+            window.history.replaceState('new', 'title', url)
+          }
+
+
 
       // for animations
 

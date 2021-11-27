@@ -61,7 +61,13 @@ ROOT_URLCONF = 'myproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+
+            #re-route the search for templates into this custom template directory
+            os.path.join(os.path.join(BASE_DIR, 'templates'), 'studentmodules'),
+         
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -73,6 +79,12 @@ TEMPLATES = [
         },
     },
 ]
+
+
+TEMPLATE_LOADERS = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+)
 
 WSGI_APPLICATION = 'myproject.wsgi.application'
 
