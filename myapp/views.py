@@ -12,6 +12,7 @@ from .forms import ProfileUpdateForm, UserUpdateForm
 # Create your views here.
 
 
+
 def login(request):
     if request.method == "POST":
         username = request.POST['username']
@@ -79,3 +80,5 @@ def logout(request):
 
 def mathmodule(request):
     return render(request, 'mathmodule.html')
+
+
