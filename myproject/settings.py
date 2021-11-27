@@ -66,9 +66,7 @@ TEMPLATES = [
 
             #re-route the search for templates into this custom template directory
             os.path.join(os.path.join(BASE_DIR, 'templates'), 'studentmodules'),
-
-            #Uncomment the line below to restore the original Oscar template
-            #OSCAR_MAIN_TEMPLATE_DIR,
+         
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -82,12 +80,6 @@ TEMPLATES = [
     },
 ]
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_ROOT, 'templates').replace('\\','/'),
-)
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',

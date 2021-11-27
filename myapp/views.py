@@ -96,12 +96,8 @@ def historymodule(request):
 def mathmodule(request):
     return render(request, 'mathmodule.html')
 
-<<<<<<< HEAD
-
-=======
 def pemodule(request):
     return render(request, 'pemodule.html')
 
 def sciencemodule(request):
     return render(request, 'sciencemodule.html')
->>>>>>> 96b86ff9c753d7a72aa68ab81db9c01b290e8dfd
