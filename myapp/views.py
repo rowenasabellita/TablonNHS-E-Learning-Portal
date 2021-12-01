@@ -67,15 +67,22 @@ def student(request, commit=True):
 
 @login_required
 def view_grade7(request, commit=True):
-    students = UserProfile.objects.all()
-    # students = UserProfile.objects.select_related('user')
-    print("select related", students)
+    students = User.objects.raw("""
+                                SELECT 
+                                a.id as id, a.username, a.first_name, a.last_name, b.section, b.gender, b.age, b.id as userprofile_id, b.gradelevel
+                                FROM myapp_user as a 
+                                JOIN myapp_userprofile as b
+                                on a.id = b.user_id
+                                """)
     students_data = {
         "data": []
     }
 
     for i in students:
         if i.gradelevel == 'Grade 7':
+            i.__dict__.update({
+                "full_name": i.first_name+" "+i.last_name
+            })
             students_data['data'].append(i.__dict__)
 
     return render(request, 'grade7.html', students_data)
