@@ -208,3 +208,34 @@ ul,li { list-style-type: none;
 #date {
     margin-left: 20px;
 }
+
+.bg-modal{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    opacity: 0.7%;
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* display: hidden; */
+}
+.model-content{
+    width: 500px;
+    height: 500px;
+    background-color: white;
+    border-radius: 4px;
+    text-align: center;
+    padding: 20px;
+}
+.close{
+    position: absolute;
+    top:0;
+    right: 14px;
+    font-size: 42px;
+    transform: rotate(45deg);
+    cursor: pointer;
+}
+
+

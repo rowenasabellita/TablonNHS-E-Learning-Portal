@@ -64,9 +64,14 @@ TEMPLATES = [
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
 
-            #re-route the search for templates into this custom template directory
-            os.path.join(os.path.join(BASE_DIR, 'templates'), 'studentmodules'),
-         
+            # re-route the search for templates into this custom template directory
+            os.path.join(os.path.join(BASE_DIR, 'templates'),
+                         'studentmodules'),
+            os.path.join(os.path.join(BASE_DIR, 'templates'),
+                         'studentmanagement'),
+            os.path.join(os.path.join(BASE_DIR, 'templates'),
+                         'uploadmodule'),
+
         ],
         'APP_DIRS': True,
         'OPTIONS': {

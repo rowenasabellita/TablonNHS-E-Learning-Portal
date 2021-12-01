@@ -1,0 +1,53 @@
+{% extends 'header.html' %} {% load static %} {% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="container">
+    <div class="wrapper">
+        <div class="sidebar">
+          <div class="logo_content">
+            <img class="file-upload-image" src="{% static 'pictures/tnhslogo.jpg'%}" width="100" height="100" />
+            <h2>Tablon National Highschool</h2>
+          </div>
+          <ul>
+            <li data-tab-target="#profile"><a href="/teacher"><i class='bx bx-user'></i>Profile</a></li>
+            <!-- For Subjects dropdown -->
+            <li><a href="#" class="subj-btn"><i class='bx bxs-book'></i>Student Management<span
+                  class='bx bxs-chevron-right first'></span></a>
+              <ul class="subj-show">
+                <li data-tab-target="#firstsubj" ><a href="/teacher/sm/grade7">Grade 7</a></li>
+                <li data-tab-target="#secondsubj"><a href="/teacher/sm/grade8">Grade 8</a></li>
+                <li data-tab-target="#thirdsubj"><a href="/teacher/sm/grade9">Grade 9</a></li>
+                <li data-tab-target="#fourthsubj"><a href="/teacher/sm/grade10">Grade 10</a></li>
+              </ul>
+            </li>
+            <!-- For Uploading Module dropdown -->
+            <li><a href="#" class="mod-btn"><i class='bx bx-upload'></i></i>Upload Module<span
+                  class='bx bxs-chevron-right second'></span></a>
+              <ul class="mod-show">
+                <li data-tab-target="#firstmod"><a href="/teacher/um/grade7">Grade 7</a></li>
+                <li data-tab-target="#secondmod"><a href="/teacher/um/grade8">Grade 8</a></li>
+                <li data-tab-target="#thirdmod"><a href="/teacher/um/grade9">Grade 9</a></li>
+                <li data-tab-target="#fourthmod"><a href="/teacher/um/grade10">Grade 10</a></li>
+              </ul>
+            </li>
+            <li><a href="/logout"><i class='bx bx-log-out'></i>Logout</a></li>
+          </ul>
+        </div>
+        <!-- For Page Tabs -->
+        <div class="main_content">
+          <!-- For Profile Page -->
+          <div class="main_content_profile">
+
+            {% block main_content %}
+                
+            {% endblock %}
+
+          </div>
+            
+        </div>
+      </div>
+    </div>
+
+
+{% endblock %}
