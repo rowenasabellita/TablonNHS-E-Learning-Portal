@@ -180,17 +180,20 @@ def edit_grade7(request, id):
 
 
 @login_required
-def edit_grade8(request):
+def edit_grade8(request, id):
+    studestudent = get_student(id).username
     return render(request, 'grade8.html')
 
 
 @login_required
-def edit_grade9(request):
+def edit_grade9(request, id):
+    student = get_student(id).username
     return render(request, 'grade9.html')
 
 
 @login_required
-def edit_grade10(request):
+def edit_grade10(request, id):
+    student = get_student(id).username
     return render(request, 'grade10.html')
 
 
