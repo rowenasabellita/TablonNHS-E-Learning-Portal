@@ -70,7 +70,7 @@ class User(AbstractUser):
     is_teacher = models.BooleanField(default=False)
     
 
-class StudentProfile(models.Model):
+class UserProfile(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     age = models.CharField(max_length=100)
@@ -90,5 +90,5 @@ class StudentProfile(models.Model):
 @receiver(post_save, sender=User)
 def update_profile_signal(sender, instance, created, **kwargs):
     if created:
-        StudentProfile.objects.create(user=instance)
-    instance.studentprofile.save()
+        UserProfile.objects.create(user=instance)
+    # instance.userprofile.save()
