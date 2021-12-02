@@ -8,13 +8,11 @@ from .models import UserProfile
 from myproject.settings import AUTH_PASSWORD_VALIDATORS
 from django.contrib.auth.models import User, auth
 from django.contrib.auth.decorators import login_required
-from .forms import ProfileUpdateForm
+from .forms import ProfileUpdateForm, UserUpdateForm
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
 # Create your views here.
-
-# myapp.User = User
 
 
 def login(request):
@@ -85,18 +83,33 @@ def view_grade7(request, commit=True):
             })
             students_data['data'].append(i.__dict__)
 
+    # if request.method == 'POST':
+    #     u_form = UserUpdateForm(
+    #         request.POST, request.students, instance=request.user)
+    #     if u_form.is_valid():
+    #         u_form.save()
+
     return render(request, 'grade7.html', students_data)
 
 
 @login_required
 def view_grade8(request, commit=True):
-    students = UserProfile.objects.all()
+    students = User.objects.raw("""
+                                SELECT 
+                                a.id as id, a.username, a.first_name, a.last_name, b.section, b.gender, b.age, b.id as userprofile_id, b.gradelevel
+                                FROM myapp_user as a 
+                                JOIN myapp_userprofile as b
+                                on a.id = b.user_id
+                                """)
     students_data = {
         "data": []
     }
 
     for i in students:
         if i.gradelevel == 'Grade 8':
+            i.__dict__.update({
+                "full_name": i.first_name+" "+i.last_name
+            })
             students_data['data'].append(i.__dict__)
 
     return render(request, 'grade8.html', students_data)
@@ -104,13 +117,22 @@ def view_grade8(request, commit=True):
 
 @login_required
 def view_grade9(request, commit=True):
-    students = UserProfile.objects.all()
+    students = User.objects.raw("""
+                                SELECT 
+                                a.id as id, a.username, a.first_name, a.last_name, b.section, b.gender, b.age, b.id as userprofile_id, b.gradelevel
+                                FROM myapp_user as a 
+                                JOIN myapp_userprofile as b
+                                on a.id = b.user_id
+                                """)
     students_data = {
         "data": []
     }
 
     for i in students:
         if i.gradelevel == 'Grade 9':
+            i.__dict__.update({
+                "full_name": i.first_name+" "+i.last_name
+            })
             students_data['data'].append(i.__dict__)
 
     return render(request, 'grade9.html', students_data)
@@ -118,21 +140,43 @@ def view_grade9(request, commit=True):
 
 @login_required
 def view_grade10(request, commit=True):
-    students = UserProfile.objects.all()
+    students = User.objects.raw("""
+                                SELECT 
+                                a.id as id, a.username, a.first_name, a.last_name, b.section, b.gender, b.age, b.id as userprofile_id, b.gradelevel
+                                FROM myapp_user as a 
+                                JOIN myapp_userprofile as b
+                                on a.id = b.user_id
+                                """)
     students_data = {
         "data": []
     }
 
     for i in students:
         if i.gradelevel == 'Grade 10':
+            i.__dict__.update({
+                "full_name": i.first_name+" "+i.last_name
+            })
             students_data['data'].append(i.__dict__)
-
     return render(request, 'grade10.html', students_data)
 
 
+def get_student(id):
+    query = """
+                SELECT 
+                a.id as id, a.username, a.first_name, a.last_name, b.section, b.gender, b.age, b.id as userprofile_id, b.gradelevel
+                FROM myapp_user as a 
+                JOIN myapp_userprofile as b
+                on a.id = b.user_id where a.id = %s
+                """
+    student = User.objects.raw(query, id)
+    print(student)
+    return student
+
+
 @login_required
-def edit_grade7(request):
-    return render(request, 'grade7.html')
+def edit_grade7(request, id):
+    student = get_student(id).username
+    return HttpResponse(student)
 
 
 @login_required

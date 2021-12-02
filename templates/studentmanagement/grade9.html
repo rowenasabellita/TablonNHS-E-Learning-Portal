@@ -1,5 +1,35 @@
 {% extends 'sidebar.html' %} {% load static %} {% load crispy_forms_tags %}
 {%block main_content %}
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+      </div>
+      <div class="modal-body">...</div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary modal_close"
+          data-dismiss="modal"
+        >
+          Close
+        </button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="main_content_profile">
   <div class="main_content_profile">
     <div data-tab-content class="active info" id="profile">
@@ -34,12 +64,16 @@
               {% for i in data %}
               <tr>
                 <td>
-                  <a href="/edit"
-                    ><button class="btn btn-primary btn-sm">Edit</button></a
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-sm edit_btn"
+                    data-target="#exampleModal"
                   >
+                    Edit
+                  </button>
                 </td>
                 <td>{{ i.username }}</td>
-                <td>{{ i.get_full_name }}</td>
+                <td>{{ i.full_name }}</td>
                 <td>{{ i.section }}</td>
                 <td>{{ i.gender }}</td>
                 <td>{{ i.age }}</td>
@@ -52,5 +86,17 @@
     </div>
   </div>
 </div>
+
+<script>
+  $(document).ready(function () {
+    $("button.edit_btn").on("click", function () {
+      $("#exampleModal").appendTo("body").modal("show");
+    });
+
+    $("button.modal_close").on("click", function () {
+      $("#exampleModal").modal("hide");
+    });
+  });
+</script>
 
 {% endblock %}

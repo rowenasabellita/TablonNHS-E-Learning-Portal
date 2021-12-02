@@ -12,6 +12,12 @@ class UserCreationForm(UserCreationForm):
         fields = "__all__"
 
 
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name']
+
+
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = UserProfile
