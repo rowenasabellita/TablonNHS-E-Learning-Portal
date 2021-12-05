@@ -1,4 +1,4 @@
-from django.db.models.query import QuerySet
+# from typing_extensions import Required
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib import messages
@@ -11,7 +11,6 @@ from django.contrib.auth.models import User, auth
 from django.contrib.auth.decorators import login_required
 from .forms import ProfileUpdateForm, UserUpdateForm
 from django.contrib.auth import get_user_model
-from .filters import FilterSearch
 
 User = get_user_model()
 # Create your views here.
@@ -66,100 +65,28 @@ def student(request, commit=True):
 
 
 @login_required
-def view_grade7(request, commit=True):
+def view_yearlevel(request, grade, commit=True):
+    yearlevel = "Grade {}".format(grade[-1])
+
     students = User.objects.raw("""
                                 SELECT 
                                 a.id as id, a.username, a.first_name, a.last_name, b.section, b.gender, b.age, b.id as userprofile_id, b.gradelevel
                                 FROM myapp_user as a 
                                 JOIN myapp_userprofile as b
                                 on a.id = b.user_id
-                                """)
+                                where b.gradelevel = '{}'
+                                """.format(yearlevel))
+
     students_data = {
         "data": []
     }
-
     for i in students:
-        if i.gradelevel == 'Grade 7':
-            i.__dict__.update({
-                "full_name": i.first_name+" "+i.last_name
-            })
-            students_data['data'].append(i.__dict__)
+        i.__dict__.update({
+            "full_name": i.first_name+" "+i.last_name
+        })
+        students_data['data'].append(i.__dict__)
 
-    # if request.method == 'POST':
-    #     u_form = UserUpdateForm(
-    #         request.POST, request.students, instance=request.user)
-    #     if u_form.is_valid():
-    #         u_form.save()
-
-    return render(request, 'grade7.html', students_data)
-
-
-@login_required
-def view_grade8(request, commit=True):
-    students = User.objects.raw("""
-                                SELECT 
-                                a.id as id, a.username, a.first_name, a.last_name, b.section, b.gender, b.age, b.id as userprofile_id, b.gradelevel
-                                FROM myapp_user as a 
-                                JOIN myapp_userprofile as b
-                                on a.id = b.user_id
-                                """)
-    students_data = {
-        "data": []
-    }
-
-    for i in students:
-        if i.gradelevel == 'Grade 8':
-            i.__dict__.update({
-                "full_name": i.first_name+" "+i.last_name
-            })
-            students_data['data'].append(i.__dict__)
-
-    return render(request, 'grade8.html', students_data)
-
-
-@login_required
-def view_grade9(request, commit=True):
-    students = User.objects.raw("""
-                                SELECT 
-                                a.id as id, a.username, a.first_name, a.last_name, b.section, b.gender, b.age, b.id as userprofile_id, b.gradelevel
-                                FROM myapp_user as a 
-                                JOIN myapp_userprofile as b
-                                on a.id = b.user_id
-                                """)
-    students_data = {
-        "data": []
-    }
-
-    for i in students:
-        if i.gradelevel == 'Grade 9':
-            i.__dict__.update({
-                "full_name": i.first_name+" "+i.last_name
-            })
-            students_data['data'].append(i.__dict__)
-
-    return render(request, 'grade9.html', students_data)
-
-
-@login_required
-def view_grade10(request, commit=True):
-    students = User.objects.raw("""
-                                SELECT 
-                                a.id as id, a.username, a.first_name, a.last_name, b.section, b.gender, b.age, b.id as userprofile_id, b.gradelevel
-                                FROM myapp_user as a 
-                                JOIN myapp_userprofile as b
-                                on a.id = b.user_id
-                                """)
-    students_data = {
-        "data": []
-    }
-
-    for i in students:
-        if i.gradelevel == 'Grade 10':
-            i.__dict__.update({
-                "full_name": i.first_name+" "+i.last_name
-            })
-            students_data['data'].append(i.__dict__)
-    return render(request, 'grade10.html', students_data)
+    return render(request, 'gradelevel.html', students_data)
 
 
 def get_student(id):
@@ -176,38 +103,38 @@ def get_student(id):
 
 
 @login_required
-def edit_grade7(request, id):
-    student = get_student(id).username
-    return HttpResponse(student)
+def edit_student(request):
+    if request.method == "POST":
+        req = request.POST
+        user = User.objects.get(id=req['id'])
+        user_profile = UserProfile.objects.get(id=req['userprofile_id'])
+
+        user.username = req['username']
+        user.first_name = req['first_name']
+        user.last_name = req['last_name']
+        user.save()
+
+        user_profile.gender = req['gender']
+        user_profile.age = req['age']
+        user_profile.section = req['section']
+        user_profile.save()
+
+    return HttpResponse("Successfully edited student {}".format(req['username']))
 
 
 @login_required
-def edit_grade8(request, id):
-    studestudent = get_student(id).username
+def edit_grade8(request):
     return render(request, 'grade8.html')
 
 
 @login_required
-def edit_grade9(request, id):
-    student = get_student(id).username
+def edit_grade9(request):
     return render(request, 'grade9.html')
 
 
 @login_required
-def edit_grade10(request, id):
-    student = get_student(id).username
+def edit_grade10(request):
     return render(request, 'grade10.html')
-
-
-@login_required
-def studentSearchInfo(request):
-    students = UserProfile.objects.all()
-
-    filters = FilterSearch(request.GET, queryset=students)
-
-    context = {'filters': filters}
-
-    return render(request, 'search.html', context)
 
 
 @login_required

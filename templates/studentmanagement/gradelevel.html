@@ -9,24 +9,25 @@
         
         <h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
       </div>
-      <form action="post">
+      <form action="post" id="edit_form">
         <div class="modal-body">
           <form>
 
             <div class="mb-3">
-              <input type="text" class="form-control" id="id" style="display: none;">
+              <input type="text" class="form-control" id="id" style="display: none;" name="id">
+              <input type="text" class="form-control" id="userprofile_id" style="display: none;" name="userprofile_id">
               <label for="student_number" class="col-form-label">Student Number</label>
-              <input type="text" class="form-control" id="student_number">
+              <input type="text" class="form-control" id="username" name="username">
             </div>
 
             <div class="mb-3">
               <label for="message-text" class="col-form-label">First Name</label>
-              <input type="text" class="form-control" id="first_name">
+              <input type="text" class="form-control" id="first_name" name="first_name">
             </div>
 
             <div class="mb-3">
               <label for="message-text" class="col-form-label">Last Name</label>
-              <input type="text" class="form-control" id="last_name">
+              <input type="text" class="form-control" id="last_name" name="last_name">
             </div>
 
             <div class="mb-3">
@@ -43,19 +44,19 @@
 
             <div class="mb-3">
               <label for="message-text" class="col-form-label">Gender</label>
-              <input type="text" class="form-control" id="gender">
+              <input type="text" class="form-control" id="gender" name="gender">
             </div>
 
             <div class="mb-3">
               <label for="message-text" class="col-form-label">Age</label>
-              <input type="text" class="form-control" id="age">
+              <input type="text" class="form-control" id="age" name="age">
             </div>
 
             
           </form>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Save changes</button>
+          <button type="submit" class="btn btn-primary" onclick='save()'>Save changes</button>
           <button type="button" class="btn btn-secondary modal_close" data-dismiss="modal">Close</button>
         </div>
       </form>
@@ -63,9 +64,9 @@
   </div>
 </div>
 
-<div class="main_content_profile">
+
   <div class="main_content_profile">
-    <div data-tab-content class="active info" id="thirdsubj">
+    <div data-tab-content class="active info" id="firstsubj">
       <!-- searchuser -->
       <form action="" method="get">
         <div class="row">
@@ -79,47 +80,45 @@
               </div>
             </div> 
             <!-- table -->
-        <hr />
-        <div class="table_container">
-          <table class="table">
-            <thead class="thead-dark">
-              <tr align="center">
-                <th scope="col">Action</th>
-                <th scope="col">Student Number</th>
-                <th scope="col">Name</th>
-                <th scope="col">Section</th>
-                <th scope="col">Gender</th>
-                <th scope="col">Age</th>
-              </tr>
-            </thead>
-            <tbody align="center" id="myTable">
-              {% for i in data %}
-              <tr>
-                <td>
-                  <button type="button" class="btn btn-primary btn-sm edit_btn" data-target="#exampleModal" 
-                  onclick='edit_data("{{ i.id }}", "{{ i.username }}", "{{ i.first_name }}","{{ i.last_name }}", "{{ i.section }}", "{{ i.gender }}", "{{ i.age }}")'>
-                    Edit
-                  </button> 
-                </td>
-                <td>{{ i.username }}</td>
-                <td>{{ i.full_name }}</td>
-                <td>{{ i.section }}</td>
-                <td>{{ i.gender }}</td>
-                <td>{{ i.age }}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+          <hr />
+          <div class="table_container">
+            <table class="table">
+              <thead class="thead-dark">
+                <tr align="center">
+                  <th scope="col">Action</th>
+                  <th scope="col">Student Number</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Section</th>
+                  <th scope="col">Gender</th>
+                  <th scope="col">Age</th>
+                </tr>
+              </thead>
+              <tbody align="center" id="myTable">
+                {% for i in data %}
+                <tr>
+                  <td>
+                    <button type="button" class="btn btn-primary btn-sm edit_btn" data-target="#exampleModal" 
+                    onclick='edit_data("{{ i.id }}", "{{ i.username }}", "{{ i.first_name }}","{{ i.last_name }}", "{{ i.section }}", "{{ i.gender }}", "{{ i.age }}", "{{ i.userprofile_id }}")'>
+                      Edit
+                    </button> 
+                  </td>
+                  <td>{{ i.username }}</td>
+                  <td>{{ i.full_name }}</td>
+                  <td>{{ i.section }}</td>
+                  <td>{{ i.gender }}</td>
+                  <td>{{ i.age }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   </div>
-</div>
-
-
 <script>
-
-$(document).ready(function(){
+  
+  $(document).ready(function(){
     $("#myInput").on("keyup", function(){
       var value = $(this).val().toLowerCase();
       $("#myTable tr").filter(function(){
@@ -128,34 +127,45 @@ $(document).ready(function(){
     });
   });
 
-
   $(document).ready(function(){
-
-    //$('button.edit_btn').on('click', function () {
-    //    $('#exampleModal').appendTo("body").modal('show');
-    //})
-
       $('button.modal_close').on('click', function () {
         $('#exampleModal').modal('hide');
     })
   })
 
-
   var url = "teacher/sm/grade7"
 
-  function edit_data(id, student_number, first_name, last_name, section, gender, age){
+  function edit_data(id, username, first_name, last_name, section, gender, age, userprofile_id){
     $('#exampleModal').appendTo("body").modal('show');
     var req_url = url+"/edit/"+id
 
     $("input#id.form-control").val(id)
-    $("input#student_number.form-control").val(student_number)
+    $("input#username.form-control").val(username)
     $("input#first_name.form-control").val(first_name)
     $("input#last_name.form-control").val(last_name)
     $("input#section.form-control").val(section)
     $("input#gender.form-control").val(gender)
     $("input#age.form-control").val(age)
+    $("input#userprofile_id.form-control").val(userprofile_id)
 
-  } 
+  }
+
+
+  function save(){
+    var request =  $.ajax({
+        type : 'POST',
+        url : "http://localhost:8000/yearlevel/edit",
+        data : $('#edit_form').serialize()
+    })
+
+    request.done(function (response, textStatus, jqXHR){
+      alert(response)
+    });
+
+    request.fail(function (response, textStatus, jqXHR){
+      alert("Failed to update")
+    });
+  }
   
 </script>
 
