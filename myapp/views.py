@@ -1,3 +1,4 @@
+from django.db.models.query import QuerySet
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib import messages
@@ -10,6 +11,7 @@ from django.contrib.auth.models import User, auth
 from django.contrib.auth.decorators import login_required
 from .forms import ProfileUpdateForm, UserUpdateForm
 from django.contrib.auth import get_user_model
+from .filters import FilterSearch
 
 User = get_user_model()
 # Create your views here.
@@ -195,6 +197,17 @@ def edit_grade9(request, id):
 def edit_grade10(request, id):
     student = get_student(id).username
     return render(request, 'grade10.html')
+
+
+@login_required
+def studentSearchInfo(request):
+    students = UserProfile.objects.all()
+
+    filters = FilterSearch(request.GET, queryset=students)
+
+    context = {'filters': filters}
+
+    return render(request, 'search.html', context)
 
 
 @login_required

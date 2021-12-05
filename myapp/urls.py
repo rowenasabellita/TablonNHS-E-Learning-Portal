@@ -33,6 +33,8 @@ urlpatterns = [
     path('teacher/um/grade9', views.upload_module_grade9, name='view_grade9'),
     path('teacher/um/grade10', views.upload_module_grade10, name='view_grade10'),
 
+    path('search/', views.studentSearchInfo, name='studentSearchInfo'),
+
 
 
 ]
