@@ -54,18 +54,17 @@
           <details>
             <summary>Activity</summary>
             <br />
-            <form id="form">
-              <input type="url" id="url" />
+            <form id="form" method="POST" action="/teacher/um/grade">
+              {% csrf_token %}
+
+              <input name="myurl" type="url" id="url" />
               <label>Choose URL</label>
-              <input type="date" id="date" value="2020-06-06" />
-              <textarea id="comment" placeholder="Enter your comment here">
+              <input name="mydate" type="date" id="date" value="2020-06-06" />
+              <textarea name="mycomment" id="comment" placeholder="Enter your comment here">
               </textarea>
               <div>
-                <a href="#" type="button"
-                  ><button class="btn btn-primary btn-sm" id="submit">
-                    Submit
-                  </button></a
-                >
+                <input type="submit" class="btn btn-primary btn-sm" id="submit">
+                </input>
               </div>
             </form>
             <br />

@@ -4,12 +4,15 @@ from django.contrib import messages
 from django.utils.translation import ugettext
 from django.shortcuts import render
 import myapp
+from myapp.models.activity_model import Activity
+from myapp.models.class_subjects_model import ClassSubjects
 from .models import UserProfile
 from myproject.settings import AUTH_PASSWORD_VALIDATORS
 from django.contrib.auth.models import User, auth
 from django.contrib.auth.decorators import login_required
 from .forms import ProfileUpdateForm, UserUpdateForm
 from django.contrib.auth import get_user_model
+from .models.class_subjects_model import ClassSubjects
 
 User = get_user_model()
 # Create your views here.
@@ -88,7 +91,7 @@ def view_yearlevel(request, grade, commit=True):
 
 
 @login_required
-def edit_student(request):
+def edit_student(request): 
     if request.method == "POST":
         req = request.POST
         user = User.objects.get(id=req['id'])
@@ -109,7 +112,18 @@ def edit_student(request):
 
 @login_required
 def view_upload_module(request, commit=True):
-    return render(request, 'um_gradelevel.html')
+    if request.method == 'POST':
+        
+        myurl = request.POST["myurl"]
+        mydate = request.POST["mydate"]
+        mycomment = request.POST["mycomment"]
+        activity = Activity(url=myurl, date=mydate, instruction=mycomment)
+        activity.save()
+
+        return render(request, 'um_gradelevel.html')  
+
+    else:
+            return render(request,'um_gradelevel.html')
 
 
 def teachersubject(request):
