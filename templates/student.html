@@ -47,13 +47,10 @@
             </h1>
             <h5>Full Name : {{ user.get_full_name }}</h5>
             <h5>Email address : {{ user.email }}</h5>
-            <h5>Grade Level : {{ user.studentprofile.gradelevel}}</h5>
-            <h5>Section : {{ user.studentprofile.section}}</h5>
+            <h5>Grade Level : {{ user.userprofile.gradelevel}}</h5>
+            <h5>Section : {{ user.userprofile.section}}</h5>
             {{s_form|crispy}}
             <br>
-            {% comment %} <h5>Age : {{ user.studentprofile.age}}</h5>
-            <h5>Gender : {{ user.studentprofile.gender}}</h5>
-            <h5>Address : {{ user.studentprofile.address}}</h5> {% endcomment %}
           </form>
         </div>
         <div class="col">

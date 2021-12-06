@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib import messages
 from django.utils.translation import ugettext
-
+from django.shortcuts import render
 import myapp
 from .models import UserProfile
 from myproject.settings import AUTH_PASSWORD_VALIDATORS
@@ -50,7 +50,7 @@ def teacher(request, commit=True):
     return render(request, 'teacher.html', {'t_form': t_form})
 
 
-@ login_required
+@login_required
 def student(request, commit=True):
     s_form = ProfileUpdateForm(instance=request.user.userprofile)
 
@@ -66,17 +66,16 @@ def student(request, commit=True):
 
 @login_required
 def view_yearlevel(request, grade, commit=True):
-    yearlevel = "Grade {}".format(grade[-1])
+    yearlevel = "Grade {}".format(grade.split("grade")[1])
 
     students = User.objects.raw("""
-                                SELECT 
+                                SELECT
                                 a.id as id, a.username, a.first_name, a.last_name, b.section, b.gender, b.age, b.id as userprofile_id, b.gradelevel
-                                FROM myapp_user as a 
+                                FROM myapp_user as a
                                 JOIN myapp_userprofile as b
                                 on a.id = b.user_id
                                 where b.gradelevel = '{}'
                                 """.format(yearlevel))
-
     students_data = {
         "data": []
     }
@@ -87,19 +86,6 @@ def view_yearlevel(request, grade, commit=True):
         students_data['data'].append(i.__dict__)
 
     return render(request, 'gradelevel.html', students_data)
-
-
-def get_student(id):
-    query = """
-                SELECT 
-                a.id as id, a.username, a.first_name, a.last_name, b.section, b.gender, b.age, b.id as userprofile_id, b.gradelevel
-                FROM myapp_user as a 
-                JOIN myapp_userprofile as b
-                on a.id = b.user_id where a.id = %s
-                """
-    student = User.objects.raw(query, id)
-    print(student)
-    return student
 
 
 @login_required
@@ -123,38 +109,8 @@ def edit_student(request):
 
 
 @login_required
-def edit_grade8(request):
-    return render(request, 'grade8.html')
-
-
-@login_required
-def edit_grade9(request):
-    return render(request, 'grade9.html')
-
-
-@login_required
-def edit_grade10(request):
-    return render(request, 'grade10.html')
-
-
-@login_required
-def upload_module_grade7(request, commit=True):
-    return render(request, 'um_grade7.html')
-
-
-@login_required
-def upload_module_grade8(request, commit=True):
-    return render(request, 'um_grade8.html')
-
-
-@login_required
-def upload_module_grade9(request, commit=True):
-    return render(request, 'um_grade9.html')
-
-
-@login_required
-def upload_module_grade10(request, commit=True):
-    return render(request, 'um_grade10.html')
+def view_upload_module(request, commit=True):
+    return render(request, 'um_gradelevel.html')
 
 
 def teachersubject(request):

@@ -2,8 +2,9 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import fields
 
-from myapp.models.model1 import UserProfile
+from myapp.models.user_profile_model import UserProfile
 from .models import User
+from . import models
 
 
 class UserCreationForm(UserCreationForm):
