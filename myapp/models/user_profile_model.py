@@ -5,7 +5,6 @@ from django.db.models.signals import post_save
 from django.conf import settings
 
 import myapp
-
 # Create your models here.
 
 GRADE10 = 'Grade 10'
@@ -68,7 +67,7 @@ myapp_user = User()
 class User(AbstractUser):
     is_student = models.BooleanField(default=False)
     is_teacher = models.BooleanField(default=False)
-    
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(
