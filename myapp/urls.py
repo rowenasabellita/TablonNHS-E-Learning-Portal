@@ -23,7 +23,7 @@ urlpatterns = [
     path('teacher/sm/<grade>', views.view_yearlevel, name='view_yearlevel'),
     path('yearlevel/edit', views.edit_student, name='edit_student'),
 
-    path('teacher/um/grade', views.view_upload_module, name='view_upload_module'),
+    path('teacher/um/grade', views.view_upload_module, name='teacher/um/grade'),
 
 
 ]
