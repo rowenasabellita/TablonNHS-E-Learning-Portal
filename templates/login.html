@@ -32,18 +32,28 @@
                     <p>Example: </p>
                     <p class="firstp">Username: 2016100461</p> 
                     <p class="secondp">Password: Varquez@2016100461</p>
+                    
                 </div>
             </div>
             <div class="container-login">
                 {% if messages %}
-                <div class="alert alert-danger">This credentials do not match on our records.</div>
+                <div class="alert">
+                    <span class="closebtn1" onclick="this.parentElement.style.display='none';">&times;</span> 
+                    <strong>WARNING!</strong> This credentials doest match our record.
+                  </div>
                 {% for msg in messages%}
-                <strong> {{ msg }}</strong>
+
                 {% endfor %}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+                <div class="callout">
+                    <div class="callout-header">ALERT!!</div>
+                    <span class="closebtn2" onclick="this.parentElement.style.display='none';">×</span>
+                    <div class="callout-container">
+                      <p>Please do register before logging. <a href="#">Learn more</a> or close it if it is in your way.</p>
+                    </div>
+                  </div>
+                
+                
+            
             {% endif %}
             <form action="/" method="post">
                 {% csrf_token %}
@@ -62,6 +72,7 @@
                     </div>
                 </div>
             </form>
+            </div>
         </div>
     </div>
     </div>
