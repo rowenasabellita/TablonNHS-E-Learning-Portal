@@ -71,6 +71,63 @@
     border: 2px solid black;
 } 
 
+.alert{
+    padding: 5px;
+    background-color: #f44336; /* Red */
+    color: white;
+    margin-bottom: 1px;
+    position:absolute; 
+    left:700px; top:-10px;
+
+      }
+  
+.callout {
+    position: fixed;
+    bottom: 35px;
+    right: 20px;
+    margin-left: 20px;
+    max-width: 300px;
+  }
+  
+.callout-header {
+    padding: 25px 15px;
+    background: rgb(3, 216, 135);
+    font-size: 30px;
+    color: white;
+  }
+  
+.callout-container {
+    padding: 15px;
+    background-color: rgb(95, 184, 157);
+    color: black
+  }
+  
+.closebtn1 {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+.closebtn2 {
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+  }
+  
+.closebtn1:hover {
+    color: lightgrey;
+  }
+.closebtn2:hover {
+    color: lightgrey;
+  }
+
 .main {
     position: absolute;
     width: 500px;
