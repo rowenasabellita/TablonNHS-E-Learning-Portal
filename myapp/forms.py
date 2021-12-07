@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import fields
+from myapp.models.reading_materials_model import ReadingMaterials
 
 from myapp.models.user_profile_model import UserProfile
 from .models import User
@@ -25,6 +26,7 @@ class ProfileUpdateForm(forms.ModelForm):
         fields = ['age', 'gender', 'address']
 
 
-# class UserUpdateForm(forms.ModelForm):
-#     model = User
-#     fields = ['email']
+class UploadFileForm(forms.ModelForm):
+    class Meta:
+        model = ReadingMaterials
+        fields = ['file', 'date']

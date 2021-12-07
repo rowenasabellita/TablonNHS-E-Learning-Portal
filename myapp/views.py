@@ -11,10 +11,11 @@ from .models import UserProfile
 from myproject.settings import AUTH_PASSWORD_VALIDATORS
 from django.contrib.auth.models import User, auth
 from django.contrib.auth.decorators import login_required
-from .forms import ProfileUpdateForm, UserUpdateForm
+from .forms import ProfileUpdateForm, UserUpdateForm, UploadFileForm
 from django.contrib.auth import get_user_model
 from .models.class_subjects_model import ClassSubjects
 
+from django.core.files.storage import FileSystemStorage
 User = get_user_model()
 # Create your views here.
 
@@ -92,7 +93,7 @@ def view_yearlevel(request, grade, commit=True):
 
 
 @login_required
-def edit_student(request): 
+def edit_student(request):
     if request.method == "POST":
         req = request.POST
         user = User.objects.get(id=req['id'])
@@ -114,17 +115,28 @@ def edit_student(request):
 @login_required
 def view_upload_module(request, commit=True):
     if request.method == 'POST':
-        
-        myurl = request.POST["myurl"]
-        mydate = request.POST["mydate"]
-        mycomment = request.POST["mycomment"]
+        req = request.POST
+
+        myurl = req["myurl"]
+        mydate = req["mydate"]
+        mycomment = req["mycomment"]
+
         activity = Activity(url=myurl, date=mydate, instruction=mycomment)
         activity.save()
+    return render(request, 'um_gradelevel.html')
 
-        return render(request, 'um_gradelevel.html')  
 
+@login_required
+def reading_material_upload(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('um_gradelevel.html')
     else:
-            return render(request,'um_gradelevel.html')
+        form = UploadFileForm()
+
+    return render(request, 'um_gradelevel.html', {'form': form})
 
 
 def teachersubject(request):
