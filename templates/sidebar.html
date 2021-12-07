@@ -1,7 +1,6 @@
 {% extends 'header.html' %} {% load static %} {% load crispy_forms_tags %}
 
 {% block content %}
-
 <div class="container">
     <div class="wrapper">
         <div class="sidebar">
@@ -34,7 +33,14 @@
             </li>
 
             <!-- For Recording Submission -->
-            <li data-tab-target="#submission"><a href="/submission"><i class='bx bx-edit-alt'></i>Record Submission</a>
+            <li><a href="#" class="rec-btn"><i class='bx bx-edit-alt'></i></i>Record Submission<span
+              class='bx bxs-chevron-right second'></span></a>
+              <ul class="rec-show">
+                <li data-tab-target="#firstrec"><a href="/submission/quarter">First Quarter</a></li>
+                <li data-tab-target="#secondrec"><a href="/submission/quarter2">Second Quarter</a></li>
+                <li data-tab-target="#thirdrec"><a href="/submission/quarter3">Third Quarter</a></li>
+                <li data-tab-target="#fourthrec"><a href="/submission/quarter4">Fourth Quarter</a></li>
+              </ul>
             </li>
 
             <li><a href="/logout"><i class='bx bx-log-out'></i>Logout</a></li>
@@ -57,3 +63,4 @@
 
 
 {% endblock %}
+
