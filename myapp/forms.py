@@ -30,3 +30,9 @@ class UploadFileForm(forms.ModelForm):
     class Meta:
         model = ReadingMaterials
         fields = ['file', 'date']
+
+
+class RecordForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['section', 'gradelevel']
