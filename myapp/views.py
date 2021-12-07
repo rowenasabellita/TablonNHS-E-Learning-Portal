@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import ProfileUpdateForm, UserUpdateForm, UploadFileForm, RecordForm
 from django.contrib.auth import get_user_model
 from .models.class_subjects_model import ClassSubjects
-from .filters import RecordFilter   
+from .filters import RecordFilter
 
 from django.core.files.storage import FileSystemStorage
 User = get_user_model()
@@ -70,19 +70,17 @@ def student(request, commit=True):
 
 
 # sample
-def student_new (request):
+def student_new(request):
     return render(request, 'student_new.html')
 
 
 @login_required
 def view_submission(request):
-
-    
     records = UserProfile.objects.all()
 
     filters = RecordFilter(request.GET, queryset=records)
-    context = {'filters':filters}
-    
+    context = {'filters': filters}
+
     return render(request, 'submission.html', context)
 
 # def view_records(request, commit-True):
@@ -104,6 +102,7 @@ def view_submission(request):
 #         records_data['data'].append(i.__dict__)
 
 #     return render(request, 'submission.html', records_data)
+
 
 @login_required
 def view_yearlevel(request, grade, commit=True):
@@ -160,7 +159,7 @@ def view_upload_module(request, commit=True):
 
         activity = Activity(url=myurl, date=mydate, instruction=mycomment)
         activity.save()
-    return render(request, 'um_gradelevel.html')
+    # return render(request, 'um_gradelevel.html')
 
 
 @login_required
