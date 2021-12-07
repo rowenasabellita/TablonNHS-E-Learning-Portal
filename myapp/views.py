@@ -73,7 +73,7 @@ def student(request, commit=True):
 def student_new(request):
     return render(request, 'student_new.html')
 
-
+# need subject filter (IMPORTANT!!!)
 @login_required
 def view_submission(request):
     records = UserProfile.objects.all()
@@ -81,7 +81,9 @@ def view_submission(request):
     filters = RecordFilter(request.GET, queryset=records)
     context = {'filters': filters}
 
-    return render(request, 'submission.html', context)
+    return render(request, 'quarter.html', context)
+
+
 
 # def view_records(request, commit-True):
 #      records = User.objects.raw("""

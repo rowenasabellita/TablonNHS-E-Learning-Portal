@@ -102,6 +102,10 @@ ul,li { list-style-type: none;
     display: block;
 }
 
+.wrapper .sidebar ul .rec-show.show{
+    display: block;
+}
+
 .wrapper .sidebar ul ul li{
     border-bottom: none;
     line-height: 40px;
