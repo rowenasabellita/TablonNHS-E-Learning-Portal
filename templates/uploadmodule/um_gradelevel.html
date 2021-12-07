@@ -35,21 +35,24 @@
           <details>
             <summary>Reading Materials</summary>
             <br />
-            <form method="" id="form">
-              <input
+            <form method="post" enctype="multipart/form-data" id="form">
+              {% csrf_token %}
+              {{ form|crispy }}
+              {% comment %} <input
                 class="file-upload input"
                 type="file"
                 onchange="readURL(this);"
                 accept="image/pdf"
+                name="document"
               />
-              <input type="date" value="2020-06-06" />
-              <a href="#" type="button"
-                ><button class="btn btn-primary btn-sm" id="submit">
+              <input type="date" value="2020-06-06" /> {% endcomment %}
+              <div>
+                <button type="submit" class="btn btn-primary btn-sm" id="submit">
                   Submit
-                </button></a
-              >
+                </button>
+              </div>
             </form>
-            <br />
+            <br/>
           </details>
           <details>
             <summary>Activity</summary>

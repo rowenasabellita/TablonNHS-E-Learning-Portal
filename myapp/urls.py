@@ -23,7 +23,9 @@ urlpatterns = [
     path('teacher/sm/<grade>', views.view_yearlevel, name='view_yearlevel'),
     path('yearlevel/edit', views.edit_student, name='edit_student'),
 
-    path('teacher/um/grade', views.view_upload_module, name='teacher/um/grade'),
-
+    # path('teacher/um/grade', views.view_upload_module, name='teacher/um/grade'),
+    path('teacher/um/grade', views.reading_material_upload, name='teacher/um/grade'),
+    path('upload_activity', views.view_upload_module,
+         name='upload_activity'),
 
 ]
