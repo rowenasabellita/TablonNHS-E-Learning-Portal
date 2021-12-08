@@ -1,46 +1,209 @@
 {% extends 'sidebar.html' %} {% load static %} {% load crispy_forms_tags %}
 {%block main_content %}
 
-
 <div class="main_content_profile">
   <div data-tab-content class="active info" id="submission">
     <div class="row">
-    <form method="get">
-
-      {{filters.form}}
-      <input type="submit" value="Search" name="">
-
-    </form>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-          <div class="table_container">
-            <table class="table">
-              <thead>
-                <tr align="center">
-                  <th scope="col">Student Number</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Section</th>
-                  <th scope="col">Grade Level</th>
-                  <th scope="col">Written Work</th>
-                  <th scope="col">Performance Task</th>
-                  <th scope="col">Grade</th>
-                </tr>
-              </thead>
-              <tbody align="center">
-                {% for record in filters.qs %}
-                <tr>
-                  <td>{{ record.firstname}}</td>
-                  <td>{{ record.lastname }}</td>
-                  <td>{{ record.section }}</td>
-                  <td>{{ record.gradelevel }}</td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
+      <form>
+        <div class="row">
+          <div class="col">
+            <select name="grade_level" id="grade_level" class="form-control">
+              <option value="" class="form-control">--Select Subject--</option>
+              {% for i in gradelevel %}
+              <option value="{{ i }}">{{ i }}</option>
+              {% endfor %}
+            </select>
           </div>
-    </form>
+
+          <div class="col">
+            <select name="section" id="section" class="form-control"></select>
+          </div>
+
+          <div class="col">
+            <select name="subject" id="subject" class="form-control">
+              <option value="" class="form-control">--Select Subject--</option>
+              {% for i in subjects.subjects %}
+              <option value="{{ i.subject_id }}">{{ i.subject_name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="col">
+            <input
+              name="myInput"
+              id="myInput"
+              class="form-control"
+              placeholder="Search here"
+            />
+          </div>
+        </div>
+      </form>
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="table_container">
+          <table class="stripe compact" id="class_record">
+            <thead>
+              <tr align="center">
+                <th scope="col">Student No</th>
+                <th scope="col">Name</th>
+                <th scope="col">Section</th>
+                <th scope="col">Grade Level</th>
+                <th scope="col">Subject</th>
+                <th scope="col">Written Work</th>
+                <th scope="col">Performance Task</th>
+                <th scope="col">Grade</th>
+              </tr>
+            </thead>
+            <tbody align="center">
+              {% for record in records %}
+              <tr>
+                <td>{{ record.username }}</td>
+                <td>{{ record.full_name }}</td>
+                <td>{{ record.section }}</td>
+                <td>{{ record.gradelevel }}</td>
+                <td>{{ record.subject_name }}</td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control"
+                    value="{{ record.written_work }}"
+                    name="written_work"
+                    id="written_work"
+                    onchange="update_record('{{ record.id }}', 'written_work', '{{ record.counter }}')"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control"
+                    value="{{ record.performance_task }}"
+                    name="performance_task"
+                    id="performance_task"
+                    onchange="update_record('{{ record.id }}', 'performance_task', '{{ record.counter }}')"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control"
+                    value="{{ record.grade }}"
+                    name="grade"
+                    id="grade"
+                    onchange="update_record('{{ record.id }}', 'grade', '{{ record.counter }}')"
+                  />
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </form>
     </div>
   </div>
 </div>
+
+<script>
+  $(document).ready(function () {
+    set_sections("Grade 7");
+
+    var myTable = $("#class_record").DataTable();
+    $(".dataTables_filter").hide();
+    $("#myInput").keyup(function () {
+      myTable.search($(this).val()).draw();
+    });
+
+    $("#grade_level").change(function (event) {
+      set_sections($(this).val());
+      filter_records();
+    });
+    $("#section").change(function (event) {
+      filter_records();
+    });
+    $("#subject").change(function (event) {
+      filter_records();
+    });
+  });
+
+  function set_sections(grade_level) {
+    $.get("http://localhost:8000/get_sections", function (response) {
+      var res = JSON.parse(response);
+      $("#section").empty();
+      $("#section").append(
+        $("<option>", { value: "", text: "--Select Section--" })
+      );
+      $.map(res[grade_level], (d, i) => {
+        $("#section").append(
+          $("<option>", {
+            value: d,
+            text: d,
+          })
+        );
+      });
+    });
+  }
+
+  function filter_records() {
+    var myTable = $("#class_record").DataTable();
+    var quarter = $(location).attr("href").split("quarter/")[1];
+    var gradelevel = $("#grade_level").val();
+    var section = $("#section").val();
+    var subject = $("#subject").val();
+
+    myTable.clear();
+    myTable.draw();
+    $.ajax({
+      type: "POST",
+      url: "http://localhost:8000/get_student_records/" + quarter,
+      data: { gradelevel: gradelevel, section: section, subject: subject },
+      success: function (r) {
+        var data = JSON.parse(r);
+        $.each(data["data"], function (index, item) {
+          myTable.row
+            .add([
+              item.username,
+              item.full_name,
+              item.section,
+              item.gradelevel,
+              item.subject_name,
+              "<input type='text' class='form-control' value=" +
+                item.written_work +
+                " name='written_work' id='written_work' onchange='update_record(" +
+                item.id +
+                ", `written_work`, " +
+                item.counter +
+                ")'>",
+              "<input type='text' class='form-control' value=" +
+                item.performance_task +
+                " name='performance_task' id='performance_task' onchange='update_record(" +
+                item.id +
+                ", `performance_task`, " +
+                item.counter +
+                ")'>",
+              "<input type='text' class='form-control' value=" +
+                item.grade +
+                " name='grade' id='grade' onchange='update_record(" +
+                item.id +
+                ", `grade`, " +
+                item.counter +
+                ")'>",
+            ])
+            .draw(false);
+        });
+      },
+    });
+  }
+
+  function update_record(id, field, counter) {
+    var val = "#" + field + ".form-control";
+    $.ajax({
+      type: "POST",
+      url: "http://localhost:8000/update_student_record/" + id,
+      data: { field: field, val: $(val)[counter - 1].value },
+      success: function (r) {
+        console.log(r);
+      },
+    });
+  }
+</script>
 
 {% endblock %}

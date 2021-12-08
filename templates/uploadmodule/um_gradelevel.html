@@ -10,106 +10,117 @@
         </div>
       </div>
       <hr />
-      <details>
-        <summary>Subject Record</summary>
-        <div class="mathRecord">
-          <table class="table table-bordered table-dark">
-            <thead>
-              <tr align="center">
-                <th scope="col">NAME</th>
-                <th scope="col">QUARTERLY GRADE</th>
-                <th scope="col">ALERT</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </details>
-      <details>
-        <summary>Subject Module</summary>
-        <br />
-        <div class="mathModule">
-          <!-- for uploading modules -->
-          <details>
-            <summary>Reading Materials</summary>
-            <br />
-            <form method="post" enctype="multipart/form-data" id="form">
-              {% csrf_token %}
-              {{ form|crispy }}
-              {% comment %} <input
-                class="file-upload input"
-                type="file"
-                onchange="readURL(this);"
-                accept="image/pdf"
-                name="document"
-              />
-              <input type="date" value="2020-06-06" /> {% endcomment %}
-              <div>
-                <button type="submit" class="btn btn-primary btn-sm" id="submit">
-                  Submit
-                </button>
-              </div>
-            </form>
-            <br/>
-          </details>
-          <details>
-            <summary>Activity</summary>
-            <br />
-            <form id="form" method="POST" action="/teacher/um/grade">
-              {% csrf_token %}
 
-              <input name="myurl" type="url" id="url" />
-              <label>Choose URL</label>
-              <input name="mydate" type="date" id="date" value="2020-06-06" />
-              <textarea name="mycomment" id="comment" placeholder="Enter your comment here">
-              </textarea>
-              <div>
-                <input type="submit" class="btn btn-primary btn-sm" id="submit">
-                </input>
-              </div>
-            </form>
-            <br />
-          </details>
-          <details>
-            <summary>Quiz</summary>
-            <br />
-            <form id="form">
-              <input type="url" id="url" />
-              <label>Choose URL</label>
-              <input type="date" id="date" value="2020-06-06" />
-              <textarea id="comment" placeholder="Enter your comment here">
-              </textarea>
-              <div>
-                <a href="#" type="button"
-                  ><button class="btn btn-primary btn-sm" id="submit">
+      {% for sub in subjects.subjects %}
+        <details>
+          
+            <summary>{{ sub.subject_name }} Record</summary>
+            <div class="mathRecord">
+              <table class="table table-bordered table-dark" id='per_subject_table'>
+                <thead>
+                  <tr align="center">
+                    <th scope="col">NAME</th>
+                    <th scope="col">1ST QUARTER</th>
+                    <th scope="col">2ND QUARTER</th>
+                    <th scope="col">3RD QUARTER</th>
+                    <th scope="col">4TH QUARTER</th>
+                    <th scope="col">ALERT</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+        </details>
+
+        <details>
+          <summary>{{ sub.subject_name }} Module</summary>
+          <br />
+          <div class="mathModule">
+            <!-- for uploading modules -->
+            <details>
+              <summary>Reading Materials</summary>
+              <br />
+              <form method="post" enctype="multipart/form-data" id="form">
+                {% csrf_token %}
+                {{ form|crispy }}
+                {% comment %} <input
+                  class="file-upload input"
+                  type="file"
+                  onchange="readURL(this);"
+                  accept="image/pdf"
+                  name="document"
+                />
+                <input type="date" value="2020-06-06" /> {% endcomment %}
+                <div>
+                  <button type="submit" class="btn btn-primary btn-sm" id="submit">
                     Submit
-                  </button></a
-                >
-              </div>
-            </form>
-            <br />
-          </details>
-          <details>
-            <summary>Exam</summary>
-            <br />
-            <form id="form">
-              <input type="url" id="url" />
-              <label>Choose URL</label>
-              <input type="date" id="date" value="2020-06-06" />
-              <textarea id="comment" placeholder="Enter your comment here">
-              </textarea>
-              <div>
-                <a href="#" type="button"
-                  ><button class="btn btn-primary btn-sm" id="submit">
-                    Submit
-                  </button></a
-                >
-              </div>
-            </form>
-            <br />
-          </details>
-        </div>
-      </details>
+                  </button>
+                </div>
+              </form>
+              <br/>
+            </details>
+            <details>
+              <summary>Activity</summary>
+              <br />
+              <form id="form" method="POST" action="/teacher/um/grade">
+                {% csrf_token %}
+
+                <input name="myurl" type="url" id="url" />
+                <label>Choose URL</label>
+                <input name="mydate" type="date" id="date" value="2020-06-06" />
+                <textarea name="mycomment" id="comment" placeholder="Enter your comment here">
+                </textarea>
+                <div>
+                  <input type="submit" class="btn btn-primary btn-sm" id="submit">
+                  </input>
+                </div>
+              </form>
+              <br />
+            </details>
+            <details>
+              <summary>Quiz</summary>
+              <br />
+              <form id="form">
+                <input type="url" id="url" />
+                <label>Choose URL</label>
+                <input type="date" id="date" value="2020-06-06" />
+                <textarea id="comment" placeholder="Enter your comment here">
+                </textarea>
+                <div>
+                  <a href="#" type="button"
+                    ><button class="btn btn-primary btn-sm" id="submit">
+                      Submit
+                    </button></a
+                  >
+                </div>
+              </form>
+              <br />
+            </details>
+            <details>
+              <summary>Exam</summary>
+              <br />
+              <form id="form">
+                <input type="url" id="url" />
+                <label>Choose URL</label>
+                <input type="date" id="date" value="2020-06-06" />
+                <textarea id="comment" placeholder="Enter your comment here">
+                </textarea>
+                <div>
+                  <a href="#" type="button"
+                    ><button class="btn btn-primary btn-sm" id="submit">
+                      Submit
+                    </button></a
+                  >
+                </div>
+              </form>
+              <br />
+            </details>
+          </div>
+        </details>
+        <br>
+        <br>
+        <br>
+      {% endfor %}
       <hr />
     </div>
   </div>

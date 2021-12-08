@@ -67,7 +67,7 @@ myapp_user = User()
 class User(AbstractUser):
     is_student = models.BooleanField(default=False)
     is_teacher = models.BooleanField(default=False)
-    
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(
@@ -84,6 +84,20 @@ class UserProfile(models.Model):
     def __str__(self):
         self.full_name = self.user.first_name + " " + self.user.last_name
         return self.full_name
+
+    def get_all_sections(self):
+        levels = ['Grade 7', 'Grade 8', 'Grade 9', 'Grade 10']
+
+        sections = {}
+        for l in levels:
+            section_name = []
+            for i in dict(SECTION)[l]:
+                section_name.append(i[0])
+
+            sections.update({
+                l: section_name
+            })
+        return sections
 
 
 @receiver(post_save, sender=User)
