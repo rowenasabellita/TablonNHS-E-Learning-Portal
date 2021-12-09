@@ -86,56 +86,6 @@ def update_update_student_record(request, id):
 
 
 @login_required
-def get_quarterly_grade(request, gradelevel):
-    data = {"data": []}
-    format_gradelevel = "Grade {}".format(gradelevel[-1])
-
-    for i in get_grade_quarterly_per_subject(format_gradelevel):
-        i.__dict__.pop("_state")
-        i.__dict__.update({
-            "full_name": i.first_name+" "+i.last_name,
-            "quarter1": str(i.quarter1),
-            "quarter2": str(i.quarter2),
-            "quarter3": str(i.quarter3),
-            "quarter4": str(i.quarter4),
-        })
-        data['data'].append(i.__dict__)
-    return HttpResponse(json.dumps(data))
-
-
-def get_grade_quarterly_per_subject(gradelevel, subject=None):
-    condition = ""
-    if subject:
-        condition = "and subject_id = '{}' ".format(subject)
-
-    query = """
-        select 
-        a.id,
-        d.subject_name,
-        b.gradelevel,
-        c.first_name, 
-        c.last_name,
-        sum(case when a.quarter = '1st Quarter' then a.grade else 0 end) as quarter1,
-        sum(case when a.quarter = '2nd Quarter' then a.grade else 0 end) as quarter2,
-        sum(case when a.quarter = '3rd Quarter' then a.grade else 0 end) as quarter3,
-        sum(case when a.quarter = '4th Quarter' then a.grade else 0 end) as quarter4
-
-        FROM myapp_classrecord as a 
-        join myapp_userprofile as b
-        join myapp_user as c
-        join myapp_subject as d
-    
-        on a.user_profile_id = b.id and b.user_id = c.id and d.id = a.subject_id
-        
-        where b.gradelevel = '{}' """.format(gradelevel) + condition+"""
-        group by a.subject_id, b.gradelevel ,a.user_profile_id"""
-
-    records = ClassRecord.objects.raw(query)
-    print(records)
-    return records
-
-
-@login_required
 def get_sections(request):
     user_profile = UserProfile()
 

@@ -22,13 +22,12 @@ urlpatterns = [
     path('pemodule', views.pemodule, name='pemodule'),
     path('sciencemodule', views.sciencemodule, name='sciencemodule'),
 
-
     path('teacher/sm/<grade>', views.view_yearlevel, name='view_yearlevel'),
     path('yearlevel/edit', views.edit_student, name='edit_student'),
 
     path('teacher/um/<grade>', views.reading_material_upload,
          name='teacher/um/grade'),
-    path('teacher/get_quarterly_grade/<gradelevel>', views.get_quarterly_grade,
+    path('teacher/get_quarterly_grade/<gradelevel>/<subject_id>', views.get_quarterly_grade,
          name='gradelevel'),
     # path('upload_activity', views.view_upload_module,
     #      name='upload_activity'),

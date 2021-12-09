@@ -7,6 +7,18 @@ from myapp.models.user_profile_model import UserProfile
 from .models import User
 from . import models
 
+SUBJECTS = (
+    (None, 'Subjects'),
+    ('Araling Panlipunan', 'Araling Panlipunan'),
+    ('English', 'English'),
+    ('ESP', 'ESP'),
+    ('Filipino', 'Filipino'),
+    ('MAPEH', 'MAPEH'),
+    ('Math', 'Math'),
+    ('Science', 'Science'),
+    ('TLE', 'TLE'),
+)
+
 
 class UserCreationForm(UserCreationForm):
     class Meta:
@@ -29,7 +41,10 @@ class ProfileUpdateForm(forms.ModelForm):
 class UploadFileForm(forms.ModelForm):
     class Meta:
         model = ReadingMaterials
-        fields = ['file', 'date']
+        fields = ['file', 'date', 'subject']
+
+    def __str__(self):
+        return self.subject_name
 
 
 class RecordForm(forms.ModelForm):

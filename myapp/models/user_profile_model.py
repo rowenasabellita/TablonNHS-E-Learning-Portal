@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser, User
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.conf import settings
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 import myapp
 # Create your models here.
@@ -72,7 +73,11 @@ class User(AbstractUser):
 class UserProfile(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    age = models.CharField(max_length=100)
+    age = models.IntegerField(default=1,
+                              validators=[
+                                  MaxValueValidator(99),
+                                  MinValueValidator(1)
+                              ])
     gender = models.CharField(
         max_length=50, choices=GENDER, verbose_name="gender", blank=True)
     address = models.CharField(max_length=500, blank=True)

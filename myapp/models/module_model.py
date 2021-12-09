@@ -15,7 +15,6 @@ CATEGORY = (
 
 
 class Module(models.Model):
-    user_profile = models.ForeignKey(UserProfile,  on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject,  on_delete=models.CASCADE)
     category = models.CharField(
         max_length=50, choices=CATEGORY, verbose_name="Category")

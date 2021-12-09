@@ -8,7 +8,7 @@ from myapp.models.user_profile_model import UserProfile
 ALERT_STATUS = (
     (None, "Alert Status"),
     ('At Risk', 'At Risk'),
-    ('On Target', 'On Target'),
+    ('No Risk', 'No Risk'),
 )
 
 

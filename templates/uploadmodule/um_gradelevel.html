@@ -14,17 +14,22 @@
       {% for sub in subjects.subjects %}
         <details>
           
-            <summary>{{ sub.subject_name }} Record</summary>
+            <summary onclick="get_records('{{ sub.subject_id }}')">{{ sub.subject_name }} Record</summary>
             <div class="mathRecord">
-              <table class="table table-bordered table-dark" id='per_subject_table'>
-                <thead>
+              <table class="table table-bordered table-success table-hover compact" style="width:100%" id='per_subject_table{{ sub.subject_id }}'>
+                <thead class="thead-dark">
                   <tr align="center">
-                    <th scope="col">NAME</th>
+                    <th scope="col" rowspan="2">NAME</th>
+                    <th scope="col" colspan="4">QUARTER</th>
+                    <th scope="col" colspan="2">STATUS</th>
+                  </tr>
+                  <tr align="center">
                     <th scope="col">1ST QUARTER</th>
                     <th scope="col">2ND QUARTER</th>
                     <th scope="col">3RD QUARTER</th>
                     <th scope="col">4TH QUARTER</th>
-                    <th scope="col">ALERT STATUS</th>
+                    <th scope="col">PERCENT(%)</th>
+                    <th scope="col">ALERT</th>
                   </tr>
                 </thead>
                 <tbody></tbody>
@@ -42,15 +47,16 @@
               <br />
               <form method="post" enctype="multipart/form-data" id="form">
                 {% csrf_token %}
-                {{ form|crispy }}
-                {% comment %} <input
+                <!-- {{ form|crispy }} -->
+               <input
                   class="file-upload input"
                   type="file"
                   onchange="readURL(this);"
                   accept="image/pdf"
                   name="document"
                 />
-                <input type="date" value="2020-06-06" /> {% endcomment %}
+                <input type="date" value="2020-06-06" name="date"/> 
+                <input type="text" name="subject_id" value='{{ sub.subject_id }}'/> 
                 <div>
                   <button type="submit" class="btn btn-primary btn-sm" id="submit">
                     Submit
@@ -59,6 +65,8 @@
               </form>
               <br/>
             </details>
+
+
             <details>
               <summary>Activity</summary>
               <br />
@@ -124,4 +132,54 @@
     </div>
   </div>
 </div>
+
+
+
+
+
+
+
+<script>
+
+  function get_records(sub_id){
+
+    // initialization of variables
+    var id_name = '#per_subject_table'+sub_id
+    var gradelevel = $(location).attr("href").split("/")[5];
+    var formatted_gradelevel = gradelevel.includes("#") ? gradelevel.slice(0,-1) : gradelevel
+    var url = "http://localhost:8000/teacher/get_quarterly_grade/"+formatted_gradelevel+"/"+sub_id
+    
+    
+    // initialization of datatable
+    $.fn.dataTable.ext.errMode = 'none';
+
+    $(id_name).dataTable({
+      "ajax" : {
+          "url" : url,
+          "dataSrc" : "data"
+        },
+      "columns": [
+              { "data": "full_name" },
+              { "data": "quarter1" },
+              { "data": "quarter2" },
+              { "data": "quarter3" },
+              { "data": "quarter4" },
+              { "data": "percent" },
+              { "data": "alert" },
+      ],
+        
+    });
+
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
 {% endblock %}

@@ -9,7 +9,6 @@ import datetime
 
 
 class ReadingMaterials(models.Model):
-    user_profile = models.ForeignKey(UserProfile,  on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject,  on_delete=models.CASCADE)
     file = models.FileField(
         default="", upload_to='materials/pdf', max_length=100)
