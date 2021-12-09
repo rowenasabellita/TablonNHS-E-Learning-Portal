@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
+# from .views import views_old
 from django.conf.urls import url
+# import .views
 
 
 urlpatterns = [
@@ -20,6 +22,7 @@ urlpatterns = [
     path('pemodule', views.pemodule, name='pemodule'),
     path('sciencemodule', views.sciencemodule, name='sciencemodule'),
 
+
     path('teacher/sm/<grade>', views.view_yearlevel, name='view_yearlevel'),
     path('yearlevel/edit', views.edit_student, name='edit_student'),
 
@@ -29,6 +32,7 @@ urlpatterns = [
          name='gradelevel'),
     # path('upload_activity', views.view_upload_module,
     #      name='upload_activity'),
+
 
     path('submission/quarter/<quarter>',
          views.view_submission, name='view_submission'),
