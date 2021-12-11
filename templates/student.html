@@ -88,13 +88,19 @@
                     <img class="file-upload-image" src="{% static 'pictures/user.png'%}" width="200" height="200" alt = "Profile Picture"/>
                     <div class="image-title-wrap"></div>
                     <h5>Student</h5>
-                    {{ status.status }}
-                    {{ status.completion }}
+
+                      <div class="alert alert-info d-flex align-items-center" role="alert">
+                        {% comment %} <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg> {% endcomment %}
+                        <div>
+                          <h6>Hey {{ user.first_name}}! your current standing is {{ status.status }} with {{ status.completion }}% school year completion status. </h6>
+                        </div>
+                      </div>
+                      
                 </div> 
               </div>
             </div>
             <br>
-            <h2>{{user.first_name}}'s Status Completion</h2>
+            <h2>{{user.first_name}}'s Completion Status</h2>
 
             <div id="student_info" style="display: none;">
               <p id="id">{{ user.id }}</p>
