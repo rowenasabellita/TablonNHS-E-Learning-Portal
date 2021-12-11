@@ -21,13 +21,11 @@ class ClassRecord(models.Model):
     subject = models.ForeignKey(Subject,  on_delete=models.CASCADE)
     quarter = models.CharField(
         max_length=50, choices=QUARTERS, verbose_name="quarters")
-    written_work = models.IntegerField()
-    performance_task = models.IntegerField()
-    grade = models.IntegerField()
-
-    def __str__(self):
-        self.full_name = self.user.first_name + " " + self.user.last_name
-        return self.full_name
+    written_work = models.FloatField()
+    performance_task = models.FloatField()
+    quarterly_assessment = models.FloatField()
+    weighted_score = models.FloatField()
+    grade = models.FloatField()
 
     def get_all_quarters(self):
         quarters = []

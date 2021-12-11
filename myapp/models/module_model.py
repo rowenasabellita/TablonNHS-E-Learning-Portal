@@ -21,6 +21,7 @@ class Module(models.Model):
     url = models.URLField(max_length=500)
     date = models.DateField()
     instruction = models.TextField(verbose_name="Instruction", max_length=500)
+    gradelevel = models.TextField(verbose_name="Gradelevel", max_length=50)
 
     def __str__(self):
         self.activity = self.date + " " + self.subjects

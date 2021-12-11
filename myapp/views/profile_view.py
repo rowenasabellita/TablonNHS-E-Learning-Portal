@@ -68,4 +68,67 @@ def student(request, commit=True):
             s_form.save()
             messages.success(request, 'Your account has been updated!')
             return redirect("student")
-    return render(request, 'student.html', {'s_form': s_form, })
+
+    grade = request.user.userprofile.gradelevel.lower().replace(" ", "")
+    print(grade)
+    status = get_student_status(request.user.id, grade)
+    return render(request, 'student.html', {'s_form': s_form, "status": status})
+
+
+def get_student_status(user_id, gradelevel):
+    format_gradelevel = "Grade {}".format(gradelevel.split("grade")[1])
+
+    average = get_average(format_gradelevel, user_id=user_id)
+
+    completion = 0
+    counter = 0
+    ave = 0
+    for i in average:
+
+        if i.quarter1 != 0:
+            completion += 25
+            counter += 1
+            ave += i.quarter1 / 8
+
+        if i.quarter2 != 0:
+            completion += 25
+            counter += 1
+            ave += i.quarter2 / 8
+
+        if i.quarter3 != 0:
+            completion += 25
+            counter += 1
+            ave += i.quarter3 / 8
+
+        if i.quarter4 != 0:
+            completion += 25
+            counter += 1
+            ave += i.quarter4 / 8
+
+    final_average = ave / counter
+    status = "No Risk"
+    if final_average < 75:
+        status = "At Risk"
+
+    return {
+        "status": status,
+        "completion": completion
+    }
+
+
+def get_average(gradelevel, user_id):
+    query = """
+        select a.id, d.subject_name, b.gradelevel, c.first_name, c.last_name, b.user_id,
+        sum(case when a.quarter = '1st Quarter' then a.grade else 0 end) as quarter1, 
+        sum(case when a.quarter = '2nd Quarter' then a.grade else 0 end) as quarter2, 
+        sum(case when a.quarter = '3rd Quarter' then a.grade else 0 end) as quarter3, 
+        sum(case when a.quarter = '4th Quarter' then a.grade else 0 end) as quarter4 
+        FROM myapp_classrecord as a 
+        join myapp_userprofile as b 
+        join myapp_user as c 
+        join myapp_subject as d 
+        on a.user_profile_id = b.id and b.user_id = c.id and d.id = a.subject_id where b.gradelevel = '{}' and b.user_id = '{}'
+    """.format(gradelevel, user_id)
+    print(query)
+    records = ClassRecord.objects.raw(query)
+    return records

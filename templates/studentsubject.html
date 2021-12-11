@@ -41,526 +41,97 @@
           </div>
         </div>
         <hr />
+        {% for sub in subjects.subjects %}
         <details>
-          <summary>Math Module</summary>
+          <summary>{{ sub.subject_name }} Module</summary>
           <br />
           <div class="mathModule">
             <a href="/mathmodule" target="_blank">Reading Materials</a>
-            <details>
-              <summary>Activity</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
-            <details>
-              <summary>Quiz</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
-            <details>
-              <summary>Exam</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
+            
+              <!-- activity -->
+                <details>
+                  <summary>Activity</summary>
+                  <table class="content-table" id='activity_{{ sub.subject_id}}'>
+                    <thead>
+                      <tr>
+                        <th>Instructions</th>
+                        <th>Deadline</th>
+                        <th>File</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for mod in module %}
+                      {% if mod.subject_id == sub.subject_id and mod.category == "activity" %}
+                      <tr class="active-row">
+                        <td>{{ mod.instruction }}</td>
+                        <td>{{ mod.date }}</td>
+                        <td><a href="{{ mod.url }}">{{ mod.url }}</a></td>
+                      </tr>
+                      
+                      {% endif %}
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </details>
+                <!-- end of activity -->
+
+                <!-- quiz -->
+                <details>
+                  <summary>Quiz</summary>
+                  <table class="content-table" id='quiz_{{ sub.subject_id}}'>
+                    <thead>
+                      <tr>
+                        <th>Instructions</th>
+                        <th>Deadline</th>
+                        <th>File</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for mod in module %}
+                      {% if mod.subject_id == sub.subject_id and mod.category == "quiz" %}
+                      <tr class="active-row">
+                        <td>{{ mod.instruction }}</td>
+                        <td>{{ mod.date }}</td>
+                        <td><a href="{{ mod.url }}">{{ mod.url }}</a></td>
+                      </tr>
+                      
+                      {% endif %}
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </details>
+                <!-- end of quiz -->
+              <!-- exam -->
+                <details>
+                  <summary>Exam</summary>
+                  <table class="content-table" id='exam_{{ sub.subject_id}}'>
+                    <thead>
+                      <tr>
+                        <th>Instructions</th>
+                        <th>Deadline</th>
+                        <th>File</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for mod in module %}
+                      {% if mod.subject_id == sub.subject_id and mod.category == "exam" %}
+                      <tr class="active-row">
+                        <td>{{ mod.instruction }}</td>
+                        <td>{{ mod.date }}</td>
+                        <td><a href="{{ mod.url }}">{{ mod.url }}</a></td>
+                      </tr>
+                      
+                      {% endif %}
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </details>
+              <!-- end of exam -->
+              
           </div>
         </details>
-        <hr />
-        <details>
-          <summary>Science Module</summary>
-          <br />
-          <div class="scienceModule">
-            <a href="/sciencemodule" target="_blank">Science Module</a>
-            <details>
-              <summary>Activity</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
-            <details>
-              <summary>Quiz</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
-            <details>
-              <summary>Exam</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
-          </div>
-        </details>
-        <hr />
-        <details>
-          <summary>English Module</summary>
-          <br />
-          <div class="englishModule">
-            <a href="/englishmodule" target="_blank">English Module</a>
-            <details>
-              <summary>Activity</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
-            <details>
-              <summary>Quiz</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
-            <details>
-              <summary>Exam</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
-          </div>
-        </details>
-        <hr />
-        <details>
-          <summary>ESP Module</summary>
-          <br />
-          <div class="espModule">
-            <a href="/espmodule" target="_blank">ESP Module</a>
-            <details>
-              <summary>Activity</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
-            <details>
-              <summary>Quiz</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
-            <details>
-              <summary>Exam</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
-          </div>
-        </details>
-        <hr />
-        <details>
-          <summary>History Module</summary>
-          <br />
-          <div class="historyModule">
-            <a href="/historymodule" target="_blank">History Module</a>
-            <details>
-              <summary>Activity</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
-            <details>
-              <summary>Quiz</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
-            <details>
-              <summary>Exam</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
-          </div>
-        </details>
-        <hr />
-        <details>
-          <summary>Filipino Module</summary>
-          <br />
-          <div class="filipinoModule">
-            <a href="/filipinomodule" target="_blank">Filipino Module</a>
-            <details>
-              <summary>Activity</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
-            <details>
-              <summary>Quiz</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
-            <details>
-              <summary>Exam</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
-          </div>
-        </details>
-        <hr />
-        <details>
-          <summary>PE Module</summary>
-          <br />
-          <div class="peModule">
-            <a href="/pemodule" target="_blank">PE Module</a>
-            <details>
-              <summary>Activity</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
-            <details>
-              <summary>Quiz</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
-            <details>
-              <summary>Exam</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
-          </div>
-        </details>
-        <hr />
-        <details>
-          <summary>ART Module</summary>
-          <br />
-          <div class="artModule">
-            <a href="/artmodule" target="_blank">ART Module</a>
-            <details>
-              <summary>Activity</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
-            <details>
-              <summary>Quiz</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
-            <details>
-              <summary>Exam</summary>
-              <table class="content-table">
-                <thead>
-                  <tr>
-                    <th>Instructions</th>
-                    <th>Deadline</th>
-                    <th>File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="active-row">
-                    <td>instructions here</td>
-                    <td>date here</td>
-                    <td>file here</td>
-                  </tr>
-                </tbody>
-              </table>
-            </details>
-          </div>
-        </details>
-      </div>
+        {% endfor %}
+        
     </div>
   </body>
 </html>

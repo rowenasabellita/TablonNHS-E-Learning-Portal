@@ -9,6 +9,7 @@ import myapp
 from myapp.models.class_record_model import ClassRecord
 from myapp.models.subject_model import SUBJECTS, Subject
 from myapp.models import UserProfile
+from myapp.views.profile_view import login
 from myproject.settings import AUTH_PASSWORD_VALIDATORS
 from django.contrib.auth.models import User, auth
 from django.contrib.auth.decorators import login_required
@@ -17,8 +18,9 @@ from django.contrib.auth import get_user_model
 from myapp.models.class_record_model import ClassRecord
 from myapp.filters import RecordFilter
 from django.core.files.storage import FileSystemStorage
-from myapp.views.upload_module_view import get_student_records, get_subjects
+from myapp.views.upload_module_view import get_student_records, get_subjects, get_grade_quarterly_per_subject
 import json
+
 
 User = get_user_model()
 
@@ -73,11 +75,15 @@ def update_update_student_record(request, id):
     if request.method == "POST":
         df = request.POST
         record = ClassRecord.objects.get(id=id)
-        print(df['field'], df['val'])
+        record.weighted_score = df['score']
+        record.grade = df['grade']
+
         if df['field'] == "written_work":
             record.written_work = df['val']
         elif df['field'] == "performance_task":
             record.performance_task = df['val']
+        elif df['field'] == "quarterly_assessment":
+            record.quarterly_assessment = df['val']
         elif df['field'] == "grade":
             record.grade = df['val']
 

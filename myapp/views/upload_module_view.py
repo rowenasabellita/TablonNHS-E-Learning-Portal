@@ -1,4 +1,5 @@
 from django.dispatch.dispatcher import receiver
+from django.http.response import HttpResponseServerError
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib import messages
@@ -7,6 +8,7 @@ from django.utils.translation import ugettext
 from django.shortcuts import render
 import myapp
 from myapp.models.class_record_model import ClassRecord
+from myapp.models.module_model import Module
 from myapp.models.reading_materials_model import ReadingMaterials
 from myapp.models.subject_model import SUBJECTS, Subject
 from myapp.models import UserProfile
@@ -105,22 +107,32 @@ def computed_grade(grades):
     alert = "<div style='color: red'>At Risk</div>"
     passing = 75
 
-    grade = sum(grades) / len(grades)
-    if grade >= passing:
-        alert = "<div style='color: green'>No Risk</div>"
-
+    length = 0
     percent = 0
     for i in grades:
         if i != 0:
             percent += 25
+            length += 1
+
+    grade = sum(grades) / length
+    if grade >= passing:
+        alert = "<div style='color: green'>No Risk</div>"
 
     return [alert, percent]
 
 
-def get_grade_quarterly_per_subject(gradelevel, subject=None):
+def get_grade_quarterly_per_subject(gradelevel, subject=None, user_id=None):
     condition = ""
+
+    condition1 = ""
     if subject:
-        condition = "and a.subject_id = '{}' ".format(subject)
+        condition1 = "and a.subject_id = '{}' ".format(subject)
+
+    condition2 = ""
+    if user_id:
+        condition1 = "and b.user_id = '{}' ".format(user_id)
+
+    condition = condition1+condition2
 
     query = """
         select 
@@ -151,22 +163,39 @@ def get_grade_quarterly_per_subject(gradelevel, subject=None):
 @login_required
 def reading_material_upload(request, grade):
     if request.method == 'POST':
-        # form = UploadFileForm(request.POST, request.FILES)
-        # print(request.FILES)
-        # if form.is_valid():
-        #     form.save()
-        #     return redirect('um_gradelevel.html')
         req = request.POST
-        print(req.__dict__, "lasdshakjdsakjhd")
-        print(req['subject_id'], req['date'], "adsadsad")
-        # ReadingMaterials.objects.create(
-        #     subject_id=req['subject_id'], file=request.FILES, date=req['date'])
+        try:
 
-        rm = ReadingMaterials()
-        rm.subject_id = req['subject_id']
-        rm.date = req['date']
-        rm.file = request.FILES
-        rm.save()
-        return HttpResponse("success")
+            rm = ReadingMaterials()
+            rm.subject_id = req['subject_id']
+            rm.date = req['date']
+            rm.file = request.FILES.get("document")
+            rm.save()
+
+            return render(request, 'um_gradelevel.html', {"subjects": get_subjects()})
+
+        except Exception as e:
+            return render(request, 'internal_server_error.html', {"redirect_to": "/teacher", "error_msg": str(e)})
 
     return render(request, 'um_gradelevel.html', {"subjects": get_subjects()})
+
+
+@login_required
+def add_module(request, gradelevel):
+    print(gradelevel)
+    format_gradelevel = "Grade {}".format(gradelevel.split("grade")[1])
+
+    if request.method == 'POST':
+        req = request.POST
+        try:
+            rm = Module()
+            rm.category = req['category']
+            rm.url = req['url']
+            rm.date = req['date']
+            rm.instruction = req['instruction']
+            rm.subject_id = req['subject_id']
+            rm.gradelevel = format_gradelevel
+            rm.save()
+            return HttpResponse(json.dumps({"status": "OK"}))
+        except Exception as e:
+            return HttpResponseServerError(str(e))

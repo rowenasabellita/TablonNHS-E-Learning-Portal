@@ -12,174 +12,325 @@
       <hr />
 
       {% for sub in subjects.subjects %}
-        <details>
-          
-            <summary onclick="get_records('{{ sub.subject_id }}')">{{ sub.subject_name }} Record</summary>
-            <div class="mathRecord">
-              <table class="table table-bordered table-success table-hover compact" style="width:100%" id='per_subject_table{{ sub.subject_id }}'>
-                <thead class="thead-dark">
-                  <tr align="center">
-                    <th scope="col" rowspan="2">NAME</th>
-                    <th scope="col" colspan="4">QUARTER</th>
-                    <th scope="col" colspan="2">STATUS</th>
-                  </tr>
-                  <tr align="center">
-                    <th scope="col">1ST QUARTER</th>
-                    <th scope="col">2ND QUARTER</th>
-                    <th scope="col">3RD QUARTER</th>
-                    <th scope="col">4TH QUARTER</th>
-                    <th scope="col">PERCENT(%)</th>
-                    <th scope="col">ALERT</th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-              </table>
-            </div>
-        </details>
+      <details>
+        <summary onclick="get_records('{{ sub.subject_id }}')">
+          {{ sub.subject_name }} Record
+        </summary>
+        <div class="mathRecord">
+          <table
+            class="table table-bordered table-success table-hover compact"
+            style="width: 100%"
+            id="per_subject_table{{ sub.subject_id }}"
+          >
+            <thead class="thead-dark">
+              <tr align="center">
+                <th scope="col" rowspan="2">NAME</th>
+                <th scope="col" colspan="4">QUARTER</th>
+                <th scope="col" colspan="2">STATUS</th>
+              </tr>
+              <tr align="center">
+                <th scope="col">1ST QUARTER</th>
+                <th scope="col">2ND QUARTER</th>
+                <th scope="col">3RD QUARTER</th>
+                <th scope="col">4TH QUARTER</th>
+                <th scope="col">PERCENT(%)</th>
+                <th scope="col">ALERT</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </details>
 
-        <details>
-          <summary>{{ sub.subject_name }} Module</summary>
-          <br />
-          <div class="mathModule">
-            <!-- for uploading modules -->
-            <details>
-              <summary>Reading Materials</summary>
-              <br />
-              <form method="post" enctype="multipart/form-data" id="form">
-                {% csrf_token %}
-                <!-- {{ form|crispy }} -->
-               <input
-                  class="file-upload input"
-                  type="file"
-                  onchange="readURL(this);"
-                  accept="image/pdf"
-                  name="document"
+      <details>
+        <summary>{{ sub.subject_name }} Module</summary>
+        <br />
+        <div class="mathModule">
+          <!-- for uploading modules -->
+          <details>
+            <summary>Reading Materials</summary>
+            <br />
+            <form
+              method="post"
+              enctype="multipart/form-data"
+              id="read_mat_form{{ sub.subject_id}}"
+            >
+              {% csrf_token %}
+              <!-- {{ form|crispy }} -->
+              <input
+                class="file-upload input form-control"
+                type="file"
+                onchange="readURL(this);"
+                accept="image/pdf"
+                name="document"
+              />
+              <input
+                type="date"
+                value="2020-06-06"
+                name="date"
+                class="form-control"
+              />
+              <input
+                type="text"
+                name="subject_id"
+                value="{{ sub.subject_id }}"
+                style="display: none"
+              />
+              <div>
+                <button
+                  type="submit"
+                  class="btn btn-primary btn-sm"
+                  id="submit"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+            <br />
+          </details>
+
+          <details>
+            <summary>Activity</summary>
+            <br />
+            <form
+              id="activity_form{{ sub.subject_id }}"
+              method="POST"
+              action="#"
+            >
+              {% csrf_token %}
+
+              <div class="mb-3">
+                <label for="forurl" class="form-label">Enter URL</label>
+                <input
+                  type="text"
+                  name="url"
+                  class="form-control"
+                  id="forurl"
+                  aria-describedby="emailHelp"
                 />
-                <input type="date" value="2020-06-06" name="date"/> 
-                <input type="text" name="subject_id" value='{{ sub.subject_id }}'/> 
-                <div>
-                  <button type="submit" class="btn btn-primary btn-sm" id="submit">
-                    Submit
-                  </button>
-                </div>
-              </form>
-              <br/>
-            </details>
+              </div>
+              <div class="mb-3">
+                <label for="forduedate" class="form-label">Set Deadline</label>
+                <input
+                  type="date"
+                  name="date"
+                  class="form-control"
+                  id="forduedate"
+                  aria-describedby="emailHelp"
+                />
+              </div>
+              <input
+                type="text"
+                name="subject_id"
+                value="{{ sub.subject_id }}"
+                style="display: none"
+              />
+              <input
+                type="text"
+                name="category"
+                value="activity"
+                style="display: none"
+              />
+              <div class="form-floating">
+                <textarea
+                  class="form-control"
+                  name="instruction"
+                  id="instruction"
+                  placeholder="Enter your comment here"
+                  style="height: 100px; width: 100%"
+                ></textarea>
+                <label for="floatingTextarea2">Comments</label>
+              </div>
 
+              <button
+                class="btn btn-primary btn-sm"
+                onclick="add_module('activity_form{{ sub.subject_id }}')"
+              >
+                Submit
+              </button>
+            </form>
 
-            <details>
-              <summary>Activity</summary>
-              <br />
-              <form id="form" method="POST" action="/teacher/um/grade">
-                {% csrf_token %}
+            <br />
+          </details>
+          <details>
+            <summary>Quiz</summary>
+            <br />
+            <form id="quiz_form{{ sub.subject_id }}" method="POST">
+              <div class="mb-3">
+                <label for="forurl" class="form-label">Enter URL</label>
+                <input
+                  type="text"
+                  name="url"
+                  class="form-control"
+                  id="forurl"
+                  aria-describedby="emailHelp"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="forduedate" class="form-label">Set Deadline</label>
+                <input
+                  type="date"
+                  name="date"
+                  class="form-control"
+                  id="forduedate"
+                  aria-describedby="emailHelp"
+                />
+              </div>
+              <input
+                type="text"
+                name="subject_id"
+                value="{{ sub.subject_id }}"
+                style="display: none"
+              />
+              <input
+                type="text"
+                name="category"
+                value="quiz"
+                style="display: none"
+              />
+              <div class="form-floating">
+                <textarea
+                  class="form-control"
+                  name="instruction"
+                  id="instruction"
+                  placeholder="Enter your comment here"
+                  style="height: 100px; width: 100%"
+                ></textarea>
+                <label for="floatingTextarea2">Comments</label>
+              </div>
 
-                <input name="myurl" type="url" id="url" />
-                <label>Choose URL</label>
-                <input name="mydate" type="date" id="date" value="2020-06-06" />
-                <textarea name="mycomment" id="comment" placeholder="Enter your comment here">
-                </textarea>
-                <div>
-                  <input type="submit" class="btn btn-primary btn-sm" id="submit">
-                  </input>
-                </div>
-              </form>
-              <br />
-            </details>
-            <details>
-              <summary>Quiz</summary>
-              <br />
-              <form id="form">
-                <input type="url" id="url" />
-                <label>Choose URL</label>
-                <input type="date" id="date" value="2020-06-06" />
-                <textarea id="comment" placeholder="Enter your comment here">
-                </textarea>
-                <div>
-                  <a href="#" type="button"
-                    ><button class="btn btn-primary btn-sm" id="submit">
-                      Submit
-                    </button></a
-                  >
-                </div>
-              </form>
-              <br />
-            </details>
-            <details>
-              <summary>Exam</summary>
-              <br />
-              <form id="form">
-                <input type="url" id="url" />
-                <label>Choose URL</label>
-                <input type="date" id="date" value="2020-06-06" />
-                <textarea id="comment" placeholder="Enter your comment here">
-                </textarea>
-                <div>
-                  <a href="#" type="button"
-                    ><button class="btn btn-primary btn-sm" id="submit">
-                      Submit
-                    </button></a
-                  >
-                </div>
-              </form>
-              <br />
-            </details>
-          </div>
-        </details>
-        <br>
- 
+              <button
+                class="btn btn-primary btn-sm"
+                onclick="add_module('quiz_form{{ sub.subject_id }}')"
+              >
+                Submit
+              </button>
+            </form>
+            <br />
+          </details>
+          <details>
+            <summary>Exam</summary>
+            <br />
+            <form id="exam_form{{ sub.subject_id }}">
+              <div class="mb-3">
+                <label for="forurl" class="form-label">Enter URL</label>
+                <input
+                  type="text"
+                  name="url"
+                  class="form-control"
+                  id="forurl"
+                  aria-describedby="emailHelp"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="forduedate" class="form-label">Set Deadline</label>
+                <input
+                  type="date"
+                  name="date"
+                  class="form-control"
+                  id="forduedate"
+                  aria-describedby="emailHelp"
+                />
+              </div>
+              <input
+                type="text"
+                name="subject_id"
+                value="{{ sub.subject_id }}"
+                style="display: none"
+              />
+              <input
+                type="text"
+                name="category"
+                value="exam"
+                style="display: none"
+              />
+              <div class="form-floating">
+                <textarea
+                  class="form-control"
+                  name="instruction"
+                  id="instruction"
+                  placeholder="Enter your comment here"
+                  style="height: 100px; width: 100%"
+                ></textarea>
+                <label for="floatingTextarea2">Comments</label>
+              </div>
+
+              <button
+                class="btn btn-primary btn-sm"
+                onclick="add_module('exam_form{{ sub.subject_id }}')"
+              >
+                Submit
+              </button>
+            </form>
+            <br />
+          </details>
+        </div>
+      </details>
+      <br />
+
       {% endfor %}
       <hr />
     </div>
   </div>
 </div>
 
-
-
-
-
-
-
 <script>
+  var gradelevel = $(location).attr("href").split("/")[5];
+  var formatted_gradelevel = gradelevel.includes("#")
+    ? gradelevel.slice(0, -1)
+    : gradelevel;
 
-  function get_records(sub_id){
-
+  function get_records(sub_id) {
     // initialization of variables
-    var id_name = '#per_subject_table'+sub_id
-    var gradelevel = $(location).attr("href").split("/")[5];
-    var formatted_gradelevel = gradelevel.includes("#") ? gradelevel.slice(0,-1) : gradelevel
-    var url = "http://localhost:8000/teacher/get_quarterly_grade/"+formatted_gradelevel+"/"+sub_id
-    
-    
+    var id_name = "#per_subject_table" + sub_id;
+    var record_url =
+      "http://localhost:8000/teacher/get_quarterly_grade/" +
+      formatted_gradelevel +
+      "/" +
+      sub_id;
+
+    console.log(record_url);
+    console.log(gradelevel);
+    console.log(formatted_gradelevel);
+    console.log(sub_id);
+    console.log(id_name);
     // initialization of datatable
-    $.fn.dataTable.ext.errMode = 'none';
+    $.fn.dataTable.ext.errMode = "none";
 
     $(id_name).dataTable({
-      "ajax" : {
-          "url" : url,
-          "dataSrc" : "data"
-        },
-      "columns": [
-              { "data": "full_name" },
-              { "data": "quarter1" },
-              { "data": "quarter2" },
-              { "data": "quarter3" },
-              { "data": "quarter4" },
-              { "data": "percent" },
-              { "data": "alert" },
+      ajax: {
+        url: record_url,
+        dataSrc: "data",
+      },
+      columns: [
+        { data: "full_name" },
+        { data: "quarter1" },
+        { data: "quarter2" },
+        { data: "quarter3" },
+        { data: "quarter4" },
+        { data: "percent" },
+        { data: "alert" },
       ],
-        
     });
+  }
 
+  function add_module(form) {
+    var url = "http://localhost:8000/";
+    var id = "#" + form;
+    console.log(url + "add_module" + "/" + formatted_gradelevel);
+    $.post(
+      url + "add_module" + "/" + formatted_gradelevel,
+      $(id).serialize(),
+      function (r) {
+        alert("Successfully Added");
+        setTimeout(function () {
+          window.location.replace(url + "teacher/um/" + formatted_gradelevel);
+        }, 500);
+      }
+    ).fail(function () {
+      window.location.replace(url + "error500/teacher");
+    });
   }
 </script>
-
-
-
-
-
-
-
-
-
 
 {% endblock %}

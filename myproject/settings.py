@@ -74,6 +74,8 @@ TEMPLATES = [
                          'uploadmodule'),
             os.path.join(os.path.join(BASE_DIR, 'templates'),
                          'record'),
+            os.path.join(os.path.join(BASE_DIR, 'templates'),
+                         'errors'),
 
         ],
         'APP_DIRS': True,

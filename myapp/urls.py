@@ -1,6 +1,5 @@
 from django.urls import path
 from . import views
-# from .views import views_old
 from django.conf.urls import url
 # import .views
 
@@ -10,7 +9,8 @@ urlpatterns = [
     path('teacher', views.teacher, name='teacher'),
     path('teachersubject', views.teachersubject, name='teachersubject'),
     path('student', views.student, name='student'),
-    path('studentsubject', views.studentsubject, name="studentsubject"),
+    path('studentsubject/<gradelevel>',
+         views.studentsubject, name="studentsubject"),
     path('logout', views.logout, name='logout'),
 
     path('artmodule', views.artmodule, name='artmodule'),
@@ -27,10 +27,14 @@ urlpatterns = [
 
     path('teacher/um/<grade>', views.reading_material_upload,
          name='teacher/um/grade'),
+
+
+    path('add_module/<gradelevel>', views.add_module,
+         name='add_module'),
+
+
     path('teacher/get_quarterly_grade/<gradelevel>/<subject_id>', views.get_quarterly_grade,
          name='gradelevel'),
-    # path('upload_activity', views.view_upload_module,
-    #      name='upload_activity'),
 
 
     path('submission/quarter/<quarter>',
@@ -39,10 +43,16 @@ urlpatterns = [
     path('get_student_records/<quarter>', views.filter_student_records,
          name='filter_student_records'),
     path('update_student_record/<id>', views.update_update_student_record,
-         name='filter_student_records')
+         name='update_student_record'),
 
 
+    # student
+    path('get_student_analytics/<id>/<gradelevel>', views.get_student_analytics,
+         name='get_student_analytics'),
 
+
+    # errors
+    path("error500/<redirect_to>", views.internal_server_error, name="error500")
 
 
 ]

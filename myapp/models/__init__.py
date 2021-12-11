@@ -4,4 +4,3 @@ from .class_record_model import *
 from .module_model import *
 from .reading_materials_model import *
 from .subject_model import *
-from .student_analytics_model import *

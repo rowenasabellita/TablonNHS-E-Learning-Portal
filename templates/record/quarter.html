@@ -51,6 +51,8 @@
                 <th scope="col">Subject</th>
                 <th scope="col">Written Work</th>
                 <th scope="col">Performance Task</th>
+                <th scope="col">Quarterly Assessment</th>
+                <th scope="col">Weighted Score</th>
                 <th scope="col">Grade</th>
               </tr>
             </thead>
@@ -86,10 +88,32 @@
                   <input
                     type="number"
                     class="form-control"
+                    value="{{ record.quarterly_assessment }}"
+                    name="quarterly_assessment"
+                    id="quarterly_assessment"
+                    onchange="update_record('{{ record.id }}', 'quarterly_assessment', '{{ record.counter }}')"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    class="form-control"
+                    value="{{ record.weighted_score }}"
+                    name="weighted_score"
+                    id="weighted_score"
+                    onchange="update_record('{{ record.id }}', 'weighted_score', '{{ record.counter }}')"
+                    disabled
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    class="form-control"
                     value="{{ record.grade }}"
                     name="grade"
                     id="grade"
                     onchange="update_record('{{ record.id }}', 'grade', '{{ record.counter }}')"
+                    disabled
                   />
                 </td>
               </tr>
@@ -157,6 +181,7 @@
       data: { gradelevel: gradelevel, section: section, subject: subject },
       success: function (r) {
         var data = JSON.parse(r);
+        console.log(data);
         $.each(data["data"], function (index, item) {
           myTable.row
             .add([
@@ -165,6 +190,7 @@
               item.section,
               item.gradelevel,
               item.subject_name,
+
               "<input type='text' class='form-control' value=" +
                 item.written_work +
                 " name='written_work' id='written_work' onchange='update_record(" +
@@ -172,6 +198,7 @@
                 ", `written_work`, " +
                 item.counter +
                 ")'>",
+
               "<input type='text' class='form-control' value=" +
                 item.performance_task +
                 " name='performance_task' id='performance_task' onchange='update_record(" +
@@ -179,13 +206,30 @@
                 ", `performance_task`, " +
                 item.counter +
                 ")'>",
+
+              "<input type='text' class='form-control' value=" +
+                item.quarterly_assessment +
+                " name='quarterly_assessment' id='quarterly_assessment' onchange='update_record(" +
+                item.id +
+                ", `quarterly_assessment`, " +
+                item.counter +
+                ")'>",
+
+              "<input type='text' class='form-control' value=" +
+                item.weighted_score +
+                " name='weighted_score' id='weighted_score' onchange='update_record(" +
+                item.id +
+                ", `weighted_score`, " +
+                item.counter +
+                ")' disabled>",
+
               "<input type='text' class='form-control' value=" +
                 item.grade +
                 " name='grade' id='grade' onchange='update_record(" +
                 item.id +
                 ", `grade`, " +
                 item.counter +
-                ")'>",
+                ")' disabled>",
             ])
             .draw(false);
         });
@@ -198,11 +242,91 @@
     $.ajax({
       type: "POST",
       url: "http://localhost:8000/update_student_record/" + id,
-      data: { field: field, val: $(val)[counter - 1].value },
+      data: {
+        field: field,
+        score: calculate_weighted_score(id, counter),
+        val: $(val)[counter - 1].value,
+        grade: calculate_grade(counter),
+      },
       success: function (r) {
         console.log(r);
       },
     });
+  }
+
+  function calculate_weighted_score(id, counter) {
+    var fields = ["written_work", "performance_task", "quarterly_assessment"];
+
+    var score = 0;
+    $.map(fields, function (i, df) {
+      var val = "#" + i + ".form-control";
+      score += parseFloat($(val)[counter - 1].value);
+    });
+
+    $("#weighted_score.form-control")[counter - 1].value = score;
+
+    if (score <= 100) {
+      return score;
+    } else {
+      alert("Warning: You exceed Weighted Score!");
+    }
+  }
+
+  function calculate_grade(counter) {
+    var transmutation_table = [
+      [100, 100, 100],
+      [98.4, 99.99, 99],
+      [96.8, 98.39, 98],
+      [95.2, 96.79, 97],
+      [93.6, 95.19, 96],
+      [61.6, 63.19, 76],
+      [92.0, 93.59, 95],
+      [90.4, 91.99, 94],
+      [88.8, 90.39, 93],
+      [87.2, 88.79, 92],
+      [85.6, 87.19, 91],
+      [84.0, 85.59, 90],
+      [82.4, 83.99, 89],
+      [80.8, 82.39, 88],
+      [79.2, 80.79, 87],
+      [77.6, 79.19, 86],
+      [76.0, 77.59, 85],
+      [74.4, 75.99, 84],
+      [72.8, 74.39, 83],
+      [71.2, 72.79, 82],
+      [69.6, 71.19, 81],
+      [68.0, 69.59, 80],
+      [66.4, 67.99, 79],
+      [64.8, 66.39, 78],
+      [63.2, 64.79, 77],
+      [60.0, 61.59, 75],
+      [56.0, 59.99, 74],
+      [52.0, 55.99, 73],
+      [48.0, 51.99, 72],
+      [44.0, 47.99, 71],
+      [40.0, 43.99, 70],
+      [36.0, 39.99, 69],
+      [32.0, 35.99, 68],
+      [28.0, 31.99, 67],
+      [24.0, 27.99, 66],
+      [20.0, 23.99, 65],
+      [16.0, 19.99, 64],
+      [12.0, 15.99, 63],
+      [8.0, 11.99, 62],
+      [4.0, 7.99, 61],
+      [1, 3.99, 60],
+      [0, 0, 0],
+    ];
+    var score = $("#weighted_score.form-control")[counter - 1].value;
+
+    var grade = 0;
+    $.map(transmutation_table, function (df, i) {
+      if (df[0] <= score && score <= df[1]) {
+        grade = df[2];
+        $("#grade.form-control")[counter - 1].value = df[2];
+      }
+    });
+    return grade;
   }
 </script>
 
