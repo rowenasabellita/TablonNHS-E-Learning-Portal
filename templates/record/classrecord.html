@@ -1,0 +1,170 @@
+{% extends 'sidebar.html' %} {% load static %} {% load crispy_forms_tags %}
+{%block main_content %}
+<style>
+    .cell-border {
+        border: 1px solid black;
+        border-collapse: collapse;
+    } 
+    .cell-border th {
+        border: 1px solid;
+        border-collapse: collapse;
+        
+    } 
+    .cell-border tr td {
+        border: 1px solid black;
+        
+    } 
+    .cell-border tr  {
+        font-weight: bold;
+    }
+
+</style>
+<div class="main_content_profile">
+  <div data-tab-content class="active info" id="classrecord">
+    <div class="row">
+      <form>
+        <div class="row">
+          <div class="col">
+            <select name="grade_level" id="grade_level" class="form-control">
+              <option value="" class="form-control">--Select Grade Level--</option>
+              {% for i in gradelevel %}
+              <option value="{{ i }}">{{ i }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="col">
+            <select name="section" id="section" class="form-control"></select>
+          </div>
+
+          <div class="col">
+            <select name="subject" id="subject" class="form-control">
+              <option value="" class="form-control">--Select Subject--</option>
+              {% for i in subjects.subjects %}
+              <option value="{{ i.subject_id }}">{{ i.subject_name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="col">
+            <input
+              name="myInput"
+              id="myInput"
+              class="form-control"
+              placeholder="Search here"
+            />
+          </div>
+        </div>
+      </form>
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <br>
+        <div class="table_container">
+            <table class="cell-border" class="stripe compact" style="width:100%" id="record">
+                <thead>
+                    <tr align="center" >
+                      <th rowspan="2" scope="rowgroup">Student Name</th>
+                      <th colspan="13" scope="colgroup">Written Work</th>
+                      <th colspan="13" scope="colgroup">Performance Task</th>
+                      <th colspan="3" scope="colgroup">Quarterly Assessment</th>
+                      <th scope="colgroup">Initial Grade</th>
+                    </tr>
+                  </thead>
+                  <tbody align="center">
+                    <thead>
+                     
+                        <tr>
+                            <th></th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>4</th>
+                            <th>5</th>
+                            <th>6</th>
+                            <th>7</th>
+                            <th>8</th>
+                            <th>9</th>
+                            <th>10</th>
+                            <th>Total</th>
+                            <th>PS</th>
+                            <th>WS</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>4</th>
+                            <th>5</th>
+                            <th>6</th>
+                            <th>7</th>
+                            <th>8</th>
+                            <th>9</th>
+                            <th>10</th>
+                            <th>Total</th>
+                            <th>PS</th>
+                            <th>WS</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <!-- sample data no for loop -->
+                        <tr>
+                            <td>**name**</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                </tbody>
+            </table>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+
+ $(document).ready(function() {
+    $('#record').DataTable();
+} );
+
+</script>
+<!-- <script type="text/javascript" src="jquery.dataTables.js"></script>
+<script type="text/javascript" src="dataTables.scrollingPagination.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#record').dataTable( {
+            "pagingType": "scrolling"
+        } );
+    } );
+</script> -->
+
+
+{% endblock %}
