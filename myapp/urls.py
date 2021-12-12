@@ -37,6 +37,8 @@ urlpatterns = [
          name='gradelevel'),
 
 
+    path('classrecord', views.view_classrecord, name='view_classrecord'),
+
     path('submission/quarter/<quarter>',
          views.view_submission, name='view_submission'),
     path('get_sections', views.get_sections, name='get_sections'),
