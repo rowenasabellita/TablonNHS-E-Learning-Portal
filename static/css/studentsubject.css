@@ -94,6 +94,11 @@ hr {
     background-color:  black;
 }
 
+details, summary{
+  outline: green;
+  color: #009879;
+}
+
 
 #back {
     margin-top: 20px;
