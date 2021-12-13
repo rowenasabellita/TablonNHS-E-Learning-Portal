@@ -10,15 +10,119 @@
             <h1 align="center">{{ subject }} Module</h1>
           </div>
         </div>
-        <hr /> 
+        <hr />
         
-        <!-- RECORDS -->
-        <h3>RECORDS</h3>
-        <table
+        <!-- categories --> 
+        <h3>ACTIVITIES, QUIZES AND EXAMS</h3>
+        <br>
+        <!-- add -->
+        <div> 
+          <details>
+            <summary style="font-size: 18px; font-weight:700">Add modules</summary>
+            <form id="exam_form{{ sub_id }}" method="POST" action='/add_module/{{ gradelevel }}' enctype="multipart/form-data">
+              <input value="{{ user.id }}" id='prepared_by' name="prepared_by" hidden/>
+              
+              <div class="row">
+                <div class="col">
+                  <label for="forduedate" class="form-label">Category</label>
+                  <select name="category" id="category" class="form-control">
+                    <option value="activity" class="form-control">Activity</option>
+                    <option value="quiz" class="form-control">Quiz</option>
+                    <option value="exam" class="form-control">Exam</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <label for="forduedate" class="form-label">Set Deadline</label>
+                  <input
+                  type="date"
+                  name="date"
+                  class="form-control"
+                  id="forduedate"
+                  aria-describedby="emailHelp"
+                  required
+                  />
+                </div>
+                <div class="col">
+                  <label class="form-label">Upload File <label style="color: gray">(Optional)</label></label>
+                  <input
+                  class="file-upload input form-control"
+                  type="file"
+                  onchange="readURL(this);"
+                  accept="image/pdf"
+                  name="document"
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <input
+                type="text"
+                name="subject_id"
+                value="{{ sub_id }}"
+                style="display: none"
+                />
+                <input
+                type="text"
+                name="category"
+                value="exam"
+                style="display: none"
+                />
+                <div class="mb-3">
+                  <div class="form-floating">
+                    <textarea
+                    class="form-control"
+                    name="instruction"
+                    id="instruction"
+                    style="height: 100px; width: 100%"
+                    ></textarea>
+                    <label for="floatingTextarea2"
+                    >Please provide instructions here..
+                  </label>
+                </div>
+                <div id="emailHelp" class="form-text">e.g. <br />
+                  For google forms link. Copy and paste the link here.
+                  https://forms.gle/sFBKybkNxhQXn2jT8</div>
+                </div>
+              </div>
+              <div>
+                <button
+                type="submit"
+                class="btn btn-primary btn-sm"
+                id="submit"
+                >
+                Submit
+              </button>
+            </form>
+          </details>
+          <!-- end -->
+        </div>
+          
+          <br>
+          <br>
+          <table
           class="table table-bordered stripe table-hover compact"
           style="width: 100%"
-          id="per_subject_table{{ sub_id }}"
+          id="module_table{{ sub_id }}"
         >
+          <thead class="thead-dark">
+            <tr>
+              <th>Category</th>
+              <th>Created On</th>
+              <th>instructions</th>
+              <th>File</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <!-- end of categories -->
+
+        <br>
+        <br>
+        <br>
+         <!-- RECORDS -->
+        <h3>RECORDS</h3>
+        <table class="table table-bordered stripe table-hover compact"
+          style="width: 100%"
+          id="per_subject_table{{ sub_id }}">
           <thead class="thead-dark">
             <tr align="center">
               <th scope="col" rowspan="2">NAME</th>
@@ -36,109 +140,9 @@
           </thead>
           <tbody></tbody>
         </table>
+
         <!-- end of records -->
-        <br>
-        
-        <!-- categories -->
-        <h3>ACTIVITIES, QUIZES AND EXAMS</h3>
-
-        <!-- add -->
-        <details>
-          <summary>Add modules</summary>
-          <form id="exam_form{{ sub_id }}" method="POST" action='/add_module/{{ gradelevel }}' enctype="multipart/form-data">
-            <input value="{{ user.id }}" id='prepared_by' name="prepared_by" hidden/>
-            
-            <div class="row">
-              <div class="col">
-                <label for="forduedate" class="form-label">Category</label>
-                <select name="category" id="category" class="form-control">
-                  <option value="activity" class="form-control">Activity</option>
-                  <option value="quiz" class="form-control">Quiz</option>
-                  <option value="exam" class="form-control">Exam</option>
-                </select>
-              </div>
-              <div class="col">
-                <label for="forduedate" class="form-label">Set Deadline</label>
-                <input
-                  type="date"
-                  name="date"
-                  class="form-control"
-                  id="forduedate"
-                  aria-describedby="emailHelp"
-                  required
-                />
-              </div>
-              <div class="col">
-                <label class="form-label">Upload File <label style="color: gray">(Optional)</label></label>
-                <input
-                  class="file-upload input form-control"
-                  type="file"
-                  onchange="readURL(this);"
-                  accept="image/pdf"
-                  name="document"
-                />
-              </div>
-            </div>
-            <div class="row">
-              <input
-                type="text"
-                name="subject_id"
-                value="{{ sub_id }}"
-                style="display: none"
-              />
-              <input
-                type="text"
-                name="category"
-                value="exam"
-                style="display: none"
-              />
-              <div class="mb-3">
-                <div class="form-floating">
-                  <textarea
-                    class="form-control"
-                    name="instruction"
-                    id="instruction"
-                    style="height: 100px; width: 100%"
-                  ></textarea>
-                  <label for="floatingTextarea2"
-                    >Please provide instructions here..
-                  </label>
-                </div>
-                <div id="emailHelp" class="form-text">e.g. <br />
-                  For google forms link. Copy and paste the link here.
-                  https://forms.gle/sFBKybkNxhQXn2jT8</div>
-              </div>
-            </div>
-            <div>
-              <button
-                type="submit"
-                class="btn btn-primary btn-sm"
-                id="submit"
-              >
-                Submit
-              </button>
-          </form>
-        </details>
-        <!-- end -->
-
-        <table
-          class="table table-bordered stripe table-hover compact"
-          style="width: 100%"
-          id="module_table{{ sub_id }}"
-        >
-          <thead class="thead-dark">
-            <tr>
-              <th>Category</th>
-              <th>Created On</th>
-              <th>instructions</th>
-              <th>File</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-        <!-- end of categories -->
-
-        <hr />
+        <hr/>
       </div>
     </div>
 </div>

@@ -13,12 +13,12 @@
 
       {% for sub in subjects.subjects %}
         <a href="/view_per_module/{{ cur_url }}/{{ sub.subject_id }}">
-          <div style="border: 1px solid black; width: 25%; height: 50px;">
+          <div id="subj" style="border: 1px solid black; width: 100%; height: 100px; background-color:rgb(177, 228, 177)">
               {{ sub.subject_name }}
           </div>
         </a>
           
-      {% endfor %}
+      {% endfor %}  
       <div  style="clear: both; float: left"></div>
       <hr />
     </div>
@@ -82,6 +82,7 @@
       window.location.replace(url + "error500/teacher");
     });
   }
+
 </script>
 
 {% endblock %}
