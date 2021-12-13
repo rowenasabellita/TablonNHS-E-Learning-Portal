@@ -58,9 +58,29 @@
       </form>
       <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        <br>
         <div class="table_container">
-            <table class="cell-border" class="stripe compact" style="width:100%" id="record">
+            <table class="stripe compact" id="record">
+                <thead>
+                  <tr align="center">
+                    <th scope="col">Student Name</th>
+                    <th scope="colgroup">Written Work</th>
+                    <th scope="col">Performance Task</th>
+                    <th scope="col">Quarterly Assessment</th>
+                    <th scope="col">Initial Grade</th>
+                  </tr>
+                </thead>
+                <tbody align="center">
+                  <tr>
+                    <td>asd</td>
+                    <td>asdasd</td>
+                    <td>asdasd</td>
+                    <td>asdasd</td>
+                    <td>asdasdsad</td>
+                  </tr>
+                </tbody>
+              </table>
+
+            <!-- <table class="cell-border" class="stripe compact" style="width:100%" id="record">
                 <thead>
                     <tr align="center" >
                       <th rowspan="2" scope="rowgroup">Student Name</th>
@@ -106,7 +126,7 @@
                             <th></th>
                             <th></th>
                         </tr>
-                        <!-- sample data no for loop -->
+             
                         <tr>
                             <td>**name**</td>
                             <td></td>
@@ -142,7 +162,7 @@
                         </tr>
                     </thead>
                 </tbody>
-            </table>
+            </table> -->
         </div>
       </form>
     </div>

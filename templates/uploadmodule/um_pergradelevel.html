@@ -96,51 +96,63 @@
           <!-- end -->
         </div>
           
-          <br>
-          <br>
+        <br>
+        <br>
+
+        <div class="module_div">
           <table
-          class="table table-bordered stripe table-hover compact"
-          style="width: 100%"
-          id="module_table{{ sub_id }}"
-        >
-          <thead class="thead-dark">
-            <tr>
-              <th>Category</th>
-              <th>Created On</th>
-              <th>instructions</th>
-              <th>File</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+            class="table table-bordered stripe table-hover compact"
+            style="width: 100%"
+            id="module_table{{ sub_id }}"
+          >
+            <thead class="thead-dark">
+              <tr>
+                <th>Category</th>
+                <th>Created On</th>
+                <th>instructions</th>
+                <th>File</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
         <!-- end of categories -->
 
         <br>
         <br>
         <br>
-         <!-- RECORDS -->
-        <h3>RECORDS</h3>
-        <table class="table table-bordered stripe table-hover compact"
-          style="width: 100%"
-          id="per_subject_table{{ sub_id }}">
-          <thead class="thead-dark">
-            <tr align="center">
-              <th scope="col" rowspan="2">NAME</th>
-              <th scope="col" colspan="4">QUARTER</th>
-              <th scope="col" colspan="2">STATUS</th>
-            </tr>
-            <tr align="center">
-              <th scope="col">1ST QUARTER</th>
-              <th scope="col">2ND QUARTER</th>
-              <th scope="col">3RD QUARTER</th>
-              <th scope="col">4TH QUARTER</th>
-              <th scope="col">PERCENT(%)</th>
-              <th scope="col">ALERT</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
 
+        <br>
+        <br>
+        <br>
+      
+         <!-- RECORDS -->
+
+        <div>
+          <h3>RECORDS</h3>
+          <div class="record_div">
+            <table class="table table-bordered stripe table-hover compact"
+              style="width: 100%"
+              id="per_subject_table{{ sub_id }}">
+              <thead class="thead-dark">
+                <tr align="center">
+                  <th scope="col" rowspan="2">NAME</th>
+                  <th scope="col" colspan="4">QUARTER</th>
+                  <th scope="col" colspan="2">STATUS</th>
+                </tr>
+                <tr align="center">
+                  <th scope="col">1ST QUARTER</th>
+                  <th scope="col">2ND QUARTER</th>
+                  <th scope="col">3RD QUARTER</th>
+                  <th scope="col">4TH QUARTER</th>
+                  <th scope="col">PERCENT(%)</th>
+                  <th scope="col">ALERT</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
         <!-- end of records -->
         <hr/>
       </div>
