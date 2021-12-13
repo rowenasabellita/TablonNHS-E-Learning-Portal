@@ -61,14 +61,15 @@
                     </thead>
                     <tbody>
                       {% for mod in module %}
-                      {% if mod.subject_id == sub.subject_id and mod.category == "activity" %}
-                      <tr class="active-row">
-                        <td>{{ mod.instruction }}</td>
-                        <td>{{ mod.date }}</td>
-                        <td><a href="{{ mod.url }}">{{ mod.url }}</a></td>
-                      </tr>
                       
-                      {% endif %}
+                        {% if mod.subject_id == sub.subject_id and mod.category == "activity" %}
+                        <tr class="active-row">
+                          <td>{{ mod.instruction }}</td>
+                          <td>{{ mod.date }}</td>
+                          <td><a href="{{ mod.url }}">{{ mod.url }}</a></td>
+                        </tr>
+                      
+                        {% endif %}
                       {% endfor %}
                     </tbody>
                   </table>

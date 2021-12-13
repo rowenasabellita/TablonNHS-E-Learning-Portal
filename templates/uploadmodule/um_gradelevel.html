@@ -12,9 +12,15 @@
       <hr />
 
       {% for sub in subjects.subjects %}
-        <a href="/view_per_module/{{ cur_url }}/{{ sub.subject_id }}">
-          <div id="subj" style="border: 1px solid black; width: 100%; height: 100px; background-color:rgb(177, 228, 177)">
-              {{ sub.subject_name }}
+        <a class="subject_link" href="/view_per_module/{{ cur_url }}/{{ sub.subject_id }}">
+          <div class="card">
+            <div id="subj">
+                <div class="bar">
+                  <h1 class="subject_title">
+                    {{ sub.subject_name }}
+                  </h1>
+                </div>
+            </div>
           </div>
         </a>
           
