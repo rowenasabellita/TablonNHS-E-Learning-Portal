@@ -7,29 +7,31 @@
         <div class="row">
           <div class="col-12">
             <p id="sub_id" hidden>{{ sub_id }}</p>
-            <h1 align="center">{{ subject }} Module</h1>
+            <p id="grade" hidden></p>
+            <h1 align="center">{{ formatted_gradelevel}} - {{ subject }} Module</h1>
           </div>
         </div>
         <hr />
         
         <!-- categories --> 
-        <h3>ACTIVITIES, QUIZES AND EXAMS</h3>
+        <h3>ACTIVITIES, QUIZZES AND EXAMS</h3>
         <br>
         <!-- add -->
         <div> 
           <details>
             <summary style="font-size: 18px; font-weight:700">Add modules</summary>
-            <form id="exam_form{{ sub_id }}" method="POST" action='/add_module/{{ gradelevel }}' enctype="multipart/form-data">
+            <form method="POST" action='/add_module/{{ gradelevel }}' enctype="multipart/form-data">
               <input value="{{ user.id }}" id='prepared_by' name="prepared_by" hidden/>
               
               <div class="row">
                 <div class="col">
                   <label for="forduedate" class="form-label">Category</label>
-                  <select name="category" id="category" class="form-control">
+                  <select id="select_category" class="form-control" onchange="set_category()">
                     <option value="activity" class="form-control">Activity</option>
                     <option value="quiz" class="form-control">Quiz</option>
                     <option value="exam" class="form-control">Exam</option>
                   </select>
+                  <input type="text" value="" id="cat" name="cat">
                 </div>
                 <div class="col">
                   <label for="forduedate" class="form-label">Set Deadline</label>
@@ -103,17 +105,40 @@
           <table
             class="table table-bordered stripe table-hover compact"
             style="width: 100%"
-            id="module_table{{ sub_id }}"
+            id="module_table"
           >
             <thead class="thead-dark">
               <tr>
                 <th>Category</th>
                 <th>Created On</th>
-                <th>instructions</th>
+                <th>Instructions</th>
                 <th>File</th>
+                <th></th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              {% for mod in modules %}
+                <!-- <tr onclick="test()"> -->
+                <tr>
+                  <td>{{ mod.category }}</td>
+                  <td>{{ mod.date }}</td>
+                  <td>{{ mod.instruction }}</td>
+                  {% if mod.file %}
+                    <td><a href="{{ mod.file.url }}">{{ mod.file.name }}</a></td>
+                  {% else %}
+                    <td></td>
+                  {% endif %}
+                  <td>
+                    <a href="#" title="View Student Submissions" onclick="view_records('{{ sub_id }}', '{{ mod.category }}')">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                      </svg>
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
           </table>
         </div>
         <!-- end of categories -->
@@ -121,7 +146,6 @@
         <br>
         <br>
         <br>
-
         <br>
         <br>
         <br>
@@ -146,7 +170,7 @@
                   <th scope="col">3RD QUARTER</th>
                   <th scope="col">4TH QUARTER</th>
                   <th scope="col">PERCENT(%)</th>
-                  <th scope="col">ALERT</th>
+                  <th scope="col">REMARKS</th>
                 </tr>
               </thead>
               <tbody></tbody>
@@ -174,16 +198,18 @@
 
 
 <script>
-  $(document).ready(function(){
-    var id = $("p#sub_id").text()
-    get_records(id)
-    get_modules(id)
-  })
-
   var gradelevel = $(location).attr("href").split("/")[4];
   var formatted_gradelevel = gradelevel.includes("#")
     ? gradelevel.slice(0, -1)
     : gradelevel;
+
+  $(document).ready(function(){
+    var id = $("p#sub_id").text()
+    $("p#grade").text(formatted_gradelevel)
+    get_records(id)
+    var table = $("#module_table").dataTable();
+    //get_modules(id)
+  })
 
   function get_records(sub_id) {
     // initialization of variables
@@ -233,9 +259,23 @@
         { data: "type" },
         { data: "created_on" },
         { data: "instruction" },
-        { data: "file" }
+        { data: "file" }  
       ],
     });
+  }
+
+  function view_records(sub_id, category){
+    window.location.href = "/teacher/view_subject_record/"+formatted_gradelevel+"/"+sub_id+"/"+category
+  }
+  
+  function set_category(){
+    var cat = $("select#select_category").val()
+    $("input#cat").val(cat)
+  }
+
+
+  function test(){
+    window.location.href = "/teacher"
   }
   
 </script>

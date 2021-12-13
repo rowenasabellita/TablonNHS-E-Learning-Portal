@@ -1,3 +1,4 @@
+from django.db.models import query
 from django.dispatch.dispatcher import receiver
 from django.core import serializers
 from django.http.response import HttpResponseServerError
@@ -9,7 +10,7 @@ from django.utils.translation import ugettext
 from django.shortcuts import render
 import myapp
 from myapp.models.class_record_model import ClassRecord
-from myapp.models.module_model import Module
+from myapp.models.module_model import Module, StudentSubmission
 from myapp.models.reading_materials_model import ReadingMaterials
 from myapp.models.subject_model import SUBJECTS, Subject
 from myapp.models import UserProfile
@@ -111,7 +112,7 @@ def get_quarterly(gradelevel, subject_id):
 
 def computed_grade(grades):
     # analytics
-    alert = "<div style='color: red'>At Risk</div>"
+    alert = "<div style='color: red'>Failed</div>"
     passing = 75
 
     length = 0
@@ -123,7 +124,7 @@ def computed_grade(grades):
 
     grade = sum(grades) / length
     if grade >= passing:
-        alert = "<div style='color: green'>No Risk</div>"
+        alert = "<div style='color: green'>Passed</div>"
 
     return [alert, percent]
 
@@ -171,13 +172,18 @@ def get_grade_quarterly_per_subject(gradelevel, subject=None, user_id=None):
 def view_per_module(request, grade, subject):
     subject = Subject.objects.get(id=subject)
     record = get_quarterly(grade, subject)
-    print(grade)
+    format_gradelevel = "Grade {}".format(grade.split("grade")[1])
+    modules = Module.objects.filter(
+        gradelevel=format_gradelevel, subject_id=subject)
+
     return render(request, 'um_pergradelevel.html', {
         "grade": grade,
         "subject": subject.subject_name,
         "sub_id": subject.id,
         "record": record,
-        "gradelevel": grade
+        "gradelevel": grade,
+        "modules": modules,
+        "formatted_gradelevel": format_gradelevel
     })
 
 
@@ -209,12 +215,10 @@ def upload_rm(request, grade):
     if request.method == 'POST':
         format_gradelevel = "Grade {}".format(grade.split("grade")[1])
         req = request.POST
-        print(req.__dict__)
         try:
-
             rm = ReadingMaterials()
-            rm.subject_id = req['subject_id']
             rm.file = request.FILES.get("document")
+            rm.subject_id = req['subject_id']
             rm.prepared_by_id = req['prepared_by']
             rm.gradelevel = format_gradelevel
             rm.save()
@@ -232,7 +236,7 @@ def add_module(request, gradelevel):
         req = request.POST
         try:
             rm = Module()
-            rm.category = req['category']
+            rm.category = req['cat']
             rm.date = req['date']
             rm.prepared_by_id = req['prepared_by']
             rm.instruction = req['instruction']
@@ -243,3 +247,46 @@ def add_module(request, gradelevel):
             return redirect("view_per_module", gradelevel, req['subject_id'])
         except Exception as e:
             return render(request, 'internal_server_error.html', {"redirect_to": "/teacher", "error_msg": str(e)})
+
+
+@login_required
+def view_subject_record(request, grade, subject, category):
+    subject = Subject.objects.get(id=subject)
+    format_gradelevel = "Grade {}".format(grade.split("grade")[1])
+
+    submissions = get_student_per_subject_record(
+        format_gradelevel, subject.id, category)
+
+    return render(request, "view_subject_record.html", {
+        "formatted_gradelevel": format_gradelevel,
+        "subject": subject.subject_name,
+        "sub_id": subject.id,
+        "category": category.title(),
+        "submissions": submissions
+    })
+
+
+def get_student_per_subject_record(grade, subject, category, section=None, student=None):
+    csection = ""
+    if section:
+        csection = " and b.section ='{}' ".format(section)
+
+    cstudent = ""
+    if student:
+        cstudent = " and b.id = '{}' ".format(student)
+
+    condition = csection + cstudent
+
+    query = """
+        SELECT a.*, c.first_name, c.last_name, b.gradelevel, 
+        b.section, d.instruction, d.category, d.prepared_by_id, 
+        d.subject_id, d.file as instruction_file, e.subject_name 
+        from myapp_studentsubmission as a 
+        join myapp_userprofile as b 
+        join myapp_user as c 
+        join myapp_module as d 
+        join myapp_subject as e 
+        on a.submitted_by_id = b.id and b.user_id = c.id and a.module_id = d.id and d.subject_id = e.id
+        where d.gradelevel = '{}' and d.subject_id = '{}' and d.category = '{}' """.format(grade, subject, category) + condition + """ """
+    print(query)
+    return StudentSubmission.objects.raw(query)

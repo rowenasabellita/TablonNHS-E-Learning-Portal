@@ -32,3 +32,6 @@ class StudentSubmission(models.Model):
     submitted_by = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     submission_date = models.DateField(auto_now_add=True)
     score = models.FloatField()
+    file = models.FileField(
+        default="", upload_to='materials/pdf', max_length=100)
+    created_at = models.DateField(auto_now_add=True)

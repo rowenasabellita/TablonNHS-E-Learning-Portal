@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 from django.conf.urls import url
+from django.conf import settings
+from django.conf.urls.static import static
 # import .views
 
 
@@ -11,6 +13,9 @@ urlpatterns = [
     path('student', views.student, name='student'),
     path('studentsubject/<gradelevel>',
          views.studentsubject, name="studentsubject"),
+
+    #     path('allsubjects', views.all_subjects_view, name="allsubjects"),
+
     path('logout', views.logout, name='logout'),
 
     path('artmodule', views.artmodule, name='artmodule'),
@@ -35,11 +40,13 @@ urlpatterns = [
     path('view_per_module/<grade>/<subject>', views.view_per_module,
          name='view_per_module'),  # add module per type (quiz, exam, activity)
 
-
+    # module per subject view
     path('teacher/get_quarterly_grade/<gradelevel>/<subject_id>', views.get_quarterly_grade,
          name='get_quarterly_grade'),
     path('teacher/get_module_per_subject_and_grade/<grade>/<subject>', views.get_module_per_subject_and_grade,
          name='get_module_per_subject_and_grade'),
+    path('teacher/view_subject_record/<grade>/<subject>/<category>',
+         views.view_subject_record, name='view_subject_record'),
 
 
     path('classrecord', views.view_classrecord, name='view_classrecord'),
@@ -63,3 +70,8 @@ urlpatterns = [
 
 
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

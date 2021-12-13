@@ -1,0 +1,85 @@
+{% extends 'sidebar.html' %} {% load static %} {% load crispy_forms_tags %}
+{%block main_content %}
+
+
+<div class="main_content_profile">
+  <div class="main_content_profile">
+    <div data-tab-content class="active info" id="firstmod">
+      <div class="row">
+        <div class="col-12">
+          <p id="sub_id" hidden>{{ sub_id }}</p>
+          <h1 align="center">{{ formatted_gradelevel}} - {{ subject }} {{ category}} Submissions</h1>
+        </div>
+      </div>
+      <hr />
+        <!-- table -->
+        <div class="row">
+            <div class="col" id="section_filter">
+            </div>
+        </div>
+        <br>
+        <table class="table table-bordered stripe table-hover compact" style="width: 100%" id="per_subject_table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Section</th>
+                    <th>Submission Date</th>
+                    <th>Uploaded File</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in submissions %}
+                    <tr>
+                        <td>{{ i.first_name}} {{ i.last_name }}</td>
+                        <td>{{ i.section }}</td>
+                        <td>{{ i.submission_date }}</td>
+                        <td>{{ i.file }}</td>
+                        <td><input type="number" value="{{ i.score }}" class="form-control"></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- end of table -->
+      <hr />
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    var id = $("p#sub_id").text();
+    //var table = $("#per_subject_table").dataTable()
+    $('#per_subject_table').DataTable( {
+        initComplete: function () {
+            this.api().columns().every( function (idx, i) {
+                var column = this;
+                if (idx == 1){
+                    var select = $('<select class="form-control filter_option" id="filter_option"><option value="">--Select Section--</option></select>')
+                        .appendTo( $("div#section_filter") )
+                        .on( 'change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+    
+                            column
+                                .search( val ? '^'+val+'$' : '', true, false )
+                                .draw();
+                        } );
+    
+                    column.data().unique().sort().each( function ( d, j ) {
+                        select.append( '<option value="'+d+'">'+d+'</option>' )
+                    } );
+                }
+                
+            } );
+        }
+    } );
+  });
+
+
+
+</script>
+
+
+{% endblock %}
