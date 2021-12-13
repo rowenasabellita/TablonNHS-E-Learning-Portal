@@ -1,0 +1,231 @@
+{% extends 'sidebar.html' %} {% load static %} {% load crispy_forms_tags %}
+{% block main_content %}
+
+<div class="main_content_profile">
+    <div class="main_content_profile">
+      <div data-tab-content class="active info" id="firstmod">
+        <div class="row">
+          <div class="col-12">
+            <p id="sub_id" hidden>{{ sub_id }}</p>
+            <h1 align="center">{{ subject }} Module</h1>
+          </div>
+        </div>
+        <hr /> 
+        
+        <!-- RECORDS -->
+        <h3>RECORDS</h3>
+        <table
+          class="table table-bordered stripe table-hover compact"
+          style="width: 100%"
+          id="per_subject_table{{ sub_id }}"
+        >
+          <thead class="thead-dark">
+            <tr align="center">
+              <th scope="col" rowspan="2">NAME</th>
+              <th scope="col" colspan="4">QUARTER</th>
+              <th scope="col" colspan="2">STATUS</th>
+            </tr>
+            <tr align="center">
+              <th scope="col">1ST QUARTER</th>
+              <th scope="col">2ND QUARTER</th>
+              <th scope="col">3RD QUARTER</th>
+              <th scope="col">4TH QUARTER</th>
+              <th scope="col">PERCENT(%)</th>
+              <th scope="col">ALERT</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <!-- end of records -->
+        <br>
+        
+        <!-- categories -->
+        <h3>ACTIVITIES, QUIZES AND EXAMS</h3>
+
+        <!-- add -->
+        <details>
+          <summary>Add modules</summary>
+          <form id="exam_form{{ sub_id }}" method="POST" action='/add_module/{{ gradelevel }}' enctype="multipart/form-data">
+            <input value="{{ user.id }}" id='prepared_by' name="prepared_by" hidden/>
+            
+            <div class="row">
+              <div class="col">
+                <label for="forduedate" class="form-label">Category</label>
+                <select name="category" id="category" class="form-control">
+                  <option value="activity" class="form-control">Activity</option>
+                  <option value="quiz" class="form-control">Quiz</option>
+                  <option value="exam" class="form-control">Exam</option>
+                </select>
+              </div>
+              <div class="col">
+                <label for="forduedate" class="form-label">Set Deadline</label>
+                <input
+                  type="date"
+                  name="date"
+                  class="form-control"
+                  id="forduedate"
+                  aria-describedby="emailHelp"
+                  required
+                />
+              </div>
+              <div class="col">
+                <label class="form-label">Upload File <label style="color: gray">(Optional)</label></label>
+                <input
+                  class="file-upload input form-control"
+                  type="file"
+                  onchange="readURL(this);"
+                  accept="image/pdf"
+                  name="document"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <input
+                type="text"
+                name="subject_id"
+                value="{{ sub_id }}"
+                style="display: none"
+              />
+              <input
+                type="text"
+                name="category"
+                value="exam"
+                style="display: none"
+              />
+              <div class="mb-3">
+                <div class="form-floating">
+                  <textarea
+                    class="form-control"
+                    name="instruction"
+                    id="instruction"
+                    style="height: 100px; width: 100%"
+                  ></textarea>
+                  <label for="floatingTextarea2"
+                    >Please provide instructions here..
+                  </label>
+                </div>
+                <div id="emailHelp" class="form-text">e.g. <br />
+                  For google forms link. Copy and paste the link here.
+                  https://forms.gle/sFBKybkNxhQXn2jT8</div>
+              </div>
+            </div>
+            <div>
+              <button
+                type="submit"
+                class="btn btn-primary btn-sm"
+                id="submit"
+              >
+                Submit
+              </button>
+          </form>
+        </details>
+        <!-- end -->
+
+        <table
+          class="table table-bordered stripe table-hover compact"
+          style="width: 100%"
+          id="module_table{{ sub_id }}"
+        >
+          <thead class="thead-dark">
+            <tr>
+              <th>Category</th>
+              <th>Created On</th>
+              <th>instructions</th>
+              <th>File</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <!-- end of categories -->
+
+        <hr />
+      </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  $(document).ready(function(){
+    var id = $("p#sub_id").text()
+    get_records(id)
+    get_modules(id)
+  })
+
+  var gradelevel = $(location).attr("href").split("/")[4];
+  var formatted_gradelevel = gradelevel.includes("#")
+    ? gradelevel.slice(0, -1)
+    : gradelevel;
+
+  function get_records(sub_id) {
+    // initialization of variables
+    var id_name = "#per_subject_table" + sub_id;
+    var record_url =
+      "http://localhost:8000/teacher/get_quarterly_grade/" +
+      formatted_gradelevel +
+      "/" +
+      sub_id;
+    // initialization of datatable
+    $.fn.dataTable.ext.errMode = "none";
+
+    $(id_name).dataTable({
+      ajax: {
+        url: record_url,
+        dataSrc: "data",
+      },
+      columns: [
+        { data: "full_name" },
+        { data: "quarter1" },
+        { data: "quarter2" },
+        { data: "quarter3" },
+        { data: "quarter4" },
+        { data: "percent" },
+        { data: "alert" },
+      ],
+    });
+  }
+
+
+  function get_modules(sub_id){
+    console.log(sub_id)
+    var id_name = "#module_table" + sub_id;
+    var record_url =
+    "http://localhost:8000/teacher/get_module_per_subject_and_grade/" +
+      formatted_gradelevel +
+      "/" +
+      sub_id;
+    // initialization of datatable
+    $.fn.dataTable.ext.errMode = "none";
+    $(id_name).dataTable({
+      ajax: {
+        url: record_url,
+        dataSrc: "data",
+      },
+      columns: [
+        { data: "type" },
+        { data: "created_on" },
+        { data: "instruction" },
+        { data: "file" }
+      ],
+    });
+  }
+  
+</script>
+
+
+
+
+
+{% endblock %} 
