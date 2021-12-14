@@ -25,6 +25,9 @@ class Module(models.Model):
     file = models.FileField(
         default="", upload_to='materials/pdf', max_length=100)
     created_at = models.DateField(auto_now_add=True)
+    total_item = models.CharField(default=1, max_length=5)
+    grade_type = models.CharField(default="Written Work", max_length=45)
+    quarter = models.CharField(default="1st Quarter", max_length=45)
 
 
 class StudentSubmission(models.Model):
@@ -35,3 +38,4 @@ class StudentSubmission(models.Model):
     file = models.FileField(
         default="", upload_to='materials/pdf', max_length=100)
     created_at = models.DateField(auto_now_add=True)
+    comments = models.TextField()

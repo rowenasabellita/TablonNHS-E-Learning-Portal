@@ -1,23 +1,20 @@
 {% extends 'sidebar.html' %} {% load static %} {% load crispy_forms_tags %}
 {%block main_content %}
 <style>
-    .cell-border {
-        border: 1px solid black;
-        border-collapse: collapse;
-    } 
-    .cell-border th {
-        border: 1px solid;
-        border-collapse: collapse;
-        
-    } 
-    .cell-border tr td {
-        border: 1px solid black;
-        
-    } 
-    .cell-border tr  {
-        font-weight: bold;
-    }
-
+  .cell-border {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  .cell-border th {
+    border: 1px solid;
+    border-collapse: collapse;
+  }
+  .cell-border tr td {
+    border: 1px solid black;
+  }
+  .cell-border tr {
+    font-weight: bold;
+  }
 </style>
 <div class="main_content_profile">
   <div data-tab-content class="active info" id="classrecord">
@@ -26,10 +23,10 @@
         <div class="row">
           <div class="col">
             <select name="grade_level" id="grade_level" class="form-control">
-              <option value="" class="form-control">--Select Grade Level--</option>
-              {% for i in gradelevel %}
-              <option value="{{ i }}">{{ i }}</option>
-              {% endfor %}
+              <option value="Grade 7">Grade 7</option>
+              <option value="Grade 8">Grade 8</option>
+              <option value="Grade 9">Grade 9</option>
+              <option value="Grade 10">Grade 10</option>
             </select>
           </div>
 
@@ -39,8 +36,7 @@
 
           <div class="col">
             <select name="subject" id="subject" class="form-control">
-              <option value="" class="form-control">--Select Subject--</option>
-              {% for i in subjects.subjects %}
+              {% for i in subjects %}
               <option value="{{ i.subject_id }}">{{ i.subject_name }}</option>
               {% endfor %}
             </select>
@@ -58,111 +54,92 @@
       </form>
       <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        <!-- <div class="table_container">
-            <table class="stripe compact" id="record">
-                <thead>
-                  <tr align="center">
-                    <th scope="col">Student Name</th>
-                    <th scope="colgroup">Written Work</th>
-                    <th scope="col">Performance Task</th>
-                    <th scope="col">Quarterly Assessment</th>
-                    <th scope="col">Initial Grade</th>
-                  </tr>
-                </thead>
-                <tbody align="center">
-                  <tr>
-                    <td>asd</td>
-                    <td>asdasd</td>
-                    <td>asdasd</td>
-                    <td>asdasd</td>
-                    <td>asdasdsad</td>
-                  </tr>
-                </tbody>
-              </table> -->
+        <div class="table_container">
+          <table class="cell-border" style="width: 100%" id="record" >
+            <thead>
+              <tr align="center">
+                {% for sub in subjects %}
+                  <th rowspan="3" scope="rowgroup">Student Name</th>
+                  <th colspan="13" scope="colgroup">Written Work ({{ sub.written_works }}%)</th>
+                  <th colspan="13" scope="colgroup">Performance Task ({{ sub.performance_task }}%)</th>
+                  <th colspan="2" scope="colgroup">Quarterly Assessment ({{ sub.quarterly_assessment }}%)</th>
+                  <th rowspan="3" scope="colgroup">Initial Grade</th>
+                {% endfor %}
+              </tr>
+              <tr align="center">
+                <!-- written_work -->
+                
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+                <th>6</th>
+                <th>7</th>
+                <th>8</th>
+                <th>9</th>
+                <th>10</th>
+                <th>Total</th>
+                <th>PS</th>
+                <th>WS</th>
 
-             <table class="cell-border" class="stripe compact" style="width:100%" id="record">
-                <thead>
-                    <tr align="center" >
-                      <th rowspan="2" scope="rowgroup">Student Name</th>
-                      <th colspan="13" scope="colgroup">Written Work</th>
-                      <th colspan="13" scope="colgroup">Performance Task</th>
-                      <th colspan="3" scope="colgroup">Quarterly Assessment</th>
-                      <th scope="colgroup">Initial Grade</th>
-                    </tr>
-                  </thead>
-                  <tbody align="center">
-                    <thead>
-                     
-                        <tr>
-                            <th></th>
-                            <th>1</th>
-                            <th>2</th>
-                            <th>3</th>
-                            <th>4</th>
-                            <th>5</th>
-                            <th>6</th>
-                            <th>7</th>
-                            <th>8</th>
-                            <th>9</th>
-                            <th>10</th>
-                            <th>Total</th>
-                            <th>PS</th>
-                            <th>WS</th>
-                            <th>1</th>
-                            <th>2</th>
-                            <th>3</th>
-                            <th>4</th>
-                            <th>5</th>
-                            <th>6</th>
-                            <th>7</th>
-                            <th>8</th>
-                            <th>9</th>
-                            <th>10</th>
-                            <th>Total</th>
-                            <th>PS</th>
-                            <th>WS</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-             
-                        <tr>
-                            <td>**name**</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </thead>
-                </tbody>
-            </table> 
+                <!-- performance_task -->
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+                <th>6</th>
+                <th>7</th>
+                <th>8</th>
+                <th>9</th>
+                <th>10</th>
+                <th>Total</th>
+                <th>PS</th>
+                <th>WS</th>
+
+                <!-- quarterly_assessment -->
+                <th></th>
+
+              </tr>
+              <tr>
+                <!-- written_work -->
+                {% for i in headers.written_work %}
+                  <th>{{ i }}</th>
+                {% endfor %}
+
+                <!-- performance task -->
+                {% for i in headers.performance_task %}
+                  <th>{{ i }}</th>
+                {% endfor %}
+                
+                <!-- quarterly_assessment -->
+                <th></th>
+                <th></th>
+
+              </tr>
+            </thead>
+            <tbody align="center">
+              {% for i in records.students %}
+                <td>{{ i }}</td>
+              {% endfor %}
+              {% for i in records.written_work %}
+                {% for ii in i %}
+                  <td>{{ ii }}</td>
+                {% endfor %}
+              {% endfor %}
+
+              {% for i in records.performance_task %}
+                {% for ii in i %}
+                  <td>{{ ii }}</td>
+                {% endfor %}
+              {% endfor %}
+              
+              <th></th>
+              <th></th>
+              <th></th>
+            </tbody>
+          </table>
         </div>
       </form>
     </div>
@@ -170,11 +147,107 @@
 </div>
 
 <script>
+  $(document).ready(function () {
+    //$("#record").DataTable();
+    set_sections("Grade 7");
+  });
 
- $(document).ready(function() {
-    $('#record').DataTable();
-} );
+  $("#grade_level").change(function (event) {
+    set_sections($(this).val());
+    //filter_records();
+  });
+  $("#section").change(function (event) {
+    //filter_records();
+  });
+  $("#subject").change(function (event) {
+    //filter_records();
+  });
 
+  function set_sections(grade_level) {
+    $.get("http://localhost:8000/get_sections", function (response) {
+      var res = JSON.parse(response);
+      $("#section").empty();
+      $.map(res[grade_level], (d, i) => {
+        $("#section").append(
+          $("<option>", {
+            value: d,
+            text: d,
+          })
+        );
+      });
+    });
+  }
+
+  function filter_records() {
+    var myTable = $("#class_record").DataTable();
+    var quarter = $(location).attr("href").split("quarter/")[1];
+    var gradelevel = $("#grade_level").val();
+    var section = $("#section").val();
+    var subject = $("#subject").val();
+
+    myTable.clear();
+    myTable.draw();
+    $.ajax({
+      type: "POST",
+      url: "http://localhost:8000/get_student_records/" + quarter,
+      data: { gradelevel: gradelevel, section: section, subject: subject },
+      success: function (r) {
+        var data = JSON.parse(r);
+        console.log(data);
+        $.each(data["data"], function (index, item) {
+          myTable.row
+            .add([
+              item.username,
+              item.full_name,
+              item.section,
+              item.gradelevel,
+              item.subject_name,
+
+              "<input type='text' class='form-control' value=" +
+                item.written_work +
+                " name='written_work' id='written_work' onchange='update_record(" +
+                item.id +
+                ", `written_work`, " +
+                item.counter +
+                ")'>",
+
+              "<input type='text' class='form-control' value=" +
+                item.performance_task +
+                " name='performance_task' id='performance_task' onchange='update_record(" +
+                item.id +
+                ", `performance_task`, " +
+                item.counter +
+                ")'>",
+
+              "<input type='text' class='form-control' value=" +
+                item.quarterly_assessment +
+                " name='quarterly_assessment' id='quarterly_assessment' onchange='update_record(" +
+                item.id +
+                ", `quarterly_assessment`, " +
+                item.counter +
+                ")'>",
+
+              "<input type='text' class='form-control' value=" +
+                item.weighted_score +
+                " name='weighted_score' id='weighted_score' onchange='update_record(" +
+                item.id +
+                ", `weighted_score`, " +
+                item.counter +
+                ")' disabled>",
+
+              "<input type='text' class='form-control' value=" +
+                item.grade +
+                " name='grade' id='grade' onchange='update_record(" +
+                item.id +
+                ", `grade`, " +
+                item.counter +
+                ")' disabled>",
+            ])
+            .draw(false);
+        });
+      },
+    });
+  }
 </script>
 <!-- <script type="text/javascript" src="jquery.dataTables.js"></script>
 <script type="text/javascript" src="dataTables.scrollingPagination.js"></script>
@@ -185,6 +258,5 @@
         } );
     } );
 </script> -->
-
 
 {% endblock %}

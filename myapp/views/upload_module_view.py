@@ -241,7 +241,9 @@ def add_module(request, gradelevel):
             rm.prepared_by_id = req['prepared_by']
             rm.instruction = req['instruction']
             rm.subject_id = req['subject_id']
+            rm.total_item = req['total_items']
             rm.gradelevel = format_gradelevel
+            rm.grade_type = req['grade_type']
             rm.file = request.FILES.get("document")
             rm.save()
             return redirect("view_per_module", gradelevel, req['subject_id'])
@@ -250,12 +252,12 @@ def add_module(request, gradelevel):
 
 
 @login_required
-def view_subject_record(request, grade, subject, category):
+def view_subject_record(request, grade, subject, category, module_id):
     subject = Subject.objects.get(id=subject)
     format_gradelevel = "Grade {}".format(grade.split("grade")[1])
 
     submissions = get_student_per_subject_record(
-        format_gradelevel, subject.id, category)
+        format_gradelevel, subject.id, category, module_id)
 
     return render(request, "view_subject_record.html", {
         "formatted_gradelevel": format_gradelevel,
@@ -266,7 +268,7 @@ def view_subject_record(request, grade, subject, category):
     })
 
 
-def get_student_per_subject_record(grade, subject, category, section=None, student=None):
+def get_student_per_subject_record(grade, subject, category, module_id=None, section=None, student=None):
     csection = ""
     if section:
         csection = " and b.section ='{}' ".format(section)
@@ -275,12 +277,17 @@ def get_student_per_subject_record(grade, subject, category, section=None, stude
     if student:
         cstudent = " and b.id = '{}' ".format(student)
 
-    condition = csection + cstudent
+    cmodule = ""
+    if module_id:
+        cmodule = " and d.id = '{}' ".format(module_id)
+
+    condition = csection + cstudent + cmodule
 
     query = """
         SELECT a.*, c.first_name, c.last_name, b.gradelevel, 
         b.section, d.instruction, d.category, d.prepared_by_id, 
-        d.subject_id, d.file as instruction_file, e.subject_name 
+        d.subject_id, d.file as instruction_file, e.subject_name, d.total_item
+        
         from myapp_studentsubmission as a 
         join myapp_userprofile as b 
         join myapp_user as c 
@@ -288,5 +295,18 @@ def get_student_per_subject_record(grade, subject, category, section=None, stude
         join myapp_subject as e 
         on a.submitted_by_id = b.id and b.user_id = c.id and a.module_id = d.id and d.subject_id = e.id
         where d.gradelevel = '{}' and d.subject_id = '{}' and d.category = '{}' """.format(grade, subject, category) + condition + """ """
-    print(query)
+
     return StudentSubmission.objects.raw(query)
+
+
+@login_required
+def udpate_score(request):
+    try:
+        if request.method == "POST":
+            req = request.POST
+            submit = StudentSubmission.objects.get(id=req['id'])
+            submit.score = request.POST['score']
+            submit.save()
+            return HttpResponse(json.dumps({"status": "OK"}))
+    except Exception as e:
+        return HttpResponseServerError(json.dumps({"status": str(e)}))

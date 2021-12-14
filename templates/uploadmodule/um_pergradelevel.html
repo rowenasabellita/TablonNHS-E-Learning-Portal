@@ -24,75 +24,75 @@
               <input value="{{ user.id }}" id='prepared_by' name="prepared_by" hidden/>
               
               <div class="row">
+                <!-- quater -->
                 <div class="col">
-                  <label for="forduedate" class="form-label">Category</label>
+                  <label for="forduedate" class="form-label">Quarter*</label>
+                  <select id="select_quarter" class="form-control" onchange="set_quarter()">
+                    <option value="1st Quarter" class="form-control">1st Quarter</option>
+                    <option value="2nd Quarter" class="form-control">2nd Quarter</option>
+                    <option value="3rd Quarter" class="form-control">3rd Quarter</option>
+                    <option value="4th Quarter" class="form-control">4th Quarter</option>
+                  </select>
+                  <input type="text" value="1st Quarter" id="quarter" name="quarter" hidden>
+                </div>
+                <!-- category -->
+                <div class="col">
+                  <label for="forduedate" class="form-label">Category*</label>
                   <select id="select_category" class="form-control" onchange="set_category()">
                     <option value="activity" class="form-control">Activity</option>
                     <option value="quiz" class="form-control">Quiz</option>
                     <option value="exam" class="form-control">Exam</option>
                   </select>
-                  <input type="text" value="" id="cat" name="cat">
+                  <input type="text" value="activity" id="cat" name="cat" hidden>
                 </div>
+                <!-- type -->
                 <div class="col">
-                  <label for="forduedate" class="form-label">Set Deadline</label>
-                  <input
-                  type="date"
-                  name="date"
-                  class="form-control"
-                  id="forduedate"
-                  aria-describedby="emailHelp"
-                  required
-                  />
+                  <label for="forduedate" class="form-label">Type*</label>
+                  <select id="select_type" class="form-control" onchange="set_type()">
+                    <option value="Written Work" class="form-control">Written Work</option>
+                    <option value="Performance Task" class="form-control">Performance Task</option>
+                    <option value="Quarterly Assessment" class="form-control">Quarterly Assessment</option>
+                  </select>
+                  <input type="text" value="Written Work" id="grade_type" name="grade_type" hidden>
                 </div>
+                
+                <!-- total items -->
+                <div class="col">
+                  <label for="forduedate" class="form-label">Total Items*</label>
+                  <input type="text" name="total_items" class="form-control" id="forduedate" aria-describedby="emailHelp" placeholder='10' required />
+                  <div id="emailHelp" class="form-text">Total items is 10/10</div>
+                </div>
+                <!-- date -->
+                <div class="col">
+                  <label for="forduedate" class="form-label">Set Date*</label>
+                  <input type="date" name="date" class="form-control" id="forduedate" aria-describedby="emailHelp" required />
+                </div>
+                <!-- upload file -->
                 <div class="col">
                   <label class="form-label">Upload File <label style="color: gray">(Optional)</label></label>
-                  <input
-                  class="file-upload input form-control"
-                  type="file"
-                  onchange="readURL(this);"
-                  accept="image/pdf"
-                  name="document"
-                  />
+                  <input class="file-upload input form-control" type="file" onchange="readURL(this);" accept="image/pdf" name="document"/>
                 </div>
               </div>
+
               <div class="row">
-                <input
-                type="text"
-                name="subject_id"
-                value="{{ sub_id }}"
-                style="display: none"
-                />
-                <input
-                type="text"
-                name="category"
-                value="exam"
-                style="display: none"
-                />
+                <input type="text" name="subject_id" value="{{ sub_id }}" style="display: none"/>
+                <input type="text" name="category" value="exam" style="display: none" />
                 <div class="mb-3">
                   <div class="form-floating">
-                    <textarea
-                    class="form-control"
-                    name="instruction"
-                    id="instruction"
-                    style="height: 100px; width: 100%"
-                    ></textarea>
-                    <label for="floatingTextarea2"
-                    >Please provide instructions here..
+                    <textarea class="form-control" name="instruction" id="instruction" style="height: 100px; width: 100%"></textarea>
+                    <label for="floatingTextarea2">Please provide instructions here..
                   </label>
                 </div>
+
                 <div id="emailHelp" class="form-text">e.g. <br />
                   For google forms link. Copy and paste the link here.
                   https://forms.gle/sFBKybkNxhQXn2jT8</div>
                 </div>
               </div>
               <div>
-                <button
-                type="submit"
-                class="btn btn-primary btn-sm"
-                id="submit"
-                >
-                Submit
-              </button>
+                <button type="submit" class="btn btn-primary btn-sm" id="submit">
+                  Submit
+                </button>
             </form>
           </details>
           <!-- end -->
@@ -101,17 +101,23 @@
         <br>
         <br>
 
-        <div class="module_div">
-          <table
-            class="table table-bordered stripe table-hover compact"
-            style="width: 100%"
-            id="module_table"
-          >
+        <div class="row">
+          <div class="row">
+              <div class="col" id="quarter_filter"></div>
+              <div class="col" id="type_filter"></div>
+              <div class="col" id="cat_filter"></div>
+              <div class="col" id="date_filter"></div>
+          </div>
+          <br/>
+          <table class="table table-bordered stripe table-hover compact" style="width: 100%" id="module_table" >
             <thead class="thead-dark">
               <tr>
+                <th>Quarter</th>
+                <th>Type</th>
                 <th>Category</th>
-                <th>Created On</th>
+                <th>On</th>
                 <th>Instructions</th>
+                <th>Total Items</th>
                 <th>File</th>
                 <th></th>
               </tr>
@@ -120,16 +126,20 @@
               {% for mod in modules %}
                 <!-- <tr onclick="test()"> -->
                 <tr>
-                  <td>{{ mod.category }}</td>
-                  <td>{{ mod.date }}</td>
-                  <td>{{ mod.instruction }}</td>
+                  <td style='text-transform: capitalize; font-size: 13px;' class='text-center'>{{ mod.quarter }}</td>
+                  <td style='text-transform: capitalize; font-size: 13px;' class='text-center'>{{ mod.grade_type }}</td>
+                  <td style='text-transform: capitalize; font-size: 13px;' class='text-center'>{{ mod.category }}</td>
+                  
+                  <td style='font-size: 13px;' class='text-center' >{{ mod.date }}</td>
+                  <td style='font-size: 13px;' class='text-center' >{{ mod.instruction }}</td>
+                  <td style='font-size: 13px;' class='text-center' >{{ mod.total_item }}</td>
                   {% if mod.file %}
-                    <td><a href="{{ mod.file.url }}">{{ mod.file.name }}</a></td>
+                    <td style='font-size: 13px;' ><a href="{{ mod.file.url }}">{{ mod.file.name|cut:"materials/pdf/" }}</a></td>
                   {% else %}
-                    <td></td>
+                    <td style='font-size: 13px;' ></td>
                   {% endif %}
-                  <td>
-                    <a href="#" title="View Student Submissions" onclick="view_records('{{ sub_id }}', '{{ mod.category }}')">
+                  <td style='font-size: 13px;' class='text-center' >
+                    <a href="#" title="View Student Submissions" onclick="view_records('{{ sub_id }}', '{{ mod.category }}', '{{ mod.id }}')">
                       <svg xmlns="http://www.w3.org/2000/svg" width="25" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
                         <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
                         <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
@@ -147,17 +157,13 @@
         <br>
         <br>
         <br>
-        <br>
-        <br>
       
          <!-- RECORDS -->
 
-        <div>
+        <div class='row'>
           <h3>RECORDS</h3>
           <div class="record_div">
-            <table class="table table-bordered stripe table-hover compact"
-              style="width: 100%"
-              id="per_subject_table{{ sub_id }}">
+            <table class="table table-bordered stripe table-hover compact" style="width: 100%" id="per_subject_table{{ sub_id }}">
               <thead class="thead-dark">
                 <tr align="center">
                   <th scope="col" rowspan="2">NAME</th>
@@ -207,8 +213,88 @@
     var id = $("p#sub_id").text()
     $("p#grade").text(formatted_gradelevel)
     get_records(id)
-    var table = $("#module_table").dataTable();
-    //get_modules(id)
+    //var table = $("#module_table").dataTable();
+
+
+    $(document).ready(function () {
+      var id = $("p#sub_id").text();
+      //var table = $("#per_subject_table").dataTable()
+      $('#module_table').DataTable( {
+          initComplete: function () {
+              this.api().columns().every( function (idx, i) {
+                  var column = this;
+                  if (idx == 2){
+                      var select = $('<select class="form-control filter_option" id="filter_option"><option value="">--Select Category--</option></select>')
+                          .appendTo( $("div#cat_filter") )
+                          .on( 'change', function () {
+                              var val = $.fn.dataTable.util.escapeRegex(
+                                  $(this).val()
+                              );
+      
+                              column
+                                  .search( val ? '^'+val+'$' : '', true, false )
+                                  .draw();
+                          } );
+      
+                      column.data().unique().sort().each( function ( d, j ) {
+                          select.append( '<option value="'+d+'" style="text-transform: capitalize">'+d+'</option>' )
+                      } );
+                  }else if (idx==3){
+                    var select = $('<select class="form-control filter_option" id="filter_option"><option value="">--Select Date--</option></select>')
+                          .appendTo( $("div#date_filter") )
+                          .on( 'change', function () {
+                              var val = $.fn.dataTable.util.escapeRegex(
+                                  $(this).val()
+                              );
+      
+                              column
+                                  .search( val ? '^'+val+'$' : '', true, false )
+                                  .draw();
+                          } );
+      
+                      column.data().unique().sort().each( function ( d, j ) {
+                          select.append( '<option value="'+d+'" style="text-transform: capitalize">'+d+'</option>' )
+                      } );
+                  }else if (idx==1){
+                    var select = $('<select class="form-control filter_option" id="filter_option"><option value="">--Select Type--</option></select>')
+                          .appendTo( $("div#quarter_filter") )
+                          .on( 'change', function () {
+                              var val = $.fn.dataTable.util.escapeRegex(
+                                  $(this).val()
+                              );
+      
+                              column
+                                  .search( val ? '^'+val+'$' : '', true, false )
+                                  .draw();
+                          } );
+      
+                      column.data().unique().sort().each( function ( d, j ) {
+                          select.append( '<option value="'+d+'" style="text-transform: capitalize">'+d+'</option>' )
+                      } );
+                  }else if (idx==0){
+                    var select = $('<select class="form-control filter_option" id="filter_option"><option value="">--Select Quarter--</option></select>')
+                          .appendTo( $("div#type_filter") )
+                          .on( 'change', function () {
+                              var val = $.fn.dataTable.util.escapeRegex(
+                                  $(this).val()
+                              );
+      
+                              column
+                                  .search( val ? '^'+val+'$' : '', true, false )
+                                  .draw();
+                          } );
+      
+                      column.data().unique().sort().each( function ( d, j ) {
+                          select.append( '<option value="'+d+'" style="text-transform: capitalize">'+d+'</option>' )
+                      } );
+                  }
+                  
+              } );
+          }
+      } );
+    });
+
+
   })
 
   function get_records(sub_id) {
@@ -264,13 +350,23 @@
     });
   }
 
-  function view_records(sub_id, category){
-    window.location.href = "/teacher/view_subject_record/"+formatted_gradelevel+"/"+sub_id+"/"+category
+  function view_records(sub_id, category, mod_id){
+    window.location.href = "/teacher/view_subject_record/"+formatted_gradelevel+"/"+sub_id+"/"+category+"/"+mod_id
   }
   
   function set_category(){
     var cat = $("select#select_category").val()
     $("input#cat").val(cat)
+  }
+
+  function set_type(){
+    var cat = $("select#select_type").val()
+    $("input#grade_type").val(cat)
+  }
+
+  function set_quarter(){
+    var cat = $("select#select_quarter").val()
+    $("input#quarter").val(cat)
   }
 
 

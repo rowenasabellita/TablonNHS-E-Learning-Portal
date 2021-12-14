@@ -45,11 +45,15 @@ urlpatterns = [
          name='get_quarterly_grade'),
     path('teacher/get_module_per_subject_and_grade/<grade>/<subject>', views.get_module_per_subject_and_grade,
          name='get_module_per_subject_and_grade'),
-    path('teacher/view_subject_record/<grade>/<subject>/<category>',
+    path('teacher/view_subject_record/<grade>/<subject>/<category>/<module_id>',
          views.view_subject_record, name='view_subject_record'),
+    path('teacher/update_score/',
+         views.udpate_score, name='update_score'),
+
+    # class record
+    path('classrecord/<quarter>', views.view_classrecord, name='view_classrecord'),
 
 
-    path('classrecord', views.view_classrecord, name='view_classrecord'),
 
     path('submission/quarter/<quarter>',
          views.view_submission, name='view_submission'),
@@ -66,7 +70,17 @@ urlpatterns = [
 
 
     # errors
-    path("error500/<redirect_to>", views.internal_server_error, name="error500")
+    path("error500/<redirect_to>", views.internal_server_error, name="error500"),
+
+
+
+
+
+    # student url
+    path("student/view_per_module/<grade>/<subject>",
+         views.student_view_per_module, name='student_view_per_module'),
+    path("student/submit_activity",
+         views.submit_activity, name='submit_activity'),
 
 
 ]

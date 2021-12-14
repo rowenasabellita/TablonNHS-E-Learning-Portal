@@ -76,6 +76,8 @@ TEMPLATES = [
                          'record'),
             os.path.join(os.path.join(BASE_DIR, 'templates'),
                          'errors'),
+            os.path.join(os.path.join(BASE_DIR, 'templates'),
+                         'studentsubjects'),
 
         ],
         'APP_DIRS': True,
