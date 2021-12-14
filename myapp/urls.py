@@ -25,21 +25,16 @@ urlpatterns = [
     path('teacher/sm/<grade>', views.view_yearlevel, name='view_yearlevel'),
     path('yearlevel/edit', views.edit_student, name='edit_student'),
 
-    # upload module
     path('teacher/um/<grade>', views.reading_material_upload,
-         name='reading_material_upload'),  # view
-    path('teacher/um/upload/<grade>', views.upload_rm,
-         name='upload_rm'),  # upload reading material
+         name='teacher/um/grade'),
+
+
     path('add_module/<gradelevel>', views.add_module,
-         name='add_module'),  # add module per type (quiz, exam, activity)
-    path('view_per_module/<grade>/<subject>', views.view_per_module,
-         name='view_per_module'),  # add module per type (quiz, exam, activity)
+         name='add_module'),
 
 
     path('teacher/get_quarterly_grade/<gradelevel>/<subject_id>', views.get_quarterly_grade,
-         name='get_quarterly_grade'),
-    path('teacher/get_module_per_subject_and_grade/<grade>/<subject>', views.get_module_per_subject_and_grade,
-         name='get_module_per_subject_and_grade'),
+         name='gradelevel'),
 
 
     path('classrecord', views.view_classrecord, name='view_classrecord'),

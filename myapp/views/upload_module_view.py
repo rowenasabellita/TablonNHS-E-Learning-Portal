@@ -1,7 +1,6 @@
 from django.dispatch.dispatcher import receiver
-from django.core import serializers
 from django.http.response import HttpResponseServerError
-from django.shortcuts import redirect, render, reverse
+from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib import messages
 from django.utils.html import html_safe
@@ -81,11 +80,6 @@ def get_student_records(quarter, gradelevel=None, section=None, subject=None):
 
 @login_required
 def get_quarterly_grade(request, gradelevel, subject_id):
-    data = get_quarterly(gradelevel, subject_id)
-    return HttpResponse(json.dumps(data))
-
-
-def get_quarterly(gradelevel, subject_id):
     data = {"data": []}
     format_gradelevel = "Grade {}".format(gradelevel.split("grade")[1])
 
@@ -105,8 +99,7 @@ def get_quarterly(gradelevel, subject_id):
             "percent": alert[1]
         })
         data['data'].append(i.__dict__)
-
-    return data
+    return HttpResponse(json.dumps(data))
 
 
 def computed_grade(grades):
@@ -168,64 +161,28 @@ def get_grade_quarterly_per_subject(gradelevel, subject=None, user_id=None):
 
 
 @login_required
-def view_per_module(request, grade, subject):
-    subject = Subject.objects.get(id=subject)
-    record = get_quarterly(grade, subject)
-    print(grade)
-    return render(request, 'um_pergradelevel.html', {
-        "grade": grade,
-        "subject": subject.subject_name,
-        "sub_id": subject.id,
-        "record": record,
-        "gradelevel": grade
-    })
-
-
-def get_module_per_subject_and_grade(request, grade, subject):
-    format_gradelevel = "Grade {}".format(grade.split("grade")[1])
-    module = Module.objects.filter(
-        gradelevel=format_gradelevel, subject_id=subject)
-    data = {"data": []}
-    for i in module:
-        data['data'].append({
-            "id": i.id,
-            "type": i.category.title(),
-            "file": "<a type='button' class='btn btn-sm btn-primary' href='{}' title='{}'>Download</a>".format(i.file.name, i.file.name),
-            "instruction": i.instruction,
-            "created_on": str(i.created_at)
-        })
-    print(data)
-    return HttpResponse(json.dumps(data))
-
-
-@login_required
 def reading_material_upload(request, grade):
-    gradelevel = request.build_absolute_uri().split("/um/")[1]
-    return render(request, 'um_gradelevel.html', {"subjects": get_subjects(), "cur_url": gradelevel})
-
-
-@login_required
-def upload_rm(request, grade):
     if request.method == 'POST':
-        format_gradelevel = "Grade {}".format(grade.split("grade")[1])
         req = request.POST
-        print(req.__dict__)
         try:
 
             rm = ReadingMaterials()
             rm.subject_id = req['subject_id']
+            rm.date = req['date']
             rm.file = request.FILES.get("document")
-            rm.prepared_by_id = req['prepared_by']
-            rm.gradelevel = format_gradelevel
             rm.save()
-            return redirect("view_per_module", grade, req['subject_id'])
+
+            return render(request, 'um_gradelevel.html', {"subjects": get_subjects()})
 
         except Exception as e:
             return render(request, 'internal_server_error.html', {"redirect_to": "/teacher", "error_msg": str(e)})
 
+    return render(request, 'um_gradelevel.html', {"subjects": get_subjects()})
+
 
 @login_required
 def add_module(request, gradelevel):
+    print(gradelevel)
     format_gradelevel = "Grade {}".format(gradelevel.split("grade")[1])
 
     if request.method == 'POST':
@@ -233,13 +190,12 @@ def add_module(request, gradelevel):
         try:
             rm = Module()
             rm.category = req['category']
+            rm.url = req['url']
             rm.date = req['date']
-            rm.prepared_by_id = req['prepared_by']
             rm.instruction = req['instruction']
             rm.subject_id = req['subject_id']
             rm.gradelevel = format_gradelevel
-            rm.file = request.FILES.get("document")
             rm.save()
-            return redirect("view_per_module", gradelevel, req['subject_id'])
+            return HttpResponse(json.dumps({"status": "OK"}))
         except Exception as e:
-            return render(request, 'internal_server_error.html', {"redirect_to": "/teacher", "error_msg": str(e)})
+            return HttpResponseServerError(str(e))

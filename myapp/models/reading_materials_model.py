@@ -13,9 +13,6 @@ class ReadingMaterials(models.Model):
     file = models.FileField(
         default="", upload_to='materials/pdf', max_length=100)
     date = models.DateField(default=datetime.date.today)
-    prepared_by = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    gradelevel = models.CharField(
-        max_length=50, verbose_name="gradelevel")
 
     def __str__(self):
         self.activity = self.date + " " + self.subjects

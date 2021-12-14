@@ -36,9 +36,6 @@ def login(request):
             elif user.is_student:
                 auth.login(request, user)
                 return redirect("student")
-            # elif user.is_superuser:
-            #     auth.login(request, user)
-            #     return redirect("teacher")
         else:
             messages.info(request, "Invalid credentials")
             return redirect("login")
