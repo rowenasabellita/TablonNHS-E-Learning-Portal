@@ -63,6 +63,12 @@ def get_student_records(quarter, gradelevel=None, section=None, subject=None):
         """
 
     records = User.objects.raw(query)
+
+    for r in records:
+        if r.grade < 75:
+            r.remarks = "red"
+        else:
+            r.remarks = "green"
     return records
 
 

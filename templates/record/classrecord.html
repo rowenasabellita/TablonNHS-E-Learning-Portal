@@ -47,15 +47,14 @@
       <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="table_container">
-          <table class="cell-border" style="width: 100%" id="record" >
+          <table class="table cell-border" style="width: 100%" id="record" >
             <thead>
               <tr align="center" id="first_header">
                 {% for sub in subjects %}
                   <th rowspan="3" scope="rowgroup">Student Name</th>
-                  <th colspan="13" scope="colgroup">Written Work ({{ sub.written_works }}%)</th>
-                  <th colspan="13" scope="colgroup">Performance Task ({{ sub.performance_task }}%)</th>
-                  <th colspan="2" scope="colgroup">Quarterly Assessment ({{ sub.quarterly_assessment }}%)</th>
-                  <th rowspan="3" scope="colgroup">Initial Grade</th>
+                  <th colspan="13" scope="colgroup" id="ww_percent">Written Work ({{ sub.written_works }}%)</th>
+                  <th colspan="13" scope="colgroup" id="pf_percent">Performance Task ({{ sub.performance_task }}%)</th>
+                  <th colspan="3" scope="colgroup" id="qa_percent">Quarterly Assessment ({{ sub.quarterly_assessment }}%)</th>
                 {% endfor %}
               </tr>
               <tr align="center" id="second_header">
@@ -91,7 +90,9 @@
                 <th>WS</th>
 
                 <!-- quarterly_assessment -->
-                <th></th>
+                <th>Total</th>
+                <th>PS</th>
+                <th>WS</th>
 
               </tr>
               <tr id="total_items_header">
@@ -106,31 +107,41 @@
                 {% endfor %}
                 
                 <!-- quarterly_assessment -->
-                <th></th>
-                <th></th>
+                {% for i in headers.quarterly_assessment %}
+                  <th>{{ i }}</th>
+                {% endfor %}
+
 
               </tr>
+              
             </thead>
-            <tbody align="center" id="body_records">
-              {% for i in records.students %}
-                <td>{{ i }}</td>
-              {% endfor %}
-              {% for i in records.written_work %}
-                {% for ii in i %}
-                  <td>{{ ii }}</td>
-                {% endfor %}
+            <tbody align="center" id="record_body">
+              <!-- student names -->
+              {% for i in records %}
+                <tr>
+                  <td>{{ i.full_name }}</td>
+                  
+                  <!-- written_work -->
+                  {% for ww in i.written_work %}
+                      <td>{{ ww }}</td>
+                  {% endfor %}
+
+                  <!-- performance_task -->
+                  {% for pf in i.performance_task %}
+                    <td>{{ pf }}</td>
+                  {% endfor %}
+
+                  <!-- quarterly_assessment -->
+                  {% for qa in i.quarterly_assessment %}
+                    <td>{{ qa }}</td>
+                  {% endfor %}
+                  
+                </tr>
+
               {% endfor %}
 
-              {% for i in records.performance_task %}
-                {% for ii in i %}
-                  <td>{{ ii }}</td>
-                {% endfor %}
-              {% endfor %}
               
-              <th></th>
-              <th></th>
-              <th></th>
-            </tbody id='record_body '>
+
           </table>
         </div>
       </form>
@@ -183,6 +194,10 @@
 
     $.post(url+"filter_classrecord/"+quarter, dt, function(r){ 
       var data = JSON.parse(r)
+      console.log(data)
+      $("th#ww_percent").text("Written Work ("+data.subject_percent.written_work+"%)") 
+      $("th#pf_percent").text("Performance Task ("+data.subject_percent.performance_task+"%)") 
+      $("th#qa_percent").text("Quarterly Assessment ("+data.subject_percent.quarterly_assessment+"%)") 
 
       // total items row
       $('#record tbody').remove()
@@ -191,9 +206,7 @@
       var head = ""
       $.each(data.header, function( index, value ) {
         $.each(value, function(i, v){
-          if (index == "written_work" || index == "performance_task"){
-            head += "<th>"+v+"</th>"
-          }
+          head += "<th>"+v+"</th>"
         })
       });
 
@@ -202,15 +215,33 @@
       )
 
       // tbody
+      var body = ""
       $.each(data.records, function( index, value ) {
+        console.log(index, value)
+        var row = ""
         $.each(value, function(i, v){
-          if (index == "written_work" || index == "performance_task"){
-            head += "<th>"+v+"</th>"
+          if (i == "full_name"){
+            row += '<td>'+v+'</td>'
           }
-        })
-      });
 
-    })  
+          if (i == "written_work" || i == "performance_task" || i == 'quarterly_assessment'){
+            $.each(v, function(ii, vv){
+              row += "<td>"+vv+"</td>"
+            })
+        
+          }
+        }) // data.records lvl2
+        console.log(row)
+        body += "<tr>"+row+"</tr>"
+
+      }) // data.records
+
+      console.log(body)
+      $('#record').append(
+        "<tbody id='record_body'>"+body+"</tbody>"
+      )
+      
+    })  // post
   
   }
 </script>

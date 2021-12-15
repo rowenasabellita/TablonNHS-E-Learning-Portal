@@ -126,6 +126,8 @@ def student_view_per_module(request, grade, subject):
 
     user_profile = UserProfile.objects.filter(user_id=request.user.id)[0].id
 
+    header = get_header_basis(format_gradelevel, subject)
+
     for i in activity:
         user = User.objects.filter(id=i.prepared_by_id)[0]
         i.prepared_by_name = user.first_name+" "+user.last_name
@@ -158,6 +160,25 @@ def student_view_per_module(request, grade, subject):
         "subject_id": subject.id,
     }
     return render(request, 'student_persubject.html', data)
+
+
+def get_header_basis(grade, subject):
+    module = Module.objects.filter(
+        gradelevel=grade, subject_id=subject)
+    subject_percentage = Subject.objects.filter(id=module[0].subject_id)
+
+    total_items = []
+    for i in module:
+        total_items.append(i.total_item)
+
+    return {
+        'total_items': total_items,
+        'subject_percentage': subject_percentage[0]
+    }
+
+
+def get_percentage(score, total):
+    return (9/10)*100
 
 
 @login_required
