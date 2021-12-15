@@ -12,263 +12,20 @@
       <hr />
 
       {% for sub in subjects.subjects %}
-      <details>
-        <summary onclick="get_records('{{ sub.subject_id }}')">
-          {{ sub.subject_name }} Record
-        </summary>
-        <div class="mathRecord">
-          <table
-            class="table table-bordered table-success table-hover compact"
-            style="width: 100%"
-            id="per_subject_table{{ sub.subject_id }}"
-          >
-            <thead class="thead-dark">
-              <tr align="center">
-                <th scope="col" rowspan="2">NAME</th>
-                <th scope="col" colspan="4">QUARTER</th>
-                <th scope="col" colspan="2">STATUS</th>
-              </tr>
-              <tr align="center">
-                <th scope="col">1ST QUARTER</th>
-                <th scope="col">2ND QUARTER</th>
-                <th scope="col">3RD QUARTER</th>
-                <th scope="col">4TH QUARTER</th>
-                <th scope="col">PERCENT(%)</th>
-                <th scope="col">ALERT</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </details>
-
-      <details>
-        <summary>{{ sub.subject_name }} Module</summary>
-        <br />
-        <div class="mathModule">
-          <!-- for uploading modules -->
-          <details>
-            <summary>Reading Materials</summary>
-            <br />
-            <form
-              method="post"
-              enctype="multipart/form-data"
-              id="read_mat_form{{ sub.subject_id}}"
-            >
-              {% csrf_token %}
-              <!-- {{ form|crispy }} -->
-              <input
-                class="file-upload input form-control"
-                type="file"
-                onchange="readURL(this);"
-                accept="image/pdf"
-                name="document"
-              />
-              <input
-                type="date"
-                value="2020-06-06"
-                name="date"
-                class="form-control"
-              />
-              <input
-                type="text"
-                name="subject_id"
-                value="{{ sub.subject_id }}"
-                style="display: none"
-              />
-              <div>
-                <button
-                  type="submit"
-                  class="btn btn-primary btn-sm"
-                  id="submit"
-                >
-                  Submit
-                </button>
-              </div>
-            </form>
-            <br />
-          </details>
-
-          <details>
-            <summary>Activity</summary>
-            <br />
-            <form
-              id="activity_form{{ sub.subject_id }}"
-              method="POST"
-              action="#"
-            >
-              {% csrf_token %}
-
-              <div class="mb-3">
-                <label for="forurl" class="form-label">Enter URL</label>
-                <input
-                  type="text"
-                  name="url"
-                  class="form-control"
-                  id="forurl"
-                  aria-describedby="emailHelp"
-                />
-              </div>
-              <div class="mb-3">
-                <label for="forduedate" class="form-label">Set Deadline</label>
-                <input
-                  type="date"
-                  name="date"
-                  class="form-control"
-                  id="forduedate"
-                  aria-describedby="emailHelp"
-                />
-              </div>
-              <input
-                type="text"
-                name="subject_id"
-                value="{{ sub.subject_id }}"
-                style="display: none"
-              />
-              <input
-                type="text"
-                name="category"
-                value="activity"
-                style="display: none"
-              />
-              <div class="form-floating">
-                <textarea
-                  class="form-control"
-                  name="instruction"
-                  id="instruction"
-                  placeholder="Enter your comment here"
-                  style="height: 100px; width: 100%"
-                ></textarea>
-                <label for="floatingTextarea2">Comments</label>
-              </div>
-
-              <button
-                class="btn btn-primary btn-sm"
-                onclick="add_module('activity_form{{ sub.subject_id }}')"
-              >
-                Submit
-              </button>
-            </form>
-
-            <br />
-          </details>
-          <details>
-            <summary>Quiz</summary>
-            <br />
-            <form id="quiz_form{{ sub.subject_id }}" method="POST">
-              <div class="mb-3">
-                <label for="forurl" class="form-label">Enter URL</label>
-                <input
-                  type="text"
-                  name="url"
-                  class="form-control"
-                  id="forurl"
-                  aria-describedby="emailHelp"
-                />
-              </div>
-              <div class="mb-3">
-                <label for="forduedate" class="form-label">Set Deadline</label>
-                <input
-                  type="date"
-                  name="date"
-                  class="form-control"
-                  id="forduedate"
-                  aria-describedby="emailHelp"
-                />
-              </div>
-              <input
-                type="text"
-                name="subject_id"
-                value="{{ sub.subject_id }}"
-                style="display: none"
-              />
-              <input
-                type="text"
-                name="category"
-                value="quiz"
-                style="display: none"
-              />
-              <div class="form-floating">
-                <textarea
-                  class="form-control"
-                  name="instruction"
-                  id="instruction"
-                  placeholder="Enter your comment here"
-                  style="height: 100px; width: 100%"
-                ></textarea>
-                <label for="floatingTextarea2">Comments</label>
-              </div>
-
-              <button
-                class="btn btn-primary btn-sm"
-                onclick="add_module('quiz_form{{ sub.subject_id }}')"
-              >
-                Submit
-              </button>
-            </form>
-            <br />
-          </details>
-          <details>
-            <summary>Exam</summary>
-            <br />
-            <form id="exam_form{{ sub.subject_id }}">
-              <div class="mb-3">
-                <label for="forurl" class="form-label">Enter URL</label>
-                <input
-                  type="text"
-                  name="url"
-                  class="form-control"
-                  id="forurl"
-                  aria-describedby="emailHelp"
-                />
-              </div>
-              <div class="mb-3">
-                <label for="forduedate" class="form-label">Set Deadline</label>
-                <input
-                  type="date"
-                  name="date"
-                  class="form-control"
-                  id="forduedate"
-                  aria-describedby="emailHelp"
-                />
-              </div>
-              <input
-                type="text"
-                name="subject_id"
-                value="{{ sub.subject_id }}"
-                style="display: none"
-              />
-              <input
-                type="text"
-                name="category"
-                value="exam"
-                style="display: none"
-              />
-              <div class="form-floating">
-                <textarea
-                  class="form-control"
-                  name="instruction"
-                  id="instruction"
-                  placeholder="Enter your comment here"
-                  style="height: 100px; width: 100%"
-                ></textarea>
-                <label for="floatingTextarea2">Comments</label>
-              </div>
-
-              <button
-                class="btn btn-primary btn-sm"
-                onclick="add_module('exam_form{{ sub.subject_id }}')"
-              >
-                Submit
-              </button>
-            </form>
-            <br />
-          </details>
-        </div>
-      </details>
-      <br />
-
-      {% endfor %}
+        <a class="subject_link" href="/view_per_module/{{ cur_url }}/{{ sub.subject_id }}">
+          <div class="card">
+            <div id="subj">
+                <div class="bar">
+                  <h1 class="subject_title">
+                    {{ sub.subject_name }}
+                  </h1>
+                </div>
+            </div>
+          </div>
+        </a>
+          
+      {% endfor %}  
+      <div  style="clear: both; float: left"></div>
       <hr />
     </div>
   </div>
@@ -331,6 +88,7 @@
       window.location.replace(url + "error500/teacher");
     });
   }
+
 </script>
 
 {% endblock %}

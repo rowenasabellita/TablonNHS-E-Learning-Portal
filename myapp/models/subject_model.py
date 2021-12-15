@@ -21,3 +21,6 @@ SUBJECTS = (
 class Subject(models.Model):
     subject_name = models.CharField(
         max_length=50, choices=SUBJECTS, verbose_name="subjects")
+    written_works = models.CharField(max_length=5)
+    performance_task = models.CharField(max_length=5)
+    quarterly_assessment = models.CharField(max_length=5, default=20)

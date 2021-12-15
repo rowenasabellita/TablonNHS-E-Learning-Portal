@@ -18,11 +18,24 @@ class Module(models.Model):
     subject = models.ForeignKey(Subject,  on_delete=models.CASCADE)
     category = models.CharField(
         max_length=50, choices=CATEGORY, verbose_name="Category")
-    url = models.URLField(max_length=500)
-    date = models.DateField()
+    date = models.DateField()  # due date
     instruction = models.TextField(verbose_name="Instruction", max_length=500)
     gradelevel = models.TextField(verbose_name="Gradelevel", max_length=50)
+    prepared_by = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    file = models.FileField(
+        default="", upload_to='materials/pdf', max_length=100)
+    created_at = models.DateField(auto_now_add=True)
+    total_item = models.CharField(default=1, max_length=5)
+    grade_type = models.CharField(default="Written Work", max_length=45)
+    quarter = models.CharField(default="1st Quarter", max_length=45)
 
-    def __str__(self):
-        self.activity = self.date + " " + self.subjects
-        return self.activity
+
+class StudentSubmission(models.Model):
+    module = models.ForeignKey(Module, on_delete=models.CASCADE)
+    submitted_by = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    submission_date = models.DateField(auto_now_add=True)
+    score = models.FloatField()
+    file = models.FileField(
+        default="", upload_to='materials/pdf', max_length=100)
+    created_at = models.DateField(auto_now_add=True)
+    comments = models.TextField()

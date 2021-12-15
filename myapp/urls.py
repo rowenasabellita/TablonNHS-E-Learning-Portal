@@ -1,6 +1,8 @@
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 from django.conf.urls import url
+from django.conf import settings
+from django.conf.urls.static import static
 # import .views
 
 
@@ -11,6 +13,9 @@ urlpatterns = [
     path('student', views.student, name='student'),
     path('studentsubject/<gradelevel>',
          views.studentsubject, name="studentsubject"),
+
+    #     path('allsubjects', views.all_subjects_view, name="allsubjects"),
+
     path('logout', views.logout, name='logout'),
 
     path('artmodule', views.artmodule, name='artmodule'),
@@ -25,16 +30,32 @@ urlpatterns = [
     path('teacher/sm/<grade>', views.view_yearlevel, name='view_yearlevel'),
     path('yearlevel/edit', views.edit_student, name='edit_student'),
 
+    # upload module
     path('teacher/um/<grade>', views.reading_material_upload,
-         name='teacher/um/grade'),
-
-
+         name='reading_material_upload'),  # view
+    path('teacher/um/upload/<grade>', views.upload_rm,
+         name='upload_rm'),  # upload reading material
     path('add_module/<gradelevel>', views.add_module,
-         name='add_module'),
+         name='add_module'),  # add module per type (quiz, exam, activity)
+    path('view_per_module/<grade>/<subject>', views.view_per_module,
+         name='view_per_module'),  # add module per type (quiz, exam, activity)
 
-
+    # module per subject view
     path('teacher/get_quarterly_grade/<gradelevel>/<subject_id>', views.get_quarterly_grade,
-         name='gradelevel'),
+         name='get_quarterly_grade'),
+    path('teacher/get_module_per_subject_and_grade/<grade>/<subject>', views.get_module_per_subject_and_grade,
+         name='get_module_per_subject_and_grade'),
+    path('teacher/view_subject_record/<grade>/<subject>/<category>/<module_id>',
+         views.view_subject_record, name='view_subject_record'),
+    path('teacher/update_score/',
+         views.udpate_score, name='update_score'),
+
+    # class record
+    path('classrecord/<quarter>',
+         views.view_classrecord, name='view_classrecord'),
+    path('filter_classrecord/<quarter>',
+         views.filter_classrecord, name='filter_classrecord'),
+
 
 
     path('classrecord', views.view_classrecord, name='view_classrecord'),
@@ -54,7 +75,22 @@ urlpatterns = [
 
 
     # errors
-    path("error500/<redirect_to>", views.internal_server_error, name="error500")
+    path("error500/<redirect_to>", views.internal_server_error, name="error500"),
+
+
+
+
+
+    # student url
+    path("student/view_per_module/<grade>/<subject>",
+         views.student_view_per_module, name='student_view_per_module'),
+    path("student/submit_activity",
+         views.submit_activity, name='submit_activity'),
 
 
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

@@ -1,6 +1,7 @@
 {% extends 'sidebar.html' %} {% load static %} {% load crispy_forms_tags %}
 {%block main_content %}
 <style>
+<<<<<<< HEAD
     .cell-border {
         border: 1px solid black;
         border-collapse: collapse;
@@ -18,6 +19,22 @@
         font-weight: bold;
     }
 
+=======
+  .cell-border {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  .cell-border th {
+    border: 1px solid;
+    border-collapse: collapse;
+  }
+  .cell-border tr td {
+    border: 1px solid black;
+  }
+  .cell-border tr {
+    font-weight: bold;
+  }
+>>>>>>> 2b77219593f91ddcf5029a3da4153595d47194a2
 </style>
 <div class="main_content_profile">
   <div data-tab-content class="active info" id="classrecord">
@@ -25,15 +42,24 @@
       <form>
         <div class="row">
           <div class="col">
+<<<<<<< HEAD
             <select name="grade_level" id="grade_level" class="form-control">
               <option value="" class="form-control">--Select Grade Level--</option>
               {% for i in gradelevel %}
               <option value="{{ i }}">{{ i }}</option>
               {% endfor %}
+=======
+            <select name="grade_level" id="grade_level" class="form-control" onchange="filter_records('{{ quarter }}')">
+              <option value="Grade 7">Grade 7</option>
+              <option value="Grade 8">Grade 8</option>
+              <option value="Grade 9">Grade 9</option>
+              <option value="Grade 10">Grade 10</option>
+>>>>>>> 2b77219593f91ddcf5029a3da4153595d47194a2
             </select>
           </div>
 
           <div class="col">
+<<<<<<< HEAD
             <select name="section" id="section" class="form-control"></select>
           </div>
 
@@ -42,10 +68,20 @@
               <option value="" class="form-control">--Select Subject--</option>
               {% for i in subjects.subjects %}
               <option value="{{ i.subject_id }}">{{ i.subject_name }}</option>
+=======
+            <select name="section" id="section" class="form-control" onchange="filter_records('{{ quarter }}')"></select>
+          </div>
+
+          <div class="col">
+            <select name="subject" id="subject" class="form-control" onchange="filter_records('{{ quarter }}')">
+              {% for i in subject_filter %}
+              <option value="{{ i.id }}">{{ i.subject_name }}</option>
+>>>>>>> 2b77219593f91ddcf5029a3da4153595d47194a2
               {% endfor %}
             </select>
           </div>
 
+<<<<<<< HEAD
           <div class="col">
             <input
               name="myInput"
@@ -54,10 +90,13 @@
               placeholder="Search here"
             />
           </div>
+=======
+>>>>>>> 2b77219593f91ddcf5029a3da4153595d47194a2
         </div>
       </form>
       <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
+<<<<<<< HEAD
         <br>
         <div class="table_container">
             <table class="cell-border" class="stripe compact" style="width:100%" id="record">
@@ -143,6 +182,94 @@
                     </thead>
                 </tbody>
             </table>
+=======
+        <div class="table_container">
+          <table class="cell-border" style="width: 100%" id="record" >
+            <thead>
+              <tr align="center" id="first_header">
+                {% for sub in subjects %}
+                  <th rowspan="3" scope="rowgroup">Student Name</th>
+                  <th colspan="13" scope="colgroup">Written Work ({{ sub.written_works }}%)</th>
+                  <th colspan="13" scope="colgroup">Performance Task ({{ sub.performance_task }}%)</th>
+                  <th colspan="2" scope="colgroup">Quarterly Assessment ({{ sub.quarterly_assessment }}%)</th>
+                  <th rowspan="3" scope="colgroup">Initial Grade</th>
+                {% endfor %}
+              </tr>
+              <tr align="center" id="second_header">
+                <!-- written_work -->
+                
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+                <th>6</th>
+                <th>7</th>
+                <th>8</th>
+                <th>9</th>
+                <th>10</th>
+                <th>Total</th>
+                <th>PS</th>
+                <th>WS</th>
+
+                <!-- performance_task -->
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+                <th>6</th>
+                <th>7</th>
+                <th>8</th>
+                <th>9</th>
+                <th>10</th>
+                <th>Total</th>
+                <th>PS</th>
+                <th>WS</th>
+
+                <!-- quarterly_assessment -->
+                <th></th>
+
+              </tr>
+              <tr id="total_items_header">
+                <!-- written_work -->
+                {% for i in headers.written_work %}
+                  <th>{{ i }}</th>
+                {% endfor %}
+
+                <!-- performance task -->
+                {% for i in headers.performance_task %}
+                  <th>{{ i }}</th>
+                {% endfor %}
+                
+                <!-- quarterly_assessment -->
+                <th></th>
+                <th></th>
+
+              </tr>
+            </thead>
+            <tbody align="center" id="body_records">
+              {% for i in records.students %}
+                <td>{{ i }}</td>
+              {% endfor %}
+              {% for i in records.written_work %}
+                {% for ii in i %}
+                  <td>{{ ii }}</td>
+                {% endfor %}
+              {% endfor %}
+
+              {% for i in records.performance_task %}
+                {% for ii in i %}
+                  <td>{{ ii }}</td>
+                {% endfor %}
+              {% endfor %}
+              
+              <th></th>
+              <th></th>
+              <th></th>
+            </tbody id='record_body '>
+          </table>
+>>>>>>> 2b77219593f91ddcf5029a3da4153595d47194a2
         </div>
       </form>
     </div>
@@ -150,6 +277,7 @@
 </div>
 
 <script>
+<<<<<<< HEAD
 
  $(document).ready(function() {
     $('#record').DataTable();
@@ -166,5 +294,82 @@
     } );
 </script> -->
 
+=======
+  $(document).ready(function () {
+    //$("#record").DataTable();
+    set_sections("Grade 7", "onload");
+  });
+
+  $("#grade_level").change(function (event) {
+    set_sections($(this).val());
+    //filter_records($(this).val());
+  });
+  $("#section").change(function (event) {
+    //filter_records($(this).val());
+  });
+  $("#subject").change(function (event) {
+    //filter_records($(this).val());
+  });
+  var url = 'http://localhost:8000/'
+
+  function set_sections(grade_level, trigger='click') {
+    $.get(url+"get_sections", function (response) {
+      var res = JSON.parse(response);
+      $("#section").empty();
+      if (trigger == "click"){
+        $("#section").append("<option value=''></option>");
+      }
+      $.map(res[grade_level], (d, i) => {
+        $("#section").append(
+          $("<option>", {
+            value: d,
+            text: d,
+          })
+        );
+      });
+    });
+  }
+
+  function filter_records(quarter) {
+    var dt = {
+      'grade': $("#grade_level").val(), 
+      'section': $("#section").val(), 
+      'subject': $("#subject").val()
+    }
+
+    $.post(url+"filter_classrecord/"+quarter, dt, function(r){ 
+      var data = JSON.parse(r)
+
+      // total items row
+      $('#record tbody').remove()
+      $('tr#total_items_header').remove()
+      
+      var head = ""
+      $.each(data.header, function( index, value ) {
+        $.each(value, function(i, v){
+          if (index == "written_work" || index == "performance_task"){
+            head += "<th>"+v+"</th>"
+          }
+        })
+      });
+
+      $('#record thead').append(
+        "<tr id='total_items_header'>"+head+"</tr>"
+      )
+
+      // tbody
+      $.each(data.records, function( index, value ) {
+        $.each(value, function(i, v){
+          if (index == "written_work" || index == "performance_task"){
+            head += "<th>"+v+"</th>"
+          }
+        })
+      });
+
+    })  
+  
+  }
+</script>
+>>>>>>> 2b77219593f91ddcf5029a3da4153595d47194a2
 
 {% endblock %}

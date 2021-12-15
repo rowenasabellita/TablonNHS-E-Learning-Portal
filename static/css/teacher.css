@@ -216,3 +216,72 @@ ul,li { list-style-type: none;
 #date {
     margin-left: 20px;
 }
+
+/* card buttons */
+
+#subj{ 
+
+    background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url(../pictures/book.jpg);
+    background-size: cover; 
+    border-radius: 20px;
+    max-height: 200px;
+    overflow-y: hidden;
+
+}
+
+.bar {
+
+    
+    width: 500px;
+    height: 130px;
+    margin: 1em;
+
+}
+
+.card{
+    margin-bottom: 10px;
+    border-style: none;
+}
+
+.subject_title{
+    color: #fff;
+    padding: 20px;
+}
+
+.subject_link{
+
+        text-decoration: none;
+      }
+      
+      a:visited {
+        text-decoration: none;
+      }
+      
+      a:hover {
+        text-decoration: none;
+      }
+      
+      a:active {
+        text-decoration: none;
+}
+
+#subj:hover{
+    opacity: 0.8;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* record div */
+
+.module_div{
+    background: rgb(245, 242, 242);
+    height: 70px;
+    margin-bottom: 400px;
+}
+
+.record_div{
+    margin-bottom: 30px;
+    margin-top: 30px;
+    background: rgb(245, 242, 242);
+    height: 100px;
+    width: 100%;
+}

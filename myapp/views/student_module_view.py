@@ -7,7 +7,7 @@ from django.utils.translation import ugettext
 from django.shortcuts import render
 import myapp
 from myapp.models.class_record_model import ClassRecord
-from myapp.models.module_model import Module
+from myapp.models.module_model import Module, StudentSubmission
 from myapp.models.subject_model import SUBJECTS, Subject
 from myapp.models import UserProfile
 from myproject.settings import AUTH_PASSWORD_VALIDATORS
@@ -36,6 +36,7 @@ def studentsubject(request, gradelevel):
     return render(request, 'studentsubject.html', {
         "subjects": subjects,
         "module": module,
+        "cur_url": gradelevel
     })
 
 
@@ -112,6 +113,72 @@ def get_average_quarter(gradelevel, user_id):
     return records
 
 
+@login_required
+def student_view_per_module(request, grade, subject):
+    format_gradelevel = "Grade {}".format(grade.split("grade")[1])
+    activity = Module.objects.filter(
+        gradelevel=format_gradelevel, subject_id=subject, category="activity").order_by("date")
+    exam = Module.objects.filter(
+        gradelevel=format_gradelevel, subject_id=subject, category="exam").order_by("date")
+    quiz = Module.objects.filter(
+        gradelevel=format_gradelevel, subject_id=subject, category="quiz").order_by("date")
+    subject = Subject.objects.filter(id=subject)[0]
+
+    user_profile = UserProfile.objects.filter(user_id=request.user.id)[0].id
+
+    for i in activity:
+        user = User.objects.filter(id=i.prepared_by_id)[0]
+        i.prepared_by_name = user.first_name+" "+user.last_name
+        sub = StudentSubmission.objects.filter(
+            submitted_by_id=user_profile, module_id=i.id)
+        if sub:
+            i.activity_submission = sub
+
+    for i in quiz:
+        user = User.objects.filter(id=i.prepared_by_id)[0]
+        i.prepared_by_name = user.first_name+" "+user.last_name
+        sub = StudentSubmission.objects.filter(
+            submitted_by_id=user_profile, module_id=i.id)
+        if sub:
+            i.quiz_submission = sub
+
+    for i in exam:
+        user = User.objects.filter(id=i.prepared_by_id)[0]
+        i.prepared_by_name = user.first_name+" "+user.last_name
+        sub = StudentSubmission.objects.filter(
+            submitted_by_id=user_profile, module_id=i.id)
+        if sub:
+            i.exam_submission = sub
+
+    data = {
+        "activity": activity,
+        "exam": exam,
+        "quiz": quiz,
+        "subject_name": subject.subject_name,
+        "subject_id": subject.id,
+    }
+    return render(request, 'student_persubject.html', data)
+
+
+@login_required
+def submit_activity(request):
+    try:
+        if request.method == 'POST':
+            req = request.POST
+            print(req.__dict__)
+
+            user_profile = UserProfile.objects.filter(
+                user_id=request.user.id)[0].id
+            submit = StudentSubmission()
+            submit.file = request.FILES.get('document')
+            submit.comments = req['comment']
+            submit.submitted_by_id = user_profile
+            submit.score = 0.00
+            submit.module_id = req['module_id']
+            submit.save()
+            return redirect("student_view_per_module", req['grade'], req['subject_id'])
+    except Exception as e:
+        return render(request, 'internal_server_error.html', {"redirect_to": "/student", "error_msg": str(e)})
 
 
 def validation(request):

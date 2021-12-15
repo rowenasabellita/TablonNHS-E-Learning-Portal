@@ -5,3 +5,4 @@ from .record_submission_view import *
 from .student_module_view import *
 from .class_record_view import*
 from .errors import *
+from .student_subject_view import *

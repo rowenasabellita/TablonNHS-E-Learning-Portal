@@ -34,106 +34,28 @@
       <div class="container">
         <div class="row">
           <div class="col-3">
-            <a href="/student" type="button"
-              ><button class="btn btn-primary btn-md" id="back">Back</button></a
-            >
+            <a href="/student" type="button"><button class="btn btn-primary btn-md" id="back">Back</button></a>
           </div>
           <div class="col-7">
-            <h1 align="center">Subjects</h1>
+            <h1 align="center">{{ subject_name }}</h1>
           </div>
         </div>
         <hr />
-        {% for sub in subjects.subjects %}
-        <details>
-          <summary>{{ sub.subject_name }} Module</summary>
-          <br />
-          <div class="mathModule">
-            <a href="/mathmodule" target="_blank">Reading Materials</a>
-            
-              <!-- activity -->
-                <details>
-                  <summary>Activity</summary>
-                  <table class="content-table" id='activity_{{ sub.subject_id}}'>
-                    <thead>
-                      <tr>
-                        <th>Instructions</th>
-                        <th>Deadline</th>
-                        <th>File</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for mod in module %}
-                      {% if mod.subject_id == sub.subject_id and mod.category == "activity" %}
-                      <tr class="active-row">
-                        <td>{{ mod.instruction }}</td>
-                        <td>{{ mod.date }}</td>
-                        <td><a href="{{ mod.url }}">{{ mod.url }}</a></td>
-                      </tr>
-                      
-                      {% endif %}
-                      {% endfor %}
-                    </tbody>
-                  </table>
-                </details>
-                <!-- end of activity -->
 
-                <!-- quiz -->
-                <details>
-                  <summary>Quiz</summary>
-                  <table class="content-table" id='quiz_{{ sub.subject_id}}'>
-                    <thead>
-                      <tr>
-                        <th>Instructions</th>
-                        <th>Deadline</th>
-                        <th>File</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for mod in module %}
-                      {% if mod.subject_id == sub.subject_id and mod.category == "quiz" %}
-                      <tr class="active-row">
-                        <td>{{ mod.instruction }}</td>
-                        <td>{{ mod.date }}</td>
-                        <td><a href="{{ mod.url }}">{{ mod.url }}</a></td>
-                      </tr>
-                      
-                      {% endif %}
-                      {% endfor %}
-                    </tbody>
-                  </table>
-                </details>
-                <!-- end of quiz -->
-              <!-- exam -->
-                <details>
-                  <summary>Exam</summary>
-                  <table class="content-table" id='exam_{{ sub.subject_id}}'>
-                    <thead>
-                      <tr>
-                        <th>Instructions</th>
-                        <th>Deadline</th>
-                        <th>File</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for mod in module %}
-                      {% if mod.subject_id == sub.subject_id and mod.category == "exam" %}
-                      <tr class="active-row">
-                        <td>{{ mod.instruction }}</td>
-                        <td>{{ mod.date }}</td>
-                        <td><a href="{{ mod.url }}">{{ mod.url }}</a></td>
-                      </tr>
-                      
-                      {% endif %}
-                      {% endfor %}
-                    </tbody>
-                  </table>
-                </details>
-              <!-- end of exam -->
-              
-          </div>
-        </details>
-        {% endfor %}
         
+        {% for sub in subjects.subjects %}
+        <a class="subject_link" href="/student/view_per_module/{{ cur_url }}/{{ sub.subject_id }}">
+          <div class="card">
+            <div id="subj">
+                <div class="bar">
+                  <h1 class="subject_title">
+                    {{ sub.subject_name }}
+                  </h1>
+                </div>
+            </div>
+          </div>
+        </a>
+      {% endfor %}  
     </div>
   </body>
 </html>

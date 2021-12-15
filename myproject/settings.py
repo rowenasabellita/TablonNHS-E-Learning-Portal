@@ -76,6 +76,8 @@ TEMPLATES = [
                          'record'),
             os.path.join(os.path.join(BASE_DIR, 'templates'),
                          'errors'),
+            os.path.join(os.path.join(BASE_DIR, 'templates'),
+                         'studentsubjects'),
 
         ],
         'APP_DIRS': True,
@@ -165,5 +167,5 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-# MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'materials/pdf')
+MEDIA_URL = '/materials/pdf/'
