@@ -104,7 +104,7 @@
                       </div> 
                     {% endfor %}
                     {% else %}
-                      <form method="POST" action='/student/submit_activity' enctype="multipart/form-data" class="row" style='margin: 0 auto; padding: 0 100px 0 100px'>
+                      <form method="POST" action='/student/submit_activity' enctype="multipart/form-data" class="row" style='margin: 0 auto; padding: 0 100px 10px 100px'>
                         <div class="col-2">
                           <p><strong>Submit Activity:</strong></p>
                         </div>
@@ -117,7 +117,14 @@
                           <input type="text" value="{{ user.userprofile.gradelevel }}" name="grade" hidden> 
                           <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                         </div>
+                        {% if act.next_score %}
+                          <div class="alert alert-info" role="alert">
+                            You must score {{ act.next_score }} points or more to pass this activity
+                          </div>
+                        {% endif %}
+
                       </form>
+                      
                   {% endif %}
                   
                 </details>
@@ -190,7 +197,7 @@
                       </div> 
                     {% endfor %}
                     {% else %}
-                      <form method="POST" action='/student/submit_activity' enctype="multipart/form-data" class="row" style='margin: 0 auto; padding: 0 100px 0 100px'>
+                      <form method="POST" action='/student/submit_activity' enctype="multipart/form-data" class="row" style='margin: 0 auto; padding: 0 100px 10px 100px'>
                         <div class="col-2">
                           <p><strong>Submit Activity:</strong></p>
                         </div>
@@ -203,6 +210,13 @@
                           <input type="text" value="{{ user.userprofile.gradelevel }}" name="grade" hidden> 
                           <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                         </div>
+
+                        {% if act.next_score %}
+                            <div class="alert alert-info" role="alert">
+                              You must score {{ act.next_score }} points or more to pass this quiz
+                            </div>
+                          {% endif %}
+
                       </form>
                   {% endif %}
                 </details>
@@ -275,7 +289,7 @@
                       </div> 
                     {% endfor %}
                     {% else %}
-                      <form method="POST" action='/student/submit_activity' enctype="multipart/form-data" class="row" style='margin: 0 auto; padding: 0 100px 0 100px'>
+                      <form method="POST" action='/student/submit_activity' enctype="multipart/form-data" class="row" style='margin: 0 auto; padding: 0 100px 10px 100px'>
                         <div class="col-2">
                           <p><strong>Submit Activity:</strong></p>
                         </div>
@@ -287,7 +301,14 @@
                           <input type="text" value="{{ subject_id }}" name="subject" hidden> 
                           <input type="text" value="{{ user.userprofile.gradelevel }}" name="grade" hidden> 
                           <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                          
+                          {% if act.next_score %}
+                            <div class="alert alert-info" role="alert">
+                              You must score {{ act.next_score }} points or more to pass this exam
+                            </div>
+                          {% endif %}
                         </div>
+                        
                       </form>
                   {% endif %}
                 </details>
