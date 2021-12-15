@@ -22,7 +22,7 @@
       <form>
         <div class="row">
           <div class="col">
-            <select name="grade_level" id="grade_level" class="form-control">
+            <select name="grade_level" id="grade_level" class="form-control" onchange="filter_records('{{ quarter }}')">
               <option value="Grade 7">Grade 7</option>
               <option value="Grade 8">Grade 8</option>
               <option value="Grade 9">Grade 9</option>
@@ -31,25 +31,17 @@
           </div>
 
           <div class="col">
-            <select name="section" id="section" class="form-control"></select>
+            <select name="section" id="section" class="form-control" onchange="filter_records('{{ quarter }}')"></select>
           </div>
 
           <div class="col">
-            <select name="subject" id="subject" class="form-control">
-              {% for i in subjects %}
-              <option value="{{ i.subject_id }}">{{ i.subject_name }}</option>
+            <select name="subject" id="subject" class="form-control" onchange="filter_records('{{ quarter }}')">
+              {% for i in subject_filter %}
+              <option value="{{ i.id }}">{{ i.subject_name }}</option>
               {% endfor %}
             </select>
           </div>
 
-          <div class="col">
-            <input
-              name="myInput"
-              id="myInput"
-              class="form-control"
-              placeholder="Search here"
-            />
-          </div>
         </div>
       </form>
       <form method="POST" enctype="multipart/form-data">
@@ -57,7 +49,7 @@
         <div class="table_container">
           <table class="cell-border" style="width: 100%" id="record" >
             <thead>
-              <tr align="center">
+              <tr align="center" id="first_header">
                 {% for sub in subjects %}
                   <th rowspan="3" scope="rowgroup">Student Name</th>
                   <th colspan="13" scope="colgroup">Written Work ({{ sub.written_works }}%)</th>
@@ -66,7 +58,7 @@
                   <th rowspan="3" scope="colgroup">Initial Grade</th>
                 {% endfor %}
               </tr>
-              <tr align="center">
+              <tr align="center" id="second_header">
                 <!-- written_work -->
                 
                 <th>1</th>
@@ -102,7 +94,7 @@
                 <th></th>
 
               </tr>
-              <tr>
+              <tr id="total_items_header">
                 <!-- written_work -->
                 {% for i in headers.written_work %}
                   <th>{{ i }}</th>
@@ -119,7 +111,7 @@
 
               </tr>
             </thead>
-            <tbody align="center">
+            <tbody align="center" id="body_records">
               {% for i in records.students %}
                 <td>{{ i }}</td>
               {% endfor %}
@@ -138,7 +130,7 @@
               <th></th>
               <th></th>
               <th></th>
-            </tbody>
+            </tbody id='record_body '>
           </table>
         </div>
       </form>
@@ -149,24 +141,28 @@
 <script>
   $(document).ready(function () {
     //$("#record").DataTable();
-    set_sections("Grade 7");
+    set_sections("Grade 7", "onload");
   });
 
   $("#grade_level").change(function (event) {
     set_sections($(this).val());
-    //filter_records();
+    //filter_records($(this).val());
   });
   $("#section").change(function (event) {
-    //filter_records();
+    //filter_records($(this).val());
   });
   $("#subject").change(function (event) {
-    //filter_records();
+    //filter_records($(this).val());
   });
+  var url = 'http://localhost:8000/'
 
-  function set_sections(grade_level) {
-    $.get("http://localhost:8000/get_sections", function (response) {
+  function set_sections(grade_level, trigger='click') {
+    $.get(url+"get_sections", function (response) {
       var res = JSON.parse(response);
       $("#section").empty();
+      if (trigger == "click"){
+        $("#section").append("<option value=''></option>");
+      }
       $.map(res[grade_level], (d, i) => {
         $("#section").append(
           $("<option>", {
@@ -178,85 +174,45 @@
     });
   }
 
-  function filter_records() {
-    var myTable = $("#class_record").DataTable();
-    var quarter = $(location).attr("href").split("quarter/")[1];
-    var gradelevel = $("#grade_level").val();
-    var section = $("#section").val();
-    var subject = $("#subject").val();
+  function filter_records(quarter) {
+    var dt = {
+      'grade': $("#grade_level").val(), 
+      'section': $("#section").val(), 
+      'subject': $("#subject").val()
+    }
 
-    myTable.clear();
-    myTable.draw();
-    $.ajax({
-      type: "POST",
-      url: "http://localhost:8000/get_student_records/" + quarter,
-      data: { gradelevel: gradelevel, section: section, subject: subject },
-      success: function (r) {
-        var data = JSON.parse(r);
-        console.log(data);
-        $.each(data["data"], function (index, item) {
-          myTable.row
-            .add([
-              item.username,
-              item.full_name,
-              item.section,
-              item.gradelevel,
-              item.subject_name,
+    $.post(url+"filter_classrecord/"+quarter, dt, function(r){ 
+      var data = JSON.parse(r)
 
-              "<input type='text' class='form-control' value=" +
-                item.written_work +
-                " name='written_work' id='written_work' onchange='update_record(" +
-                item.id +
-                ", `written_work`, " +
-                item.counter +
-                ")'>",
+      // total items row
+      $('#record tbody').remove()
+      $('tr#total_items_header').remove()
+      
+      var head = ""
+      $.each(data.header, function( index, value ) {
+        $.each(value, function(i, v){
+          if (index == "written_work" || index == "performance_task"){
+            head += "<th>"+v+"</th>"
+          }
+        })
+      });
 
-              "<input type='text' class='form-control' value=" +
-                item.performance_task +
-                " name='performance_task' id='performance_task' onchange='update_record(" +
-                item.id +
-                ", `performance_task`, " +
-                item.counter +
-                ")'>",
+      $('#record thead').append(
+        "<tr id='total_items_header'>"+head+"</tr>"
+      )
 
-              "<input type='text' class='form-control' value=" +
-                item.quarterly_assessment +
-                " name='quarterly_assessment' id='quarterly_assessment' onchange='update_record(" +
-                item.id +
-                ", `quarterly_assessment`, " +
-                item.counter +
-                ")'>",
+      // tbody
+      $.each(data.records, function( index, value ) {
+        $.each(value, function(i, v){
+          if (index == "written_work" || index == "performance_task"){
+            head += "<th>"+v+"</th>"
+          }
+        })
+      });
 
-              "<input type='text' class='form-control' value=" +
-                item.weighted_score +
-                " name='weighted_score' id='weighted_score' onchange='update_record(" +
-                item.id +
-                ", `weighted_score`, " +
-                item.counter +
-                ")' disabled>",
-
-              "<input type='text' class='form-control' value=" +
-                item.grade +
-                " name='grade' id='grade' onchange='update_record(" +
-                item.id +
-                ", `grade`, " +
-                item.counter +
-                ")' disabled>",
-            ])
-            .draw(false);
-        });
-      },
-    });
+    })  
+  
   }
 </script>
-<!-- <script type="text/javascript" src="jquery.dataTables.js"></script>
-<script type="text/javascript" src="dataTables.scrollingPagination.js"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#record').dataTable( {
-            "pagingType": "scrolling"
-        } );
-    } );
-</script> -->
 
 {% endblock %}

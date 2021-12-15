@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 from django.conf.urls import url
 from django.conf import settings
@@ -51,7 +51,10 @@ urlpatterns = [
          views.udpate_score, name='update_score'),
 
     # class record
-    path('classrecord/<quarter>', views.view_classrecord, name='view_classrecord'),
+    path('classrecord/<quarter>',
+         views.view_classrecord, name='view_classrecord'),
+    path('filter_classrecord/<quarter>',
+         views.filter_classrecord, name='filter_classrecord'),
 
 
 

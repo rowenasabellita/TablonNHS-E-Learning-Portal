@@ -28,24 +28,49 @@ grade_type = ['Written Works', 'Performance Task', 'Quarterly Assessment']
 
 
 @login_required
+# , grade=None, section=None, subject=None):
 def view_classrecord(request, quarter):
     qt = "{} Quarter".format(quarter)
-    default_grade_and_section = UserProfile.objects.raw(
-        "select a.id, a.section, a.gradelevel from myapp_userprofile as a join myapp_user as b on a.user_id = b.id where b.is_student = 1 limit 1")[0]
 
     subjects = Subject.objects.filter(id=1)
     sections = UserProfile().get_all_sections()
     header = get_headers(qt, 'Grade 7', subjects[0].id)
-    print(header['written_work'][-3])
+
     default_record = get_summative_assessment(
         qt, sections['Grade 7'][0], 'Grade 7', subjects[0].id, None, header['written_work'][-3], header['performance_task'][-3])
-    print(default_record)
+
+    if len(default_record['students']) == 0:
+        default_record = []
+
     return render(request, 'classrecord.html', {
+        "subject_filter": Subject.objects.all(),
         "subjects": subjects,
         "sections": sections,
         "headers": header,
-        "records": default_record
+        "records": default_record,
+        "quarter": quarter
     })
+
+
+# @login_required
+def filter_classrecord(request, quarter):
+    if request.method == "POST":
+        grade = request.POST["grade"]
+        section = request.POST["section"]
+        subject = request.POST["subject"]
+        qt = "{} Quarter".format(quarter)
+
+        header = get_headers(qt, grade, subject)
+
+        default_record = get_summative_assessment(
+            qt, section, grade, subject, None, header['written_work'][-3], header['performance_task'][-3])
+
+        print(default_record)
+        if len(default_record['students']) == 0:
+            default_record = []
+
+        data = {'records': default_record, 'header': header}
+        return HttpResponse(json.dumps(data))
 
 
 def get_headers(quarter, grade=None, subject=None):
@@ -141,6 +166,8 @@ def get_summative_assessment(quarter, section, gradelevel, subject_id, student_i
         where b.quarter='{}' and d.section = '{}'
         and d.gradelevel = '{}' and b.subject_id ='{}' """.format(quarter, section, gradelevel, subject_id)+condition+"""
     """
+
+    print(query)
     submissions = StudentSubmission.objects.raw(query)
 
     written_work = []
