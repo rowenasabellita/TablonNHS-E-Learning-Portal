@@ -2,6 +2,7 @@ from django.dispatch.dispatcher import receiver
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib import messages
+from django.utils import translation
 from django.utils.html import html_safe
 from django.utils.translation import ugettext
 from django.shortcuts import render
@@ -15,8 +16,12 @@ from myapp.models.module_model import Module, StudentSubmission
 from myapp.models.subject_model import SUBJECTS, Subject
 from myapp.models import UserProfile
 from myapp.models.user_profile_model import SECTION
+<<<<<<< HEAD
 >>>>>>> 2b77219593f91ddcf5029a3da4153595d47194a2
 from myapp.views.profile_view import login
+=======
+from myapp.views.profile_view import login, student
+>>>>>>> a8699e34e3ceaef6550af9ad876996521c323d13
 from myproject.settings import AUTH_PASSWORD_VALIDATORS
 from django.contrib.auth.models import User, auth
 from django.contrib.auth.decorators import login_required
@@ -24,7 +29,7 @@ from myapp.forms import ProfileUpdateForm, UserUpdateForm, UploadFileForm, Recor
 from django.contrib.auth import get_user_model
 from myapp.models.class_record_model import ClassRecord
 from myapp.filters import RecordFilter
-from django.core.files.storage import FileSystemStorage
+from django.core.files.storage import FileSystemStorage, get_storage_class
 from myapp.views.upload_module_view import get_student_records, get_subjects, get_grade_quarterly_per_subject
 import json
 
@@ -49,10 +54,17 @@ def view_classrecord(request, quarter):
     header = get_headers(qt, 'Grade 7', subjects[0].id)
 
     default_record = get_summative_assessment(
-        qt, sections['Grade 7'][0], 'Grade 7', subjects[0].id, None, header['written_work'][-3], header['performance_task'][-3])
-
-    if len(default_record['students']) == 0:
-        default_record = []
+        quarter=qt,
+        section=sections['Grade 7'][0],
+        gradelevel='Grade 7',
+        subject_id=subjects[0].id,
+        student_id=None,
+        ww_total_items=header['written_work'][-3],
+        pf_total_items=header['performance_task'][-3],
+        qa_total_items=int(header['quarterly_assessment'][-3])
+    )
+    print(header)
+    print(default_record)
 
     return render(request, 'classrecord.html', {
         "subject_filter": Subject.objects.all(),
@@ -73,15 +85,27 @@ def filter_classrecord(request, quarter):
         qt = "{} Quarter".format(quarter)
 
         header = get_headers(qt, grade, subject)
+        print(header)
 
         default_record = get_summative_assessment(
-            qt, section, grade, subject, None, header['written_work'][-3], header['performance_task'][-3])
+            quarter=qt,
+            section=section,
+            gradelevel=grade,
+            subject_id=subject,
+            student_id=None,
+            ww_total_items=header['written_work'][-3],
+            pf_total_items=header['performance_task'][-3],
+            qa_total_items=int(header['quarterly_assessment'][-3])
+        )
 
-        print(default_record)
-        if len(default_record['students']) == 0:
-            default_record = []
-
-        data = {'records': default_record, 'header': header}
+        subject_ws = Subject.objects.filter(id=subject)[0]
+        subject_percent = {
+            "written_work": subject_ws.written_works,
+            "performance_task": subject_ws.performance_task,
+            "quarterly_assessment": subject_ws.quarterly_assessment
+        }
+        data = {'records': default_record,
+                'header': header, 'subject_percent': subject_percent}
         return HttpResponse(json.dumps(data))
 
 
@@ -100,7 +124,7 @@ def get_headers(quarter, grade=None, subject=None):
     query = """
         SELECT a.*, b.subject_name, b.performance_task, b.quarterly_assessment, b.written_works
         FROM myapp_module as a JOIN myapp_subject as b on a.subject_id = b.id
-        WHERE a.quarter = '{}' """.format(quarter)+condition+"""
+        WHERE a.quarter = '{}' order by a.date""".format(quarter)+condition+"""
     """
     # print(query)
 
@@ -139,16 +163,19 @@ def get_headers(quarter, grade=None, subject=None):
     # total column (TOTAL)
     written_work.append(ww_total_item)
     performance_task.append(pf_total_item)
-    quarterly_assessment.append(qa_total_item)
 
     # Percentage Score (PS)
     written_work.append(100)
     performance_task.append(100)
     quarterly_assessment.append(100)
+
     # Weighted Score (WS)
     written_work.append(subjects[0].written_works)
     performance_task.append(subjects[0].performance_task)
     quarterly_assessment.append(subjects[0].quarterly_assessment)
+
+    if len(quarterly_assessment) < 3:
+        quarterly_assessment.insert(0, 0)
 
     return {
         "written_work": written_work,
@@ -176,16 +203,16 @@ def get_summative_assessment(quarter, section, gradelevel, subject_id, student_i
         on a.module_id = b.id and b.subject_id = c.id and a.submitted_by_id = d.id
 
         where b.quarter='{}' and d.section = '{}'
-        and d.gradelevel = '{}' and b.subject_id ='{}' """.format(quarter, section, gradelevel, subject_id)+condition+"""
+        and d.gradelevel = '{}' and b.subject_id ='{}' order by b.date """.format(quarter, section, gradelevel, subject_id)+condition+"""
     """
 
-    print(query)
     submissions = StudentSubmission.objects.raw(query)
 
     written_work = []
     performance_task = []
     quarterly_assessment = []
     students = []
+    student_ids = []
 
     ww = []
     ww_total_score = 0
@@ -197,15 +224,19 @@ def get_summative_assessment(quarter, section, gradelevel, subject_id, student_i
     qa_total_score = 0
 
     for i in submissions:
-        user = User.objects.filter(id=i.submitted_by_id)[0]
+        userprofile = UserProfile.objects.filter(id=i.submitted_by_id)[0]
+        user = User.objects.filter(id=userprofile.user_id)[0]
         students.append(user.first_name+" "+user.last_name)
+        student_ids.append(i.submitted_by_id)
 
         if i.grade_type == "Written Work":
             ww.append(int(i.student_score))
             ww_total_score += int(i.student_score)
+
         elif i.grade_type == "Performance Task":
             pf.append(int(i.student_score))
             pf_total_score += int(i.student_score)
+
         elif i.grade_type == "Quarterly Assessment":
             qa.append(int(i.student_score))
             qa_total_score += int(i.student_score)
@@ -218,7 +249,6 @@ def get_summative_assessment(quarter, section, gradelevel, subject_id, student_i
         # total
     ww.append(ww_total_score)
     pf.append(pf_total_score)
-    qa.append(qa_total_score)
 
     # PS
     ps_ww = (ww_total_score/ww_total_items) * \
@@ -233,7 +263,6 @@ def get_summative_assessment(quarter, section, gradelevel, subject_id, student_i
     qa.append("%.2f" % round(ps_qa, 2))
 
     # WS
-
     subjects = Subject.objects.filter(id=subject_id)
 
     ws_ww = (int(subjects[0].written_works) / 100) * ps_ww
@@ -244,10 +273,127 @@ def get_summative_assessment(quarter, section, gradelevel, subject_id, student_i
     pf.append("%.2f" % round(ws_pf, 2))
     qa.append("%.2f" % round(ws_qa, 2))
 
-    written_work.append(ww)
-    performance_task.append(pf)
-    quarterly_assessment.append(qa)
+    transmuted_grades = []
+    for i in list(set(student_ids)):
+        weighted_scores = update_classrecord_ws(
+            quarter, i, subject_id, ws_ww, ws_pf, ws_qa)
+        transmuted_grades.append(weighted_scores)
 
+    all_students = get_all_students(gradelevel, section)
+
+    final_records = []
+    for idx in range(len(all_students)):
+        if all_students[idx].user_profile_id not in list(set(student_ids)):
+            final_records.append({
+                "full_name": all_students[idx].first_name+" "+all_students[idx].last_name,
+                "student_id": all_students[idx].user_profile_id,
+                "written_work": ["", "", "", "", "", "", "", "", "", "", 0, 0, 0],
+                "performance_task": ["", "", "", "", "", "", "", "", "", "", 0, 0, 0],
+                "quarterly_assessment": [0, 0, 0],
+                "initial_grade": update_classrecord_ws(quarter, all_students[idx].user_profile_id, subject_id, 0, 0, 0)
+            })
+        else:
+            final_records.append({
+                "full_name": all_students[idx].first_name+" "+all_students[idx].last_name,
+                "student_id": all_students[idx].user_profile_id,
+                "written_work": ww,
+                "performance_task": pf,
+                "quarterly_assessment": qa,
+                "initial_grade": update_classrecord_ws(quarter, all_students[idx].user_profile_id, subject_id, ws_ww, ws_pf, ws_qa)
+            })
+
+    return final_records
+
+
+def update_classrecord_ws(quarter, student_id, subject, ww, pf, qa):
+    cs = ClassRecord.objects.filter(
+        quarter=quarter,
+        user_profile_id=student_id,
+        subject_id=subject
+    )
+
+    computed_ws = ww+pf+qa
+    transmuted_grade = get_transmuted_grade(computed_ws)
+
+    if cs:
+        cs_doc = ClassRecord.objects.get(id=cs[0].id)
+    else:
+        cs_doc = ClassRecord()
+
+    cs_doc.quarter = quarter
+    cs_doc.user_profile_id = student_id
+    cs_doc.subject_id = subject
+    cs_doc.written_work = ww
+    cs_doc.performance_task = pf
+    cs_doc.quarterly_assessment = qa
+    cs_doc.weighted_score = computed_ws
+    cs_doc.grade = transmuted_grade
+    cs_doc.save()
+
+    return transmuted_grade
+
+
+def get_transmuted_grade(grade):
+    transmutation_table = [
+        [100, 100, 100],
+        [98.4, 99.99, 99],
+        [96.8, 98.39, 98],
+        [95.2, 96.79, 97],
+        [93.6, 95.19, 96],
+        [61.6, 63.19, 76],
+        [92.0, 93.59, 95],
+        [90.4, 91.99, 94],
+        [88.8, 90.39, 93],
+        [87.2, 88.79, 92],
+        [85.6, 87.19, 91],
+        [84.0, 85.59, 90],
+        [82.4, 83.99, 89],
+        [80.8, 82.39, 88],
+        [79.2, 80.79, 87],
+        [77.6, 79.19, 86],
+        [76.0, 77.59, 85],
+        [74.4, 75.99, 84],
+        [72.8, 74.39, 83],
+        [71.2, 72.79, 82],
+        [69.6, 71.19, 81],
+        [68.0, 69.59, 80],
+        [66.4, 67.99, 79],
+        [64.8, 66.39, 78],
+        [63.2, 64.79, 77],
+        [60.0, 61.59, 75],
+        [56.0, 59.99, 74],
+        [52.0, 55.99, 73],
+        [48.0, 51.99, 72],
+        [44.0, 47.99, 71],
+        [40.0, 43.99, 70],
+        [36.0, 39.99, 69],
+        [32.0, 35.99, 68],
+        [28.0, 31.99, 67],
+        [24.0, 27.99, 66],
+        [20.0, 23.99, 65],
+        [16.0, 19.99, 64],
+        [12.0, 15.99, 63],
+        [8.0, 11.99, 62],
+        [4.0, 7.99, 61],
+        [1, 3.99, 60],
+        [0, 0, 0],
+    ]
+
+    final_grade = 0
+    for i in transmutation_table:
+        if i[0] <= grade and grade <= i[1]:
+            final_grade = i[2]
+
+    return final_grade
+
+
+def get_all_students(gradelevel, section):
+    query = """
+        SELECT
+        a.*, b.id as user_profile_id,
+        b.gradelevel, b.section
+
+<<<<<<< HEAD
     return {
         "students": list(set(students)),
         "written_work": written_work,
@@ -255,3 +401,14 @@ def get_summative_assessment(quarter, section, gradelevel, subject_id, student_i
         "quarterly_assessment": quarterly_assessment,
     }
 >>>>>>> 2b77219593f91ddcf5029a3da4153595d47194a2
+=======
+        FROM myapp_user as a 
+        join  myapp_userprofile as b 
+
+        on a.id = b.user_id
+        where a.is_student=1 and b.gradelevel = '{}' and b.section='{}'
+    """.format(gradelevel, section)
+
+    students = User.objects.raw(query)
+    return students
+>>>>>>> a8699e34e3ceaef6550af9ad876996521c323d13

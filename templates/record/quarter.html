@@ -44,7 +44,6 @@
           <table class="stripe compact" id="class_record">
             <thead>
               <tr align="center">
-                <th scope="col">Student No</th>
                 <th scope="col">Name</th>
                 <th scope="col">Section</th>
                 <th scope="col">Grade Level</th>
@@ -53,69 +52,21 @@
                 <th scope="col">Performance Task</th>
                 <th scope="col">Quarterly Assessment</th>
                 <th scope="col">Weighted Score</th>
-                <th scope="col">Grade</th>
+                <th scope="col">Final Grade</th>
               </tr>
             </thead>
             <tbody align="center">
               {% for record in records %}
               <tr>
-                <td>{{ record.username }}</td>
                 <td>{{ record.full_name }}</td>
                 <td>{{ record.section }}</td>
                 <td>{{ record.gradelevel }}</td>
                 <td>{{ record.subject_name }}</td>
-                <td>
-                  <input
-                    type="number"
-                    class="form-control"
-                    value="{{ record.written_work }}"
-                    name="written_work"
-                    id="written_work"
-                    onchange="update_record('{{ record.id }}', 'written_work', '{{ record.counter }}')"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    class="form-control"
-                    value="{{ record.performance_task }}"
-                    name="performance_task"
-                    id="performance_task"
-                    onchange="update_record('{{ record.id }}', 'performance_task', '{{ record.counter }}')"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    class="form-control"
-                    value="{{ record.quarterly_assessment }}"
-                    name="quarterly_assessment"
-                    id="quarterly_assessment"
-                    onchange="update_record('{{ record.id }}', 'quarterly_assessment', '{{ record.counter }}')"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    class="form-control"
-                    value="{{ record.weighted_score }}"
-                    name="weighted_score"
-                    id="weighted_score"
-                    onchange="update_record('{{ record.id }}', 'weighted_score', '{{ record.counter }}')"
-                    disabled
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    class="form-control"
-                    value="{{ record.grade }}"
-                    name="grade"
-                    id="grade"
-                    onchange="update_record('{{ record.id }}', 'grade', '{{ record.counter }}')"
-                    disabled
-                  />
-                </td>
+                <td>{{ record.written_work }}</td>
+                <td>{{ record.performance_task }}</td>
+                <td>{{ record.quarterly_assessment }}</td>
+                <td>{{ record.weighted_score }}</td>
+                <td style="color: {{ record.remarks }}"><strong>{{ record.grade }}</strong></td>
               </tr>
               {% endfor %}
             </tbody>

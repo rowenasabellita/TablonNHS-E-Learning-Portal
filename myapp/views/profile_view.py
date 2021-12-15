@@ -73,50 +73,55 @@ def student(request, commit=True):
             return redirect("student")
 
     grade = request.user.userprofile.gradelevel.lower().replace(" ", "")
-    print(grade)
     status = get_student_status(request.user.id, grade)
     return render(request, 'student.html', {'s_form': s_form, "status": status})
 
 
 def get_student_status(user_id, gradelevel):
-    format_gradelevel = "Grade {}".format(gradelevel.split("grade")[1])
+    try:
+        format_gradelevel = "Grade {}".format(gradelevel.split("grade")[1])
 
-    average = get_average(format_gradelevel, user_id=user_id)
+        average = get_average(format_gradelevel, user_id=user_id)
 
-    completion = 0
-    counter = 0
-    ave = 0
-    for i in average:
+        completion = 0
+        counter = 0
+        ave = 0
+        for i in average:
 
-        if i.quarter1 != 0:
-            completion += 25
-            counter += 1
-            ave += i.quarter1 / 8
+            if i.quarter1 != 0:
+                completion += 25
+                counter += 1
+                ave += i.quarter1 / 8
 
-        if i.quarter2 != 0:
-            completion += 25
-            counter += 1
-            ave += i.quarter2 / 8
+            if i.quarter2 != 0:
+                completion += 25
+                counter += 1
+                ave += i.quarter2 / 8
 
-        if i.quarter3 != 0:
-            completion += 25
-            counter += 1
-            ave += i.quarter3 / 8
+            if i.quarter3 != 0:
+                completion += 25
+                counter += 1
+                ave += i.quarter3 / 8
 
-        if i.quarter4 != 0:
-            completion += 25
-            counter += 1
-            ave += i.quarter4 / 8
+            if i.quarter4 != 0:
+                completion += 25
+                counter += 1
+                ave += i.quarter4 / 8
 
-    final_average = ave / counter
-    status = "No Risk"
-    if final_average < 75:
-        status = "At Risk"
+        final_average = ave / counter
+        status = "No Risk"
+        if final_average < 75:
+            status = "At Risk"
 
-    return {
-        "status": status,
-        "completion": completion
-    }
+        return {
+            "status": status,
+            "completion": completion
+        }
+    except:
+        return {
+            "status": "At Risk",
+            "completion": 0
+        }
 
 
 def get_average(gradelevel, user_id):

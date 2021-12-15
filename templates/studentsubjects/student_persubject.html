@@ -42,7 +42,7 @@
 
         <!-- activity -->
         <details>
-          <summary style="font-size: 20px">Activity</summary>
+          <summary style="font-size: 20px">Activity Module</summary>
           {% if not activity %}
               <strong><h5 class="text-center">No Activities Yet</h5></strong>
           {% else %}
@@ -104,20 +104,27 @@
                       </div> 
                     {% endfor %}
                     {% else %}
-                      <form method="POST" action='/student/submit_activity' enctype="multipart/form-data" class="row" style='margin: 0 auto; padding: 0 100px 0 100px'>
+                      <form method="POST" action='/student/submit_activity' enctype="multipart/form-data" class="row" style='margin: 0 auto; padding: 0 100px 10px 100px'>
                         <div class="col-2">
                           <p><strong>Submit Activity:</strong></p>
                         </div>
                         <div class="col-10">
                           <input class="file-upload input form-control" type="file" name="document" required/>
-                          <textarea name="comment" id="comment" class="form-control" style="width: 100%; height: 100px;" placeholder="Comments here.."></textarea>
+                          <textarea name="comment" id="comment" class="form-control" style="width: 100%; height: 100px;" placeholder="Paste link of screenshot here. Ex: https://snipboard.io/JaAiO3.jpg"></textarea>
                           <input type="text" value="{{ act.id }}" name="module_id" hidden>
                           <input type="text" value="{{ user.userprofile.id }}" name="submitted_by" hidden>
                           <input type="text" value="{{ subject_id }}" name="subject" hidden> 
                           <input type="text" value="{{ user.userprofile.gradelevel }}" name="grade" hidden> 
                           <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                         </div>
+                        {% if act.next_score %}
+                          <div class="alert alert-info" role="alert">
+                            You must score {{ act.next_score }} points or more to pass this activity
+                          </div>
+                        {% endif %}
+
                       </form>
+                      
                   {% endif %}
                   
                 </details>
@@ -136,14 +143,82 @@
             {% for act in quiz %}
                 <details>
                   <summary style="margin-left: 50px;">On <strong>{{ act.date}}</strong> | Total Items:  <strong>{{ act.total_item }}</strong></summary>
+                  <!-- prepared by -->
                   <div class="row" style='margin: 0 auto; padding: 10px 100px 0 100px'>
-                    <div class="col-3">
+                    <div class="col-2">
+                      <p><strong>Prepared By:</strong></p>
+                    </div>
+                    <div class="col-10">
+                      <p>{{ act.prepared_by_name }}</p>
+                    </div>
+                  </div>
+                  <!-- instructions -->
+                  <div class="row" style='margin: 0 auto; padding: 0 100px 0 100px'>
+                    <div class="col-2">
                       <p><strong>Instructions:</strong></p>
                     </div>
-                    <div class="col-9">
+                    <div class="col-10">
                       <p>{{ act.instruction }}</p>
                     </div>
                   </div>
+                  <!-- if naai file Attached -->
+                  {% if act.file %}
+                    <div class="row" style='margin: 0 auto; padding: 0 100px 0 100px'>
+                      <div class="col-2">
+                        <p><strong>Attached File:</strong></p>
+                      </div>
+                      <div class="col-10">
+                        <p><a href="{{ act.file.url }}">{{ act.file.name|cut:"materials/pdf/" }}</a></p>
+                      </div>
+                    </div> 
+                  {% endif %}
+                  {% if act.activity_submission %}
+                    {% for sub in act.activity_submission%}
+                      <div class="row" style='margin: 0 auto; padding: 0 100px 0 100px'>
+                        <div class="col-2">
+                          <p><strong>Submitted Activity:</strong></p>
+                        </div>
+                        <div class="col-10">
+                          {% if sub.file %}
+                            <a href="{{ sub.file.url }}">{{ sub.file.name|cut:"materials/pdf/" }}</a>
+                          {% else %}
+                            <p>No file submitted</p>
+                          {% endif %}
+                          <div id="emailHelp" class="form-text">{{ sub.comments }}</div>
+                        </div>
+                      </div>
+                      <div class="row" style='margin: 0 auto; padding: 0 100px 0 100px'>
+                        <div class="col-2">
+                          <p><strong>Score:</strong></p>
+                        </div>
+                        <div class="col-10">
+                          <p>{{ sub.score }} / {{ act.total_item }}</p>
+                        </div>
+                      </div> 
+                    {% endfor %}
+                    {% else %}
+                      <form method="POST" action='/student/submit_activity' enctype="multipart/form-data" class="row" style='margin: 0 auto; padding: 0 100px 10px 100px'>
+                        <div class="col-2">
+                          <p><strong>Submit Activity:</strong></p>
+                        </div>
+                        <div class="col-10">
+                          <input class="file-upload input form-control" type="file" name="document" required/>
+                          <textarea name="comment" id="comment" class="form-control" style="width: 100%; height: 100px;" placeholder="Paste link of screenshot here (https://snipboard.io/JaAiO3.jpg) after taking."></textarea>
+                          <input type="text" value="{{ act.id }}" name="module_id" hidden>
+                          <input type="text" value="{{ user.userprofile.id }}" name="submitted_by" hidden>
+                          <input type="text" value="{{ subject_id }}" name="subject" hidden> 
+                          <input type="text" value="{{ user.userprofile.gradelevel }}" name="grade" hidden> 
+                          <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                        </div>
+
+                        {% if act.next_score %}
+                            <div class="alert alert-info" role="alert">
+                              You must score {{ act.next_score }} points or more to pass this quiz
+                            </div>
+                          {% endif %}
+
+                      </form>
+                  {% endif %}
                 </details>
             {% endfor %}
           {% endif %}
@@ -160,14 +235,82 @@
             {% for act in exam %}
                 <details>
                   <summary style="margin-left: 50px;">On <strong>{{ act.date}}</strong> | Total Items:  <strong>{{ act.total_item }}</strong></summary>
+                  <!-- prepared by -->
                   <div class="row" style='margin: 0 auto; padding: 10px 100px 0 100px'>
-                    <div class="col-3">
+                    <div class="col-2">
+                      <p><strong>Prepared By:</strong></p>
+                    </div>
+                    <div class="col-10">
+                      <p>{{ act.prepared_by_name }}</p>
+                    </div>
+                  </div>
+                  <!-- instructions -->
+                  <div class="row" style='margin: 0 auto; padding: 0 100px 0 100px'>
+                    <div class="col-2">
                       <p><strong>Instructions:</strong></p>
                     </div>
-                    <div class="col-9">
+                    <div class="col-10">
                       <p>{{ act.instruction }}</p>
                     </div>
                   </div>
+                  <!-- if naai file Attached -->
+                  {% if act.file %}
+                    <div class="row" style='margin: 0 auto; padding: 0 100px 0 100px'>
+                      <div class="col-2">
+                        <p><strong>Attached File:</strong></p>
+                      </div>
+                      <div class="col-10">
+                        <p><a href="{{ act.file.url }}">{{ act.file.name|cut:"materials/pdf/" }}</a></p>
+                      </div>
+                    </div> 
+                  {% endif %}
+                  {% if act.activity_submission %}
+                    {% for sub in act.activity_submission%}
+                      <div class="row" style='margin: 0 auto; padding: 0 100px 0 100px'>
+                        <div class="col-2">
+                          <p><strong>Submitted Activity:</strong></p>
+                        </div>
+                        <div class="col-10">
+                          {% if sub.file %}
+                            <a href="{{ sub.file.url }}">{{ sub.file.name|cut:"materials/pdf/" }}</a>
+                          {% else %}
+                            <p>No file submitted</p>
+                          {% endif %}
+                          <div id="emailHelp" class="form-text">{{ sub.comments }}</div>
+                        </div>
+                      </div>
+                      <div class="row" style='margin: 0 auto; padding: 0 100px 0 100px'>
+                        <div class="col-2">
+                          <p><strong>Score:</strong></p>
+                        </div>
+                        <div class="col-10">
+                          <p>{{ sub.score }} / {{ act.total_item }}</p>
+                        </div>
+                      </div> 
+                    {% endfor %}
+                    {% else %}
+                      <form method="POST" action='/student/submit_activity' enctype="multipart/form-data" class="row" style='margin: 0 auto; padding: 0 100px 10px 100px'>
+                        <div class="col-2">
+                          <p><strong>Submit Activity:</strong></p>
+                        </div>
+                        <div class="col-10">
+                          <input class="file-upload input form-control" type="file" name="document" required/>
+                          <textarea name="comment" id="comment" class="form-control" style="width: 100%; height: 100px;" placeholder="Paste link of screenshot here (https://snipboard.io/JaAiO3.jpg) after taking."></textarea>
+                          <input type="text" value="{{ act.id }}" name="module_id" hidden>
+                          <input type="text" value="{{ user.userprofile.id }}" name="submitted_by" hidden>
+                          <input type="text" value="{{ subject_id }}" name="subject" hidden> 
+                          <input type="text" value="{{ user.userprofile.gradelevel }}" name="grade" hidden> 
+                          <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                          
+                          {% if act.next_score %}
+                            <div class="alert alert-info" role="alert">
+                              You must score {{ act.next_score }} points or more to pass this exam
+                            </div>
+                          {% endif %}
+                        </div>
+                        
+                      </form>
+                  {% endif %}
                 </details>
             {% endfor %}
           {% endif %}

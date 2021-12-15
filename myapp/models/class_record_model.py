@@ -34,9 +34,3 @@ class ClassRecord(models.Model):
             if not i[0]:
                 quarters.append(i[0])
         return quarters
-
-
-@receiver(post_save, sender=ClassRecord)
-def class_subject_signal(sender, instance, created, **kwargs):
-    if created:
-        ClassRecord.objects.create(class_subject=instance)

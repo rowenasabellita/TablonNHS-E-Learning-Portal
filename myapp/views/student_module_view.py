@@ -126,6 +126,9 @@ def student_view_per_module(request, grade, subject):
 
     user_profile = UserProfile.objects.filter(user_id=request.user.id)[0].id
 
+    ww_submission = []
+    pf_submission = []
+    qa_submission = []
     for i in activity:
         user = User.objects.filter(id=i.prepared_by_id)[0]
         i.prepared_by_name = user.first_name+" "+user.last_name
@@ -133,6 +136,12 @@ def student_view_per_module(request, grade, subject):
             submitted_by_id=user_profile, module_id=i.id)
         if sub:
             i.activity_submission = sub
+            if i.grade_type == "Written Work":
+                ww_submission.append(sub[0].score)
+            elif i.grade_type == "Performance Task":
+                pf_submission.append(sub[0].score)
+            if i.grade_type == "Quarterly Assessment":
+                qa_submission.append(sub[0].score)
 
     for i in quiz:
         user = User.objects.filter(id=i.prepared_by_id)[0]
@@ -140,7 +149,13 @@ def student_view_per_module(request, grade, subject):
         sub = StudentSubmission.objects.filter(
             submitted_by_id=user_profile, module_id=i.id)
         if sub:
-            i.quiz_submission = sub
+            i.activity_submission = sub
+            if i.grade_type == "Written Work":
+                ww_submission.append(sub[0].score)
+            elif i.grade_type == "Performance Task":
+                pf_submission.append(sub[0].score)
+            if i.grade_type == "Quarterly Assessment":
+                qa_submission.append(sub[0].score)
 
     for i in exam:
         user = User.objects.filter(id=i.prepared_by_id)[0]
@@ -148,7 +163,41 @@ def student_view_per_module(request, grade, subject):
         sub = StudentSubmission.objects.filter(
             submitted_by_id=user_profile, module_id=i.id)
         if sub:
-            i.exam_submission = sub
+            i.activity_submission = sub
+            if i.grade_type == "Written Work":
+                ww_submission.append(sub[0].score)
+            elif i.grade_type == "Performance Task":
+                pf_submission.append(sub[0].score)
+            if i.grade_type == "Quarterly Assessment":
+                qa_submission.append(sub[0].score)
+
+    ww_header = get_header_basis(format_gradelevel, subject, 'Written Work')
+    pf_header = get_header_basis(
+        format_gradelevel, subject, 'Performance Task')
+    qa_header = get_header_basis(
+        format_gradelevel, subject, 'Quarterly Assessment')
+
+    next_scores = []
+
+    next_scores.append(get_next_score(ww_header, ww_submission))
+    next_scores.append(get_next_score(pf_header, pf_submission))
+    next_scores.append(get_next_score(qa_header, qa_submission))
+
+    for n in next_scores:
+        for i in activity:
+            if i.id == n["next_module"]:
+                i.next_score = int(n['next_score'])
+                i.next_percent = n['percent']
+
+        for i in quiz:
+            if i.id == n["next_module"]:
+                i.next_score = int(n['next_score'])
+                i.next_percent = n['percent']
+
+        for i in exam:
+            if i.id == n["next_module"]:
+                i.next_score = int(n['next_score'])
+                i.next_percent = n['percent']
 
     data = {
         "activity": activity,
@@ -158,6 +207,54 @@ def student_view_per_module(request, grade, subject):
         "subject_id": subject.id,
     }
     return render(request, 'student_persubject.html', data)
+
+
+def get_header_basis(grade, subject, gtype):
+    module = Module.objects.filter(
+        gradelevel=grade, subject_id=subject, grade_type=gtype).order_by('date')
+    subject_percentage = Subject.objects.filter(id=module[0].subject_id)
+
+    total_items = []
+    modules = []
+    for i in module:
+        total_items.append(i.total_item)
+        modules.append(i.id)
+
+    return {
+        'total_items': total_items,
+        'modules': modules,
+        'subject_percentage': subject_percentage[0]
+    }
+
+
+def get_percentage(score, total):
+    return (score/total)*100
+
+
+def get_next_score(head, submission):
+    count = 1
+    total_percentage = 0
+    for i in range(len(submission)):
+        count += 1
+        percentage = get_percentage(
+            submission[i], float(head['total_items'][i]))
+
+        total_percentage += percentage
+
+    x = (60*count) - total_percentage
+    next_percent = abs(x)
+    if len(submission) >= len(head['total_items']):
+        next_score = None
+        next_module = None
+    else:
+        next_score = (next_percent/100) * float(head['total_items'][count-1])
+        next_module = head['modules'][count-1]
+
+    return {
+        "percent": next_percent,
+        "next_score": next_score,
+        "next_module": next_module
+    }
 
 
 @login_required
