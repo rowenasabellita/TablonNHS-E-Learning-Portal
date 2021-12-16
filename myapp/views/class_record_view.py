@@ -199,6 +199,7 @@ def get_summative_assessment(quarter, section, gradelevel, subject_id, student_i
 
     final_records = []
     for idx in range(len(all_students)):
+        print(all_students[idx].id)
         ww = []
         ww_total_score = 0
 

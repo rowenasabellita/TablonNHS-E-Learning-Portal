@@ -8,7 +8,7 @@
         <div class="row">
           <div class="col">
             <select name="grade_level" id="grade_level" class="form-control">
-              <option value="" class="form-control">--Select Subject--</option>
+              <option value="" class="form-control">--Select Grade Level--</option>
               {% for i in gradelevel %}
               <option value="{{ i }}">{{ i }}</option>
               {% endfor %}
@@ -136,51 +136,15 @@
         $.each(data["data"], function (index, item) {
           myTable.row
             .add([
-              item.username,
               item.full_name,
               item.section,
               item.gradelevel,
               item.subject_name,
-
-              "<input type='text' class='form-control' value=" +
-                item.written_work +
-                " name='written_work' id='written_work' onchange='update_record(" +
-                item.id +
-                ", `written_work`, " +
-                item.counter +
-                ")'>",
-
-              "<input type='text' class='form-control' value=" +
-                item.performance_task +
-                " name='performance_task' id='performance_task' onchange='update_record(" +
-                item.id +
-                ", `performance_task`, " +
-                item.counter +
-                ")'>",
-
-              "<input type='text' class='form-control' value=" +
-                item.quarterly_assessment +
-                " name='quarterly_assessment' id='quarterly_assessment' onchange='update_record(" +
-                item.id +
-                ", `quarterly_assessment`, " +
-                item.counter +
-                ")'>",
-
-              "<input type='text' class='form-control' value=" +
-                item.weighted_score +
-                " name='weighted_score' id='weighted_score' onchange='update_record(" +
-                item.id +
-                ", `weighted_score`, " +
-                item.counter +
-                ")' disabled>",
-
-              "<input type='text' class='form-control' value=" +
-                item.grade +
-                " name='grade' id='grade' onchange='update_record(" +
-                item.id +
-                ", `grade`, " +
-                item.counter +
-                ")' disabled>",
+              item.written_work,
+              item.performance_task,
+              item.quarterly_assessment,
+              item.weighted_score,
+              "<div style='color: "+item.remarks+"'><strong>"+item.grade+"</strong></div>",
             ])
             .draw(false);
         });
