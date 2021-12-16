@@ -115,7 +115,11 @@ def get_average_quarter(gradelevel, user_id):
 
 @login_required
 def student_view_per_module(request, grade, subject):
-    format_gradelevel = "Grade {}".format(grade.split("grade")[1])
+    split = grade.split("grade")
+    format_gradelevel = grade
+    if len(split) == 2:
+        format_gradelevel = "Grade {}".format(split[1])
+
     activity = Module.objects.filter(
         gradelevel=format_gradelevel, subject_id=subject, category="activity").order_by("date")
     exam = Module.objects.filter(
@@ -281,7 +285,7 @@ def submit_activity(request):
             submit.score = 0.00
             submit.module_id = req['module_id']
             submit.save()
-            return redirect("student_view_per_module", req['grade'], req['subject_id'])
+            return redirect("student_view_per_module", req['grade'], req['subject'])
     except Exception as e:
         return render(request, 'internal_server_error.html', {"redirect_to": "/student", "error_msg": str(e)})
 

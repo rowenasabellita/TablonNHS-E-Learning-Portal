@@ -55,10 +55,10 @@ urlpatterns = [
          views.view_classrecord, name='view_classrecord'),
     path('filter_classrecord/<quarter>',
          views.filter_classrecord, name='filter_classrecord'),
+    path('sync_record/<quarter>',
+         views.sync_all_student, name='sync_all_student'),
 
 
-
-    path('classrecord', views.view_classrecord, name='view_classrecord'),
 
     path('submission/quarter/<quarter>',
          views.view_submission, name='view_submission'),

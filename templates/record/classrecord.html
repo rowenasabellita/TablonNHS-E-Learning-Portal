@@ -1,25 +1,6 @@
 {% extends 'sidebar.html' %} {% load static %} {% load crispy_forms_tags %}
 {%block main_content %}
 <style>
-<<<<<<< HEAD
-    .cell-border {
-        border: 1px solid black;
-        border-collapse: collapse;
-    } 
-    .cell-border th {
-        border: 1px solid;
-        border-collapse: collapse;
-        
-    } 
-    .cell-border tr td {
-        border: 1px solid black;
-        
-    } 
-    .cell-border tr  {
-        font-weight: bold;
-    }
-
-=======
   .cell-border {
     border: 1px solid black;
     border-collapse: collapse;
@@ -34,7 +15,6 @@
   .cell-border tr {
     font-weight: bold;
   }
->>>>>>> 2b77219593f91ddcf5029a3da4153595d47194a2
 </style>
 <div class="main_content_profile">
   <div data-tab-content class="active info" id="classrecord">
@@ -42,33 +22,15 @@
       <form>
         <div class="row">
           <div class="col">
-<<<<<<< HEAD
-            <select name="grade_level" id="grade_level" class="form-control">
-              <option value="" class="form-control">--Select Grade Level--</option>
-              {% for i in gradelevel %}
-              <option value="{{ i }}">{{ i }}</option>
-              {% endfor %}
-=======
             <select name="grade_level" id="grade_level" class="form-control" onchange="filter_records('{{ quarter }}')">
               <option value="Grade 7">Grade 7</option>
               <option value="Grade 8">Grade 8</option>
               <option value="Grade 9">Grade 9</option>
               <option value="Grade 10">Grade 10</option>
->>>>>>> 2b77219593f91ddcf5029a3da4153595d47194a2
             </select>
           </div>
 
           <div class="col">
-<<<<<<< HEAD
-            <select name="section" id="section" class="form-control"></select>
-          </div>
-
-          <div class="col">
-            <select name="subject" id="subject" class="form-control">
-              <option value="" class="form-control">--Select Subject--</option>
-              {% for i in subjects.subjects %}
-              <option value="{{ i.subject_id }}">{{ i.subject_name }}</option>
-=======
             <select name="section" id="section" class="form-control" onchange="filter_records('{{ quarter }}')"></select>
           </div>
 
@@ -76,113 +38,14 @@
             <select name="subject" id="subject" class="form-control" onchange="filter_records('{{ quarter }}')">
               {% for i in subject_filter %}
               <option value="{{ i.id }}">{{ i.subject_name }}</option>
->>>>>>> 2b77219593f91ddcf5029a3da4153595d47194a2
               {% endfor %}
             </select>
           </div>
 
-<<<<<<< HEAD
-          <div class="col">
-            <input
-              name="myInput"
-              id="myInput"
-              class="form-control"
-              placeholder="Search here"
-            />
-          </div>
-=======
->>>>>>> 2b77219593f91ddcf5029a3da4153595d47194a2
         </div>
       </form>
       <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-<<<<<<< HEAD
-        <br>
-        <div class="table_container">
-            <table class="cell-border" class="stripe compact" style="width:100%" id="record">
-                <thead>
-                    <tr align="center" >
-                      <th rowspan="2" scope="rowgroup">Student Name</th>
-                      <th colspan="13" scope="colgroup">Written Work</th>
-                      <th colspan="13" scope="colgroup">Performance Task</th>
-                      <th colspan="3" scope="colgroup">Quarterly Assessment</th>
-                      <th scope="colgroup">Initial Grade</th>
-                    </tr>
-                  </thead>
-                  <tbody align="center">
-                    <thead>
-                     
-                        <tr>
-                            <th></th>
-                            <th>1</th>
-                            <th>2</th>
-                            <th>3</th>
-                            <th>4</th>
-                            <th>5</th>
-                            <th>6</th>
-                            <th>7</th>
-                            <th>8</th>
-                            <th>9</th>
-                            <th>10</th>
-                            <th>Total</th>
-                            <th>PS</th>
-                            <th>WS</th>
-                            <th>1</th>
-                            <th>2</th>
-                            <th>3</th>
-                            <th>4</th>
-                            <th>5</th>
-                            <th>6</th>
-                            <th>7</th>
-                            <th>8</th>
-                            <th>9</th>
-                            <th>10</th>
-                            <th>Total</th>
-                            <th>PS</th>
-                            <th>WS</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                        <!-- sample data no for loop -->
-                        <tr>
-                            <td>**name**</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </thead>
-                </tbody>
-            </table>
-=======
         <div class="table_container">
           <table class="table cell-border" style="width: 100%" id="record" >
             <thead>
@@ -280,7 +143,6 @@
               
 
           </table>
->>>>>>> 2b77219593f91ddcf5029a3da4153595d47194a2
         </div>
       </form>
     </div>
@@ -288,24 +150,6 @@
 </div>
 
 <script>
-<<<<<<< HEAD
-
- $(document).ready(function() {
-    $('#record').DataTable();
-} );
-
-</script>
-<!-- <script type="text/javascript" src="jquery.dataTables.js"></script>
-<script type="text/javascript" src="dataTables.scrollingPagination.js"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#record').dataTable( {
-            "pagingType": "scrolling"
-        } );
-    } );
-</script> -->
-
-=======
   $(document).ready(function () {
     //$("#record").DataTable();
     set_sections("Grade 7", "onload");
@@ -401,6 +245,5 @@
   
   }
 </script>
->>>>>>> 2b77219593f91ddcf5029a3da4153595d47194a2
 
 {% endblock %}

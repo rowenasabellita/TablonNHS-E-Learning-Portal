@@ -61,7 +61,7 @@ def get_student_records(quarter, gradelevel=None, section=None, subject=None):
         on a.subject_id = b.id and a.user_profile_id = d.id and d.user_id = c.id
         where quarter = '{}' """.format(quarter) + condition+"""
         """
-
+    print(query)
     records = User.objects.raw(query)
 
     for r in records:

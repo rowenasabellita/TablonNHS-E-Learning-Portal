@@ -8,20 +8,11 @@ from django.utils.translation import ugettext
 from django.shortcuts import render
 import myapp
 from myapp.models.class_record_model import ClassRecord
-<<<<<<< HEAD
-from myapp.models.subject_model import SUBJECTS, Subject
-from myapp.models import UserProfile
-=======
 from myapp.models.module_model import Module, StudentSubmission
 from myapp.models.subject_model import SUBJECTS, Subject
 from myapp.models import UserProfile
 from myapp.models.user_profile_model import SECTION
-<<<<<<< HEAD
->>>>>>> 2b77219593f91ddcf5029a3da4153595d47194a2
-from myapp.views.profile_view import login
-=======
 from myapp.views.profile_view import login, student
->>>>>>> a8699e34e3ceaef6550af9ad876996521c323d13
 from myproject.settings import AUTH_PASSWORD_VALIDATORS
 from django.contrib.auth.models import User, auth
 from django.contrib.auth.decorators import login_required
@@ -34,13 +25,6 @@ from myapp.views.upload_module_view import get_student_records, get_subjects, ge
 import json
 
 User = get_user_model()
-<<<<<<< HEAD
-
-@login_required
-def view_classrecord(request):
-
-    return render(request, 'classrecord.html')
-=======
 grade_type = ['Written Works', 'Performance Task', 'Quarterly Assessment']
 
 
@@ -215,6 +199,7 @@ def get_summative_assessment(quarter, section, gradelevel, subject_id, student_i
 
     final_records = []
     for idx in range(len(all_students)):
+        print(all_students[idx].id)
         ww = []
         ww_total_score = 0
 
@@ -281,7 +266,7 @@ def get_summative_assessment(quarter, section, gradelevel, subject_id, student_i
     return final_records
 
 
-def update_classrecord_ws(quarter, student_id, subject, ww, pf, qa):
+def update_classrecord_ws(quarter, student_id, subject, ww=0, pf=0, qa=0):
     cs = ClassRecord.objects.filter(
         quarter=quarter,
         user_profile_id=student_id,
@@ -293,17 +278,25 @@ def update_classrecord_ws(quarter, student_id, subject, ww, pf, qa):
 
     if cs:
         cs_doc = ClassRecord.objects.get(id=cs[0].id)
+        cs_doc.quarter = quarter
+        cs_doc.user_profile_id = student_id
+        cs_doc.subject_id = subject
+        cs_doc.written_work = ww
+        cs_doc.performance_task = pf
+        cs_doc.quarterly_assessment = qa
+        cs_doc.weighted_score = computed_ws
+        cs_doc.grade = transmuted_grade
     else:
         cs_doc = ClassRecord()
+        cs_doc.quarter = quarter
+        cs_doc.user_profile_id = student_id
+        cs_doc.subject_id = subject
+        cs_doc.written_work = 0
+        cs_doc.performance_task = 0
+        cs_doc.quarterly_assessment = 0
+        cs_doc.weighted_score = 0
+        cs_doc.grade = 0
 
-    cs_doc.quarter = quarter
-    cs_doc.user_profile_id = student_id
-    cs_doc.subject_id = subject
-    cs_doc.written_work = ww
-    cs_doc.performance_task = pf
-    cs_doc.quarterly_assessment = qa
-    cs_doc.weighted_score = computed_ws
-    cs_doc.grade = transmuted_grade
     cs_doc.save()
 
     return transmuted_grade
@@ -363,28 +356,47 @@ def get_transmuted_grade(grade):
     return final_grade
 
 
-def get_all_students(gradelevel, section):
+def get_all_students(gradelevel, section=None):
+    condition = ""
+    if section:
+        condition = " and b.section = '{}' ".format(section)
+
     query = """
         SELECT
         a.*, b.id as user_profile_id,
         b.gradelevel, b.section
 
-<<<<<<< HEAD
-    return {
-        "students": list(set(students)),
-        "written_work": written_work,
-        "performance_task": performance_task,
-        "quarterly_assessment": quarterly_assessment,
-    }
->>>>>>> 2b77219593f91ddcf5029a3da4153595d47194a2
-=======
         FROM myapp_user as a 
         join  myapp_userprofile as b 
 
         on a.id = b.user_id
-        where a.is_student=1 and b.gradelevel = '{}' and b.section='{}'
-    """.format(gradelevel, section)
+        where a.is_student=1 and b.gradelevel = '{}' """.format(gradelevel)+condition+"""
+    """
 
     students = User.objects.raw(query)
     return students
->>>>>>> a8699e34e3ceaef6550af9ad876996521c323d13
+
+
+@login_required
+def sync_all_student(request, quarter):
+    format_quarter = "{} Quarter".format(quarter)
+
+    subjects = []
+    for i in Subject.objects.all():
+        subjects.append(i.id)
+
+    gradelevels = ['Grade 7', 'Grade 8', 'Grade 9', 'Grade 10']
+
+    for level in gradelevels:
+        students = get_all_students(level)
+
+        for student in students:
+
+            for subject in subjects:
+                update_classrecord_ws(
+                    quarter=format_quarter,
+                    student_id=student.user_profile_id,
+                    subject=subject,
+                )
+
+    return HttpResponse(json.dumps({"status": "OK"}))
