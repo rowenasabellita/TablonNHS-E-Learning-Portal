@@ -47,8 +47,8 @@ def view_classrecord(request, quarter):
         pf_total_items=header['performance_task'][-3],
         qa_total_items=int(header['quarterly_assessment'][-3])
     )
-    print(header)
-    print(default_record)
+    # print(header)
+    # print(default_record)
 
     return render(request, 'classrecord.html', {
         "subject_filter": Subject.objects.all(),
@@ -69,7 +69,7 @@ def filter_classrecord(request, quarter):
         qt = "{} Quarter".format(quarter)
 
         header = get_headers(qt, grade, subject)
-        print(header)
+        # print(header)
 
         default_record = get_summative_assessment(
             quarter=qt,
@@ -108,7 +108,7 @@ def get_headers(quarter, grade=None, subject=None):
     query = """
         SELECT a.*, b.subject_name, b.performance_task, b.quarterly_assessment, b.written_works
         FROM myapp_module as a JOIN myapp_subject as b on a.subject_id = b.id
-        WHERE a.quarter = '{}' order by a.date""".format(quarter)+condition+"""
+        WHERE a.quarter = '{}' """.format(quarter)+condition+""" order by a.grade_type, a.date
     """
     # print(query)
 
@@ -168,7 +168,7 @@ def get_headers(quarter, grade=None, subject=None):
     }
 
 
-def get_summative_assessment(quarter, section, gradelevel, subject_id, student_id=None, ww_total_items=0, pf_total_items=0, qa_total_items=0):
+def get_submmited_modules(quarter, section, gradelevel, subject_id, student_id=None):
     condition = ""
     if student_id:
         condition = " and a.submitted_by_id = '{}' ".format(student_id)
@@ -187,104 +187,80 @@ def get_summative_assessment(quarter, section, gradelevel, subject_id, student_i
         on a.module_id = b.id and b.subject_id = c.id and a.submitted_by_id = d.id
 
         where b.quarter='{}' and d.section = '{}'
-        and d.gradelevel = '{}' and b.subject_id ='{}' order by b.date """.format(quarter, section, gradelevel, subject_id)+condition+"""
+        and d.gradelevel = '{}' and b.subject_id ='{}' """.format(quarter, section, gradelevel, subject_id)+condition+""" order by b.grade_type, b.date
     """
+    # print(query)
+    rec = StudentSubmission.objects.raw(query)
+    return rec
 
-    submissions = StudentSubmission.objects.raw(query)
 
-    written_work = []
-    performance_task = []
-    quarterly_assessment = []
-    students = []
-    student_ids = []
-
-    ww = []
-    ww_total_score = 0
-
-    pf = []
-    pf_total_score = 0
-
-    qa = []
-    qa_total_score = 0
-
-    for i in submissions:
-        userprofile = UserProfile.objects.filter(id=i.submitted_by_id)[0]
-        user = User.objects.filter(id=userprofile.user_id)[0]
-        students.append(user.first_name+" "+user.last_name)
-        student_ids.append(i.submitted_by_id)
-
-        if i.grade_type == "Written Work":
-            ww.append(int(i.student_score))
-            ww_total_score += int(i.student_score)
-
-        elif i.grade_type == "Performance Task":
-            pf.append(int(i.student_score))
-            pf_total_score += int(i.student_score)
-
-        elif i.grade_type == "Quarterly Assessment":
-            qa.append(int(i.student_score))
-            qa_total_score += int(i.student_score)
-
-    for l in range(10-len(ww)):
-        ww.append("")
-    for l in range(10-len(pf)):
-        pf.append("")
-
-        # total
-    ww.append(ww_total_score)
-    pf.append(pf_total_score)
-
-    # PS
-    ps_ww = (ww_total_score/ww_total_items) * \
-        100 if ww_total_items != 0 else ww_total_items
-    ps_pf = (pf_total_score/pf_total_items) * \
-        100 if pf_total_items != 0 else pf_total_items
-    ps_qa = (qa_total_score/qa_total_items) * \
-        100 if qa_total_items != 0 else qa_total_items
-
-    ww.append("%.2f" % round(ps_ww, 2))
-    pf.append("%.2f" % round(ps_pf, 2))
-    qa.append("%.2f" % round(ps_qa, 2))
-
-    # WS
-    subjects = Subject.objects.filter(id=subject_id)
-
-    ws_ww = (int(subjects[0].written_works) / 100) * ps_ww
-    ws_pf = (int(subjects[0].performance_task) / 100) * ps_pf
-    ws_qa = (int(subjects[0].quarterly_assessment) / 100) * ps_qa
-
-    ww.append("%.2f" % round(ws_ww, 2))
-    pf.append("%.2f" % round(ws_pf, 2))
-    qa.append("%.2f" % round(ws_qa, 2))
-
-    transmuted_grades = []
-    for i in list(set(student_ids)):
-        weighted_scores = update_classrecord_ws(
-            quarter, i, subject_id, ws_ww, ws_pf, ws_qa)
-        transmuted_grades.append(weighted_scores)
-
+def get_summative_assessment(quarter, section, gradelevel, subject_id, student_id=None, ww_total_items=0, pf_total_items=0, qa_total_items=0):
     all_students = get_all_students(gradelevel, section)
 
     final_records = []
     for idx in range(len(all_students)):
-        if all_students[idx].user_profile_id not in list(set(student_ids)):
-            final_records.append({
-                "full_name": all_students[idx].first_name+" "+all_students[idx].last_name,
-                "student_id": all_students[idx].user_profile_id,
-                "written_work": ["", "", "", "", "", "", "", "", "", "", 0, 0, 0],
-                "performance_task": ["", "", "", "", "", "", "", "", "", "", 0, 0, 0],
-                "quarterly_assessment": [0, 0, 0],
-                "initial_grade": update_classrecord_ws(quarter, all_students[idx].user_profile_id, subject_id, 0, 0, 0)
-            })
-        else:
-            final_records.append({
-                "full_name": all_students[idx].first_name+" "+all_students[idx].last_name,
-                "student_id": all_students[idx].user_profile_id,
-                "written_work": ww,
-                "performance_task": pf,
-                "quarterly_assessment": qa,
-                "initial_grade": update_classrecord_ws(quarter, all_students[idx].user_profile_id, subject_id, ws_ww, ws_pf, ws_qa)
-            })
+        ww = []
+        ww_total_score = 0
+
+        pf = []
+        pf_total_score = 0
+
+        qa = []
+        qa_total_score = 0
+        for mod in get_submmited_modules(quarter, section, gradelevel, subject_id, all_students[idx].user_profile_id):
+            if mod.grade_type == "Written Work":
+                ww.append(int(mod.student_score))
+                ww_total_score += int(mod.student_score)
+
+            elif mod.grade_type == "Performance Task":
+                pf.append(int(mod.student_score))
+                pf_total_score += int(mod.student_score)
+
+            elif mod.grade_type == "Quarterly Assessment":
+                qa.append(int(mod.student_score))
+                qa_total_score += int(mod.student_score)
+
+        for l in range(10-len(ww)):
+            ww.append("")
+        for l in range(10-len(pf)):
+            pf.append("")
+
+        # total
+        ww.append(ww_total_score)
+        pf.append(pf_total_score)
+        qa.append(qa_total_score)
+
+        # PS
+        ps_ww = (ww_total_score/ww_total_items) * \
+            100 if ww_total_items != 0 else ww_total_items
+        ps_pf = (pf_total_score/pf_total_items) * \
+            100 if pf_total_items != 0 else pf_total_items
+        ps_qa = (qa_total_score/qa_total_items) * \
+            100 if qa_total_items != 0 else qa_total_items
+
+        ww.append("%.2f" % round(ps_ww, 2))
+        pf.append("%.2f" % round(ps_pf, 2))
+        qa.append("%.2f" % round(ps_qa, 2))
+
+        # WS
+        subjects = Subject.objects.filter(id=subject_id)
+
+        ws_ww = (int(subjects[0].written_works) / 100) * ps_ww
+        ws_pf = (int(subjects[0].performance_task) / 100) * ps_pf
+        ws_qa = (int(subjects[0].quarterly_assessment) / 100) * ps_qa
+
+        ww.append("%.2f" % round(ws_ww, 2))
+        pf.append("%.2f" % round(ws_pf, 2))
+        qa.append("%.2f" % round(ws_qa, 2))
+
+        final_records.append({
+            "full_name": all_students[idx].first_name+" "+all_students[idx].last_name,
+            "student_id": all_students[idx].user_profile_id,
+            "written_work": ww,
+            "performance_task": pf,
+            "quarterly_assessment": qa,
+            "initial_grade": update_classrecord_ws(quarter, all_students[idx].user_profile_id, subject_id, ws_ww, ws_pf, ws_qa)
+        })
 
     return final_records
 
