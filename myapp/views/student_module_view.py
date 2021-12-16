@@ -116,10 +116,9 @@ def get_average_quarter(gradelevel, user_id):
 @login_required
 def student_view_per_module(request, grade, subject):
     split = grade.split("grade")
-
     format_gradelevel = grade
     if len(split) == 2:
-        format_gradelevel = "Grade {}".format([1])
+        format_gradelevel = "Grade {}".format(split[1])
 
     activity = Module.objects.filter(
         gradelevel=format_gradelevel, subject_id=subject, category="activity").order_by("date")
