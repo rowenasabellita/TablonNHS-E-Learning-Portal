@@ -212,19 +212,27 @@ def student_view_per_module(request, grade, subject):
 def get_header_basis(grade, subject, gtype):
     module = Module.objects.filter(
         gradelevel=grade, subject_id=subject, grade_type=gtype).order_by('date')
-    subject_percentage = Subject.objects.filter(id=module[0].subject_id)
 
     total_items = []
     modules = []
-    for i in module:
-        total_items.append(i.total_item)
-        modules.append(i.id)
+    if module:
+        subject_percentage = Subject.objects.filter(id=module[0].subject_id)
 
-    return {
-        'total_items': total_items,
-        'modules': modules,
-        'subject_percentage': subject_percentage[0]
-    }
+        for i in module:
+            total_items.append(i.total_item)
+            modules.append(i.id)
+
+        return {
+            'total_items': total_items,
+            'modules': modules,
+            'subject_percentage': subject_percentage[0]
+        }
+    else:
+        return {
+            'total_items': total_items,
+            'modules': modules,
+            'subject_percentage': 0
+        }
 
 
 def get_percentage(score, total):
